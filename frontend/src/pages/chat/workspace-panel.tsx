@@ -1,5 +1,7 @@
 import { For, Show, createEffect, createMemo, createSignal, onCleanup, onMount } from "solid-js"
 import { backend } from "@/api/backend"
+import { DialogBody, DialogHeader, DialogTitle, DialogV2 } from "@/ui/v2/dialog-v2"
+import { FileIcon } from "@/ui/file-icon"
 
 export interface WorkspaceNode {
   name: string
@@ -14,13 +16,32 @@ const sortNodes = (nodes: WorkspaceNode[]) =>
     return a.name.localeCompare(b.name)
   })
 
+type FileCategory = "all" | "media" | "document" | "code" | "other"
+
+const categories: Array<{ value: FileCategory; label: string }> = [
+  { value: "all", label: "全部" },
+  { value: "media", label: "图片和视频" },
+  { value: "document", label: "文档" },
+  { value: "code", label: "代码" },
+  { value: "other", label: "其他" },
+]
+
+const mediaExtensions = new Set(["png", "jpg", "jpeg", "gif", "webp", "svg", "avif", "mp4", "webm", "mov", "mkv"])
+const documentExtensions = new Set(["md", "mdx", "txt", "pdf", "doc", "docx", "rtf", "csv", "xls", "xlsx", "ppt", "pptx"])
+const codeExtensions = new Set([
+  "js", "jsx", "ts", "tsx", "css", "scss", "html", "json", "yaml", "yml", "toml", "py", "go", "rs", "java", "kt", "c", "h", "cpp", "hpp", "cs", "php", "rb", "sh", "sql", "vue", "svelte",
+])
+
+function categoryOf(node: WorkspaceNode): Exclude<FileCategory, "all"> {
+  const extension = node.name.split(".").at(-1)?.toLowerCase() ?? ""
+  if (mediaExtensions.has(extension)) return "media"
+  if (documentExtensions.has(extension)) return "document"
+  if (codeExtensions.has(extension)) return "code"
+  return "other"
+}
+
 export function WorkspacePanel(props: {
-  collapsed: boolean
-  open: boolean
   refreshVersion: number
-  visible: boolean
-  onCollapse: () => void
-  onClose: () => void
 }) {
   const [directory, setDirectory] = createSignal("")
   const [children, setChildren] = createSignal<Record<string, WorkspaceNode[]>>({})
@@ -34,6 +55,7 @@ export function WorkspacePanel(props: {
   const [downloading, setDownloading] = createSignal("")
   const [deleting, setDeleting] = createSignal("")
   const [actionError, setActionError] = createSignal("")
+  const [category, setCategory] = createSignal<FileCategory>("all")
   const directoryRequests = new Map<string, number>()
   let contentRequest = 0
 
@@ -73,17 +95,8 @@ export function WorkspacePanel(props: {
 
   onMount(() => {
     void initialize()
-    const timer = window.setInterval(() => {
-      if (props.visible) void refresh(true)
-    }, 5000)
+    const timer = window.setInterval(() => void refresh(true), 5000)
     onCleanup(() => window.clearInterval(timer))
-  })
-
-  let wasVisible = props.visible
-  createEffect(() => {
-    const visible = props.visible
-    if (visible && !wasVisible) void refresh(true)
-    wasVisible = visible
   })
 
   let lastRefresh = props.refreshVersion
@@ -176,39 +189,46 @@ export function WorkspacePanel(props: {
   const directoryName = createMemo(() => directory().split(/[\\/]/).filter(Boolean).at(-1) ?? "workspace")
 
   return (
-    <>
-      <Show when={props.open}>
-        <div class="chat-workspace-backdrop" onClick={props.onClose} />
-      </Show>
-      <aside
-        class="chat-workspace-panel"
-        classList={{ collapsed: props.collapsed, open: props.open }}
-        aria-label="工作目录"
-      >
-        <div class="chat-workspace-header">
-          <div class="chat-workspace-heading">
-            <strong>工作目录</strong>
-            <span title={directory()}>{directoryName()}</span>
+    <DialogV2 size="large" class="chat-files-dialog">
+      <DialogHeader closeLabel="关闭文件对话框">
+        <div class="chat-files-title-group">
+          <DialogTitle>此任务中的所有文件</DialogTitle>
+          <span title={directory()}>{directoryName()}</span>
+        </div>
+      </DialogHeader>
+      <DialogBody class="chat-files-dialog-body">
+        <div class="chat-files-toolbar">
+          <div class="chat-files-categories" role="tablist" aria-label="文件类型">
+            <For each={categories}>
+              {(item) => (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={category() === item.value}
+                  classList={{ active: category() === item.value }}
+                  onClick={() => setCategory(item.value)}
+                >
+                  {item.label}
+                </button>
+              )}
+            </For>
           </div>
           <div class="chat-workspace-header-actions">
             <button
               type="button"
               onClick={() => void downloadArchive()}
               disabled={!!downloading()}
-              aria-label="下载工作目录 ZIP"
-              title="下载工作目录 ZIP"
+              aria-label="下载全部文件 ZIP"
+              title="下载全部文件 ZIP"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/></svg>
             </button>
-            <button type="button" onClick={() => void refresh()} aria-label="刷新工作目录" title="刷新工作目录">
+            <button type="button" onClick={() => void refresh()} aria-label="刷新文件" title="刷新文件">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 9a7 7 0 0 1 11.7-2L20 9M4 15l2.2 2a7 7 0 0 0 11.7-2"/></svg>
-            </button>
-            <button type="button" onClick={props.onCollapse} aria-label="收起工作目录" title="收起工作目录">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>
         </div>
-
+        <div class="chat-files-content" aria-busy={loading() || contentLoading()}>
         <Show when={selectedPath()}>
           <div class="chat-workspace-preview">
             <div class="chat-workspace-preview-header">
@@ -252,6 +272,7 @@ export function WorkspacePanel(props: {
                   nodes={children()[""] ?? []}
                   children={children()}
                   expanded={expanded()}
+                  category={category()}
                   depth={0}
                   onToggle={toggleDirectory}
                   onOpen={openFile}
@@ -270,8 +291,9 @@ export function WorkspacePanel(props: {
         <Show when={actionError()}>
           <div class="chat-workspace-action-error" role="alert">{actionError()}</div>
         </Show>
-      </aside>
-    </>
+        </div>
+      </DialogBody>
+    </DialogV2>
   )
 }
 
@@ -279,6 +301,7 @@ function WorkspaceTree(props: {
   nodes: WorkspaceNode[]
   children: Record<string, WorkspaceNode[]>
   expanded: Record<string, boolean>
+  category: FileCategory
   depth: number
   onToggle: (path: string) => void
   onOpen: (path: string) => void
@@ -287,8 +310,9 @@ function WorkspaceTree(props: {
   downloading: string
   deleting: string
 }) {
+  const visible = () => props.nodes.filter((node) => node.type === "directory" || props.category === "all" || categoryOf(node) === props.category)
   return (
-    <For each={props.nodes}>
+    <For each={visible()}>
       {(node) => (
         <>
           <div class="chat-workspace-node-row" style={{ "padding-left": `${8 + props.depth * 16}px` }}>
@@ -302,8 +326,12 @@ function WorkspaceTree(props: {
               <span class="chat-workspace-chevron">
                 {node.type === "directory" ? (props.expanded[node.path] ? "▾" : "▸") : ""}
               </span>
-              <span class="chat-workspace-node-icon">{node.type === "directory" ? "□" : "·"}</span>
-              <span>{node.name}</span>
+              <FileIcon
+                node={{ path: node.path, type: node.type }}
+                expanded={node.type === "directory" && props.expanded[node.path]}
+                class="chat-workspace-file-icon"
+              />
+              <span class="chat-workspace-node-name">{node.name}</span>
             </button>
             <div class="chat-workspace-node-actions">
               <Show when={node.type === "file"}>
@@ -334,6 +362,7 @@ function WorkspaceTree(props: {
               nodes={props.children[node.path] ?? []}
               children={props.children}
               expanded={props.expanded}
+              category={props.category}
               depth={props.depth + 1}
               onToggle={props.onToggle}
               onOpen={props.onOpen}

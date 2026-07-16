@@ -12,6 +12,7 @@ import { ChatHeader } from "./header"
 import { ChatEmptyState } from "./empty-state"
 import { WorkspacePanel } from "./workspace-panel"
 import { subscribeChatEvents } from "./chat-events"
+import { useDialog } from "@/ui/context/dialog"
 import {
   appendPartDelta,
   filterRevertedMessages,
@@ -55,6 +56,7 @@ export function ChatLayout() {
 function ChatWorkspace() {
   const params = useParams()
   const navigate = useNavigate()
+  const dialog = useDialog()
   const sessionId = createMemo(() => params.id)
 
   const [sessions, setSessions] = createSignal<SidebarSession[]>([])
@@ -65,10 +67,7 @@ function ChatWorkspace() {
   const [sessionStatus, setSessionStatus] = createSignal<SessionStatus>({ type: "idle" })
   const [sidebarOpen, setSidebarOpen] = createSignal(false)
   const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false)
-  const [workspaceCollapsed, setWorkspaceCollapsed] = createSignal(false)
-  const [workspaceOpen, setWorkspaceOpen] = createSignal(false)
   const [workspaceRefresh, setWorkspaceRefresh] = createSignal(0)
-  const [workspaceMobile, setWorkspaceMobile] = createSignal(false)
   const [composerDraft, setComposerDraft] = createSignal("")
   const [sessionError, setSessionError] = createSignal("")
   const [currentSession, setCurrentSession] = createSignal<Session>()
@@ -78,24 +77,12 @@ function ChatWorkspace() {
   onMount(() => {
     try {
       setSidebarCollapsed(localStorage.getItem("chat_sidebar_collapsed") === "true")
-      setWorkspaceCollapsed(localStorage.getItem("chat_workspace_collapsed") === "true")
     } catch {}
-    const media = window.matchMedia("(max-width: 960px)")
-    const updateWorkspaceMode = () => setWorkspaceMobile(media.matches)
-    updateWorkspaceMode()
-    media.addEventListener("change", updateWorkspaceMode)
-    onCleanup(() => media.removeEventListener("change", updateWorkspaceMode))
   })
 
   createEffect(() => {
     try {
       localStorage.setItem("chat_sidebar_collapsed", String(sidebarCollapsed()))
-    } catch {}
-  })
-
-  createEffect(() => {
-    try {
-      localStorage.setItem("chat_workspace_collapsed", String(workspaceCollapsed()))
     } catch {}
   })
 
@@ -106,7 +93,6 @@ function ChatWorkspace() {
 
   const sessionInfo = createMemo(() => sessions().find((s) => s.id === sessionId()))
   const isGenerating = createMemo(() => sessionStatus().type !== "idle" || !!localGeneratingMessageID())
-  const workspaceVisible = createMemo(() => workspaceMobile() ? workspaceOpen() : !workspaceCollapsed())
 
   const sessionTime = (info: Session) => info.time?.updated ?? info.time?.created ?? 0
 
@@ -441,10 +427,14 @@ function ChatWorkspace() {
     }
   }
 
+  const openWorkspace = () => {
+    void dialog.show(() => <WorkspacePanel refreshVersion={workspaceRefresh()} />)
+  }
+
   return (
     <div
       class="chat-layout"
-      classList={{ "sidebar-collapsed": sidebarCollapsed(), "workspace-collapsed": workspaceCollapsed() }}
+      classList={{ "sidebar-collapsed": sidebarCollapsed() }}
       data-page="chat"
     >
       <ChatSidebar
@@ -455,6 +445,7 @@ function ChatWorkspace() {
         collapsed={sidebarCollapsed()}
         onClose={() => setSidebarOpen(false)}
         onCollapse={() => setSidebarCollapsed(true)}
+        onExpand={() => setSidebarCollapsed(false)}
         onDelete={handleDelete}
       />
       <div class="chat-main">
@@ -462,15 +453,11 @@ function ChatWorkspace() {
           title={sessionInfo()?.title || "新对话"}
           generating={isGenerating()}
           sidebarExpanded={!sidebarCollapsed()}
-          workspaceExpanded={workspaceVisible()}
           onToggleSidebar={() => {
             if (window.matchMedia("(max-width: 768px)").matches) setSidebarOpen((v) => !v)
             else setSidebarCollapsed((value) => !value)
           }}
-          onToggleWorkspace={() => {
-            if (workspaceMobile()) setWorkspaceOpen((value) => !value)
-            else setWorkspaceCollapsed((value) => !value)
-          }}
+          onOpenWorkspace={openWorkspace}
         />
         <Show when={sessionId()} fallback={<ChatEmptyState />}>
           <Show
@@ -500,17 +487,6 @@ function ChatWorkspace() {
           onAbortComplete={refreshAfterAbort}
         />
       </div>
-      <WorkspacePanel
-        collapsed={workspaceCollapsed()}
-        open={workspaceOpen()}
-        refreshVersion={workspaceRefresh()}
-        visible={workspaceVisible()}
-        onClose={() => setWorkspaceOpen(false)}
-        onCollapse={() => {
-          setWorkspaceOpen(false)
-          setWorkspaceCollapsed(true)
-        }}
-      />
     </div>
   )
 }

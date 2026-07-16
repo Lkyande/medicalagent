@@ -2,4 +2,9 @@
 /backend/tests/
 /backend/server.err
 /backend/server.log
+__pycache__/
+*.py[cod]
 /frontend/.env
+/frontend/node_modules/
+/frontend/dist/
+/frontend/vite.log

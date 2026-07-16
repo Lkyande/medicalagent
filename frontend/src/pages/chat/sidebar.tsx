@@ -17,6 +17,7 @@ export function ChatSidebar(props: {
   collapsed: boolean
   onClose: () => void
   onCollapse: () => void
+  onExpand: () => void
   onDelete: (id: string) => void
 }) {
   const navigate = useNavigate()
@@ -56,20 +57,32 @@ export function ChatSidebar(props: {
         aria-label="历史会话"
         ref={sidebarRef}
       >
-        <div class="chat-sidebar-header">
-          <button class="chat-new-btn" onClick={newChat}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-            新建对话
+        <div class="chat-sidebar-rail" aria-hidden={!props.collapsed}>
+          <button class="chat-rail-brand" onClick={props.onExpand} aria-label="展开历史会话" title="展开历史会话">A</button>
+          <button class="chat-rail-action" onClick={newChat} aria-label="新建对话" title="新建对话">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
           </button>
-          <button class="chat-sidebar-collapse" onClick={props.onCollapse} aria-label="收起历史会话" title="收起历史会话">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+          <button class="chat-rail-action" onClick={props.onExpand} aria-label="查看历史会话" title="历史会话">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>
+          </button>
+          <button class="chat-rail-action chat-rail-logout" onClick={handleLogout} aria-label="退出登录" title="退出登录">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/></svg>
           </button>
         </div>
-        <div class="chat-session-list">
+        <div class="chat-sidebar-expanded">
+          <div class="chat-sidebar-header">
+            <div class="chat-sidebar-brand"><span>A</span><strong>Agnes Workspace</strong></div>
+            <button class="chat-sidebar-collapse" onClick={props.onCollapse} aria-label="收起历史会话" title="收起历史会话">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+            </button>
+          </div>
+          <div class="chat-sidebar-new-wrap">
+            <button class="chat-new-btn" onClick={newChat}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg>
+              新建对话
+            </button>
+          </div>
+          <div class="chat-session-list">
           <Show when={props.loading && props.sessions.length === 0}>
             <div class="chat-loading">加载中...</div>
           </Show>
@@ -134,10 +147,13 @@ export function ChatSidebar(props: {
               )
             }}
           </For>
+          </div>
+          <button class="chat-logout-btn" onClick={handleLogout}>
+            <span class="chat-account-avatar">A</span>
+            <span>退出登录</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/></svg>
+          </button>
         </div>
-        <button class="chat-logout-btn" onClick={handleLogout}>
-          退出登录
-        </button>
       </aside>
     </>
   )

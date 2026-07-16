@@ -4,9 +4,8 @@ export function ChatHeader(props: {
   title: string
   generating?: boolean
   sidebarExpanded: boolean
-  workspaceExpanded: boolean
   onToggleSidebar: () => void
-  onToggleWorkspace: () => void
+  onOpenWorkspace: () => void
 }) {
   return (
     <div class="chat-header">
@@ -28,15 +27,15 @@ export function ChatHeader(props: {
       </div>
       <button
         class="chat-workspace-toggle"
-        onClick={props.onToggleWorkspace}
-        aria-label={props.workspaceExpanded ? "收起工作目录" : "展开工作目录"}
-        aria-expanded={props.workspaceExpanded}
-        title={props.workspaceExpanded ? "收起工作目录" : "展开工作目录"}
+        onClick={props.onOpenWorkspace}
+        aria-label="打开此任务中的所有文件"
+        aria-haspopup="dialog"
+        title="此任务中的所有文件"
       >
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5z" />
         </svg>
-        <span>工作目录</span>
+        <span>所有文件</span>
       </button>
     </div>
   )
