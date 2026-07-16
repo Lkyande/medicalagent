@@ -1,0 +1,5 @@
+/backend/.env
+/backend/tests/
+/backend/server.err
+/backend/server.log
+/frontend/.env

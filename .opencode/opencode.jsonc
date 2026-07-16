@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "clinical-assistant",
+  "share": "disabled",
+  "permission": {
+    "bash": "deny",
+    "edit": "deny",
+    "external_directory": "deny",
+    "question": "allow",
+    "skill": "allow"
+  }
+}
