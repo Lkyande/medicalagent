@@ -2,15 +2,20 @@ import { createEffect, createSignal, Show, For, createMemo, onCleanup } from "so
 import type { Message, Part } from "@opencode-ai/sdk/v2"
 import { useNavigate } from "@solidjs/router"
 import { getChatClient } from "./chat-client"
+import { backend, type AssistantEnableResult } from "@/api/backend"
 import { ChatModelSelector } from "./model-selector"
-import { ChatAssistantSelector } from "./assistant-selector"
+import { ChatAssistantSelector, CLINICAL_ASSISTANT_ID, DEFAULT_ASSISTANT_ID, type AssistantOption } from "./assistant-selector"
 import { ChatStopButton } from "./stop-button"
 import type { RawMessage } from "./message-normalize"
 import { createChatIdentifier } from "./identifier"
+import {
+  CLINICAL_CONVERSATION_TYPE,
+  GENERAL_CONVERSATION_TYPE,
+  conversationMetadata,
+} from "./conversation-type"
 
 const MAX_IMAGES = 5
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024
-
 export function ChatComposer(props: {
   sessionId?: string
   isGenerating: boolean
@@ -21,19 +26,28 @@ export function ChatComposer(props: {
   onDraftConsumed: () => void
   onSent: (msg: RawMessage) => void
   onSendFailed: (messageID: string) => void
-  onReloadSession: () => void
   onAbortComplete: () => Promise<void>
   onRestore?: () => void
+  clinical?: boolean
+  conversationTypeReady?: boolean
 }) {
   const navigate = useNavigate()
   const [text, setText] = createSignal("")
   const [images, setImages] = createSignal<File[]>([])
   const [sending, setSending] = createSignal(false)
   const [selectedModel, setSelectedModel] = createSignal<string>("")
-  const [selectedAgent, setSelectedAgent] = createSignal("build")
+  const [selectedAssistant, setSelectedAssistant] = createSignal<AssistantOption>({
+    id: props.clinical ? CLINICAL_ASSISTANT_ID : DEFAULT_ASSISTANT_ID,
+    name: props.clinical ? "诊疗助手" : "Build",
+    description: props.clinical ? "基于已审核医学资料提供临床辅助决策建议。" : "基础执行 Agent，负责开发、修改和工具调用。",
+    baseAgent: "build",
+  })
   const [error, setError] = createSignal("")
   const [activeSessionID, setActiveSessionID] = createSignal<string>()
   const [stopping, setStopping] = createSignal(false)
+  const [clinicalStatus, setClinicalStatus] = createSignal<"enabling" | "enabled" | "error">(
+    props.clinical ? "enabling" : "enabled",
+  )
   let textareaRef: HTMLTextAreaElement | undefined
 
   createEffect(() => {
@@ -53,7 +67,45 @@ export function ChatComposer(props: {
     if (props.externalError) setError(props.externalError)
   })
 
+  createEffect(() => {
+    if (!props.clinical) {
+      setSelectedAssistant({
+        id: DEFAULT_ASSISTANT_ID,
+        name: "Build",
+        description: "基础执行 Agent，负责开发、修改和工具调用。",
+        baseAgent: "build",
+      })
+      setClinicalStatus("enabled")
+      return
+    }
+    let cancelled = false
+    onCleanup(() => {
+      cancelled = true
+    })
+    setClinicalStatus("enabling")
+    backend.enableAssistant(CLINICAL_ASSISTANT_ID).then((assistant: AssistantEnableResult) => {
+      if (cancelled) return
+      setSelectedAssistant({
+        id: assistant.id,
+        name: assistant.name,
+        description: assistant.description,
+        baseAgent: assistant.baseAgent,
+        systemPrompt: assistant.systemPrompt,
+        platform: assistant,
+      })
+      setClinicalStatus("enabled")
+    }).catch((cause) => {
+      if (cancelled) return
+      setClinicalStatus("error")
+      setError(cause instanceof Error ? cause.message : "诊疗助手启用失败")
+    })
+  })
+
   const canSend = createMemo(() => text().trim().length > 0 || images().length > 0)
+
+  const selectAssistant = (assistant: AssistantOption) => {
+    setSelectedAssistant(assistant)
+  }
 
   const autoResize = (el: HTMLTextAreaElement) => {
     el.style.height = "auto"
@@ -112,8 +164,16 @@ export function ChatComposer(props: {
 
   const handleSend = async () => {
     if (!canSend() || sending() || props.isGenerating) return
-    if (!selectedAgent()) {
-      setError("请选择 Build 或 Plan Agent")
+    if (props.conversationTypeReady === false) {
+      setError("正在识别会话类型，请稍候")
+      return
+    }
+    if (props.clinical && clinicalStatus() !== "enabled") {
+      setError(clinicalStatus() === "error" ? "诊疗助手启用失败，请刷新页面后重试" : "诊疗助手正在启用，请稍候")
+      return
+    }
+    if (!selectedAssistant()) {
+      setError("请选择助手")
       return
     }
     setError("")
@@ -128,17 +188,19 @@ export function ChatComposer(props: {
 
     try {
       let sessionID = props.sessionId
-      let created = false
 
       if (!sessionID) {
-        const createResp = await client.session.create()
+        const createResp = await client.session.create({
+          metadata: conversationMetadata(
+            props.clinical ? CLINICAL_CONVERSATION_TYPE : GENERAL_CONVERSATION_TYPE,
+          ),
+        })
         sessionID = (createResp as any).data?.id
         if (!sessionID) throw new Error("创建会话失败")
         setActiveSessionID(sessionID)
-        created = true
         const title = currentText.length > 40 ? currentText.slice(0, 40) + "..." : currentText
         client.session.update({ sessionID, title } as any).catch(() => {})
-        navigate(`/chat/${sessionID}`)
+        navigate(`${props.clinical ? "/clinical" : "/chat"}/${sessionID}`)
       }
 
       const now = Date.now()
@@ -176,7 +238,7 @@ export function ChatComposer(props: {
           sessionID,
           role: "user",
           time: { created: now },
-          agent: selectedAgent(),
+          agent: selectedAssistant().baseAgent,
           model: { providerID: "", modelID: "" },
         } as Message,
         parts: optimisticParts,
@@ -193,18 +255,11 @@ export function ChatComposer(props: {
       await client.session.promptAsync({
         sessionID,
         messageID: optimisticMessageID,
-        agent: selectedAgent(),
+        agent: selectedAssistant().baseAgent,
+        system: selectedAssistant().systemPrompt,
         model: resolveModel(),
         parts: promptParts,
       } as any)
-
-      if (!created) {
-        props.onReloadSession()
-      }
-
-      if (created) {
-        props.onReloadSession()
-      }
     } catch (e: any) {
       if (optimisticMessageID) props.onSendFailed(optimisticMessageID)
       setError(e?.message ?? "发送失败")
@@ -268,11 +323,32 @@ export function ChatComposer(props: {
           </div>
         </Show>
 
-        <div class="chat-composer-box">
+        <div class="chat-composer-box" classList={{ "chat-composer-box-clinical": props.clinical }}>
+          <Show when={props.conversationTypeReady === false}>
+            <div class="chat-conversation-type-loading" role="status">正在识别会话类型...</div>
+          </Show>
+          <Show when={props.conversationTypeReady !== false && props.clinical}>
+            <div class="chat-clinical-status" classList={{ error: clinicalStatus() === "error" }} role="status">
+              <span class="chat-clinical-status-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
+              </span>
+              <strong>诊疗助手</strong>
+              <span class="chat-clinical-status-dot" />
+              <span>{clinicalStatus() === "enabling" ? "正在启用" : clinicalStatus() === "error" ? "启用失败" : "已启用"}</span>
+              <span class="chat-clinical-status-detail">临床辅助决策</span>
+            </div>
+          </Show>
           <textarea
             class="chat-composer-input"
-            placeholder="输入消息... (Enter 发送, Shift+Enter 换行)"
+            placeholder={
+              props.conversationTypeReady === false
+                ? "正在加载会话..."
+                : props.clinical
+                  ? "描述症状、病史或检查结果..."
+                  : "输入消息... (Enter 发送, Shift+Enter 换行)"
+            }
             aria-label="消息"
+            disabled={props.conversationTypeReady === false}
             onInput={handleInput}
             onKeyDown={handleKeyDown}
             ref={textareaRef}
@@ -292,7 +368,9 @@ export function ChatComposer(props: {
                   onChange={handleImageUpload}
                 />
               </label>
-              <ChatAssistantSelector selected={selectedAgent()} onSelect={setSelectedAgent} />
+              <Show when={!props.clinical}>
+                <ChatAssistantSelector selected={selectedAssistant().id} sessionId={props.sessionId} onSelect={selectAssistant} />
+              </Show>
               <ChatModelSelector selected={selectedModel()} onSelect={setSelectedModel} />
             </div>
 
@@ -300,7 +378,12 @@ export function ChatComposer(props: {
               <Show
                 when={props.isGenerating || sending()}
                 fallback={
-                  <button class="chat-send-btn" aria-label="发送消息" disabled={!canSend() || !selectedAgent()} onClick={handleSend}>
+                  <button
+                    class="chat-send-btn"
+                    aria-label="发送消息"
+                    disabled={!canSend() || props.conversationTypeReady === false}
+                    onClick={handleSend}
+                  >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
                     </svg>

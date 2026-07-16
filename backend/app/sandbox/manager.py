@@ -7,8 +7,11 @@ from app.models import User, UserWorkspace
 import httpx
 import asyncio
 import base64
+import json
+import re
 import time
 import uuid
+from contextlib import suppress
 from urllib.parse import urlencode
 
 from websockets.asyncio.client import connect
@@ -19,37 +22,92 @@ _workspace_ready_lock = asyncio.Lock()
 _workspace_verified_at: dict[str, float] = {}
 _workspace_verify_ttl = 300.0
 _workspace_ready_marker = "__OPENCODE_WORKSPACE_READY__"
+_workspace_roots: dict[str, str] = {}
+_workspace_root_locks: dict[str, asyncio.Lock] = {}
 _workspace_verify_script = (
     "const fs=require('fs');"
     "const ready=fs.statSync(process.argv[1]).isDirectory();"
-    f"setTimeout(()=>{{process.stdout.write('{_workspace_ready_marker}'+ready);setTimeout(()=>{{}},300);}},500);"
+    f"process.stdout.write('{_workspace_ready_marker}'+ready);"
 )
+_command_runner_script = r"""
+const { spawn } = require("child_process");
+const payload = JSON.parse(Buffer.from(process.argv[1], "base64").toString("utf8"));
+let started = false;
+let finished = false;
+
+function finish(code) {
+  if (finished) return;
+  finished = true;
+  const exitCode = Number.isInteger(code) ? code : 1;
+  process.stdout.write(`\n${payload.marker}${exitCode}\n`, () => {
+    setTimeout(() => process.exit(exitCode), 100);
+  });
+}
+
+process.stdin.setEncoding("utf8");
+process.stdin.resume();
+process.stdin.once("data", () => {
+  if (started) return;
+  started = true;
+  let child;
+  try {
+    child = spawn(payload.command, payload.args, {
+      cwd: payload.cwd,
+      stdio: ["ignore", "inherit", "inherit"],
+      windowsHide: true
+    });
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    finish(1);
+    return;
+  }
+  child.once("error", (error) => {
+    console.error(error instanceof Error ? error.message : String(error));
+    finish(1);
+  });
+  child.once("exit", (code) => finish(code));
+});
+""".strip()
 
 
 async def get_workspace_root(sandbox: dict) -> str:
     configured = sandbox.get("workspace_root", "")
     if configured:
         return configured
-    auth = None
-    if sandbox.get("password"):
-        auth = (sandbox.get("username", "opencode"), sandbox["password"])
-    try:
-        async with httpx.AsyncClient(timeout=10.0, auth=auth) as client:
-            response = await client.get(f"{sandbox['url']}/path")
-            response.raise_for_status()
-            home = response.json().get("home")
-    except (httpx.HTTPError, ValueError, TypeError) as exc:
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail="Unable to detect the sandbox workspace root",
-        ) from exc
-    if not isinstance(home, str) or not home:
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail="Unable to detect the sandbox workspace root",
-        )
-    separator = "\\" if "\\" in home else "/"
-    return home.rstrip("/\\") + separator + ".opencode" + separator + "workspaces"
+
+    key = f"{sandbox['id']}\0{sandbox['url']}"
+    cached = _workspace_roots.get(key)
+    if cached:
+        return cached
+
+    lock = _workspace_root_locks.setdefault(key, asyncio.Lock())
+    async with lock:
+        cached = _workspace_roots.get(key)
+        if cached:
+            return cached
+
+        auth = None
+        if sandbox.get("password"):
+            auth = (sandbox.get("username", "opencode"), sandbox["password"])
+        try:
+            async with httpx.AsyncClient(timeout=10.0, auth=auth) as client:
+                response = await client.get(f"{sandbox['url']}/path")
+                response.raise_for_status()
+                home = response.json().get("home")
+        except (httpx.HTTPError, ValueError, TypeError) as exc:
+            raise HTTPException(
+                status_code=status.HTTP_502_BAD_GATEWAY,
+                detail="Unable to detect the sandbox workspace root",
+            ) from exc
+        if not isinstance(home, str) or not home:
+            raise HTTPException(
+                status_code=status.HTTP_502_BAD_GATEWAY,
+                detail="Unable to detect the sandbox workspace root",
+            )
+        separator = "\\" if "\\" in home else "/"
+        root = home.rstrip("/\\") + separator + ".opencode" + separator + "workspaces"
+        _workspace_roots[key] = root
+        return root
 
 
 def workspace_directory(root: str, workspace_id: str) -> str:
@@ -96,6 +154,14 @@ async def get_or_assign_sandbox(user: User, db: AsyncSession) -> dict:
 async def get_or_create_workspace(user: User, db: AsyncSession) -> tuple[dict, UserWorkspace]:
     sandbox = await get_or_assign_sandbox(user, db)
     root = await get_workspace_root(sandbox)
+
+    result = await db.execute(select(UserWorkspace).where(UserWorkspace.user_id == user.id))
+    workspace = result.scalar_one_or_none()
+    if workspace:
+        directory = workspace_directory(root, workspace.id)
+        if workspace.sandbox_id == sandbox["id"] and workspace.directory == directory:
+            return sandbox, workspace
+
     async with _assignment_lock:
         result = await db.execute(
             select(UserWorkspace).where(UserWorkspace.user_id == user.id).with_for_update()
@@ -139,6 +205,22 @@ def sandbox_auth(sandbox: dict) -> tuple[str, str] | None:
     return (sandbox.get("username", "opencode"), sandbox["password"])
 
 
+def _command_payload(command: str, args: list[str], cwd: str, marker: str) -> str:
+    payload = json.dumps(
+        {"command": command, "args": args, "cwd": cwd, "marker": marker},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode()
+    return base64.b64encode(payload).decode()
+
+
+def _parse_command_output(output: str, marker: str) -> tuple[int, str] | None:
+    match = re.search(rf"(?:\r?\n)?{re.escape(marker)}(-?\d+)(?:\r?\n)?", output)
+    if not match:
+        return None
+    return int(match.group(1)), output[: match.start()] + output[match.end() :]
+
+
 async def run_sandbox_command_capture(
     sandbox: dict,
     directory: str,
@@ -154,12 +236,18 @@ async def run_sandbox_command_capture(
     websocket = None
     receiver: asyncio.Task | None = None
     output: list[str] = []
+    marker = f"__OPENCODE_COMMAND_EXIT_{uuid.uuid4().hex}__"
     try:
         async with httpx.AsyncClient(timeout=10.0, auth=auth) as client:
             response = await client.post(
                 f"{sandbox['url']}/pty",
                 params={"directory": directory},
-                json={"command": command, "args": args, "cwd": cwd, "title": title},
+                json={
+                    "command": "node",
+                    "args": ["-e", _command_runner_script, _command_payload(command, args, cwd, marker)],
+                    "cwd": cwd,
+                    "title": title,
+                },
             )
             response.raise_for_status()
             info = response.json()
@@ -167,55 +255,50 @@ async def run_sandbox_command_capture(
             if not isinstance(pty_id, str) or not pty_id:
                 raise ValueError("Sandbox did not return a PTY id")
 
-            if capture_output:
-                scheme = "wss" if sandbox["url"].startswith("https://") else "ws"
-                base_url = sandbox["url"].split("://", 1)[-1].rstrip("/")
-                query = {"directory": directory, "cursor": "0"}
-                if auth:
-                    query["auth_token"] = base64.b64encode(f"{auth[0]}:{auth[1]}".encode()).decode()
-                websocket = await asyncio.wait_for(
-                    connect(f"{scheme}://{base_url}/pty/{pty_id}/connect?{urlencode(query)}"),
-                    timeout=5.0,
-                )
+            scheme = "wss" if sandbox["url"].startswith("https://") else "ws"
+            base_url = sandbox["url"].split("://", 1)[-1].rstrip("/")
+            query = {"directory": directory, "cursor": "0"}
+            if auth:
+                query["auth_token"] = base64.b64encode(f"{auth[0]}:{auth[1]}".encode()).decode()
+            websocket = await asyncio.wait_for(
+                connect(f"{scheme}://{base_url}/pty/{pty_id}/connect?{urlencode(query)}"),
+                timeout=5.0,
+            )
+            completed = asyncio.get_running_loop().create_future()
 
-                async def receive_output() -> None:
-                    try:
-                        async for message in websocket:
-                            if isinstance(message, bytes):
-                                if message.startswith(b"\x00"):
-                                    continue
-                                output.append(message.decode("utf-8", errors="replace"))
-                            else:
-                                output.append(message)
-                    except WebSocketException:
-                        pass
+            async def receive_output() -> None:
+                try:
+                    async for message in websocket:
+                        if isinstance(message, bytes):
+                            if message.startswith(b"\x00"):
+                                continue
+                            text = message.decode("utf-8", errors="replace")
+                        else:
+                            text = message
+                        output.append(text)
+                        parsed = _parse_command_output("".join(output), marker)
+                        if parsed and not completed.done():
+                            completed.set_result(parsed)
+                except WebSocketException as exc:
+                    if not completed.done():
+                        completed.set_exception(exc)
+                finally:
+                    if not completed.done():
+                        completed.set_exception(RuntimeError("Sandbox PTY closed before command completion"))
 
-                receiver = asyncio.create_task(receive_output())
-
-            deadline = time.monotonic() + timeout_seconds
-            while info.get("status") != "exited":
-                if time.monotonic() >= deadline:
-                    raise HTTPException(
-                        status_code=status.HTTP_504_GATEWAY_TIMEOUT,
-                        detail="Sandbox command timed out",
-                    )
-                await asyncio.sleep(0.1)
-                response = await client.get(
-                    f"{sandbox['url']}/pty/{pty_id}",
-                    params={"directory": directory},
-                )
-                if response.status_code == status.HTTP_404_NOT_FOUND:
-                    await asyncio.sleep(0.1)
-                    return 0, "".join(output)
-                response.raise_for_status()
-                info = response.json()
-
-            exit_code = info.get("exitCode")
-            await asyncio.sleep(0.1)
-            return (exit_code if isinstance(exit_code, int) else 1), "".join(output)
+            receiver = asyncio.create_task(receive_output())
+            await websocket.send("\r")
+            try:
+                exit_code, cleaned_output = await asyncio.wait_for(completed, timeout=timeout_seconds)
+            except asyncio.TimeoutError as exc:
+                raise HTTPException(
+                    status_code=status.HTTP_504_GATEWAY_TIMEOUT,
+                    detail="Sandbox command timed out",
+                ) from exc
+            return exit_code, cleaned_output if capture_output else ""
     except HTTPException:
         raise
-    except (httpx.HTTPError, WebSocketException, OSError, ValueError, TypeError) as exc:
+    except (httpx.HTTPError, WebSocketException, OSError, RuntimeError, ValueError, TypeError) as exc:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="Unable to execute command in the sandbox",
@@ -223,6 +306,8 @@ async def run_sandbox_command_capture(
     finally:
         if receiver:
             receiver.cancel()
+            with suppress(asyncio.CancelledError):
+                await receiver
         if websocket:
             await websocket.close()
         if pty_id:

@@ -1,15 +1,21 @@
 ---
 name: disease-guidelines
-description: Use when clinical or follow-up work requires disease-specific diagnostic criteria, red flags, contraindications, treatment guidance, or follow-up intervals from approved guidelines.
+description: 当临床问题需要从已审核的《莫塔全科医学》知识服务获取疾病评估、诊断标准、危险信号、禁忌证或治疗指导时使用。
 ---
 
-# Disease Guidelines
+# 莫塔疾病诊疗资料
 
-Only use guideline material that has been reviewed and published by the platform administrator.
+本技能通过 `murtagh-medical` MCP 服务按需获取平台管理员审核的莫塔医学资料。不得用模型通用知识代替知识服务中已经覆盖的疾病专项内容。
 
-- Identify the applicable region, institution, population, disease, and guideline version.
-- Include the guideline title, publisher, version, publication date, and relevant section in the response.
-- Distinguish recommendations by evidence level when that information is available.
-- Check red flags, contraindications, pregnancy, pediatric, older adult, and immunocompromised considerations.
-- If no approved guideline covers the question, say so and request clinician review instead of improvising.
-- Do not treat this skill as authorization to diagnose, prescribe, contact a patient, or modify a medical record.
+## 必须执行的流程
+
+1. 从用户输入提取疾病、症状、关键词、年龄、性别、妊娠状态、发病时间、严重程度和请求意图，不得虚构患者事实。
+2. 调用 `murtagh_route`，获取匹配章节及候选技能的 `skill_id`、`skill_name`、`objective`、`scope`、匹配原因和紧急优先级。
+3. 根据病例上下文、`objective` 和 `scope` 选择最小充分集合，通常为一至五个技能；急诊分诊和危险信号技能优先。
+4. 调用 `murtagh_get_skills` 获取选中技能的完整审核内容。不得只依据路由元数据生成临床意见。
+5. 临床内容只能依据 MCP 返回且 `review_status` 为 `approved` 的完整技能内容。
+6. 回答中标明实际使用的 `skill_id`、资料标题、章节或段落、知识库版本。
+
+如果没有合适匹配、内容不可用、审核状态异常或资料互相冲突，应明确说明并请求临床医生复核，不得编造缺失内容。路由命中只表示资料可能相关，不代表诊断成立。
+
+结果仅用于临床辅助决策，不构成最终诊断或处方，也不授权联系患者或修改正式病历。

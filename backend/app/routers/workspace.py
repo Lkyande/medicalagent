@@ -1,7 +1,6 @@
 import base64
 import binascii
 import asyncio
-import json
 import mimetypes
 import tempfile
 import time
@@ -33,34 +32,15 @@ router = APIRouter(prefix="/workspace", tags=["workspace"])
 MAX_ARCHIVE_FILES = 2000
 MAX_ARCHIVE_BYTES = 200 * 1024 * 1024
 MAX_ARCHIVE_DEPTH = 24
-DIRECTORY_JSON_START = "__OPENCODE_DIRECTORY_JSON_START__"
-DIRECTORY_JSON_END = "__OPENCODE_DIRECTORY_JSON_END__"
 FILE_CHECK_START = "__OPENCODE_FILE_CHECK_START__"
 FILE_CHECK_END = "__OPENCODE_FILE_CHECK_END__"
-DIRECTORY_LIST_SCRIPT = (
-    "const fs=require('fs');"
-    "const path=require('path');"
-    "const root=fs.realpathSync(process.argv[1]);"
-    "const target=fs.realpathSync(process.argv[2]);"
-    "if(target!==root&&!target.startsWith(root+path.sep))throw new Error('outside workspace');"
-    "const items=fs.readdirSync(target,{withFileTypes:true})"
-    ".filter(item=>!item.isSymbolicLink()).map(item=>({"
-    "name:item.name,type:item.isDirectory()?'directory':'file'}));"
-    "setTimeout(()=>{"
-    f"process.stdout.write('{DIRECTORY_JSON_START}'+JSON.stringify(items)+'{DIRECTORY_JSON_END}');"
-    "setTimeout(()=>{},300);"
-    "},500);"
-)
 FILE_CHECK_SCRIPT = (
     "const fs=require('fs');"
     "const path=require('path');"
     "const root=fs.realpathSync(process.argv[1]);"
     "const target=fs.realpathSync(process.argv[2]);"
     "const valid=(target===root||target.startsWith(root+path.sep))&&fs.statSync(target).isFile();"
-    "setTimeout(()=>{"
     f"process.stdout.write('{FILE_CHECK_START}'+JSON.stringify(valid)+'{FILE_CHECK_END}');"
-    "setTimeout(()=>{},300);"
-    "},500);"
 )
 _directory_locks: dict[str, asyncio.Lock] = {}
 _directory_cache: dict[str, tuple[float, list[dict]]] = {}
@@ -204,40 +184,20 @@ async def _read_remote_directory(
     workspace: UserWorkspace,
     relative_path: str,
 ) -> list[dict]:
-    target = remote_target(workspace.directory, relative_path)
-    exit_code, output = await run_sandbox_command_capture(
-        sandbox=sandbox,
-        directory=workspace.directory,
-        command="node",
-        args=["-e", DIRECTORY_LIST_SCRIPT, workspace.directory, target],
-        cwd=workspace.directory,
-        title=f"List {relative_path or 'workspace'}",
-    )
-    # Windows PTYs hard-wrap long output at the terminal width.
-    output = output.replace("\r\n", "")
-    start = output.find(DIRECTORY_JSON_START)
-    end = output.find(DIRECTORY_JSON_END, start + len(DIRECTORY_JSON_START))
-    if exit_code != 0 or start < 0 or end < 0:
-        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Unable to list workspace")
-    try:
-        payload = json.loads(output[start + len(DIRECTORY_JSON_START):end])
-    except (TypeError, ValueError) as exc:
-        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Invalid workspace response") from exc
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        payload = await remote_json(client, sandbox, workspace, "file", relative_path, allow_root=True)
     if not isinstance(payload, list):
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Invalid workspace response")
 
+    expected_parent = PurePosixPath(relative_path) if relative_path else PurePosixPath(".")
     result: list[dict] = []
     for item in payload:
-        if not isinstance(item, dict):
+        node = normalize_node(item)
+        if not node or PurePosixPath(node["path"]).parent != expected_parent:
             continue
-        name = item.get("name")
-        node_type = item.get("type")
-        if not isinstance(name, str) or not name or name in {".", ".."} or "/" in name or "\\" in name:
+        if not node["name"] or node["name"] in {".", ".."} or "/" in node["name"] or "\\" in node["name"]:
             continue
-        if node_type not in {"file", "directory"}:
-            continue
-        node_path = f"{relative_path}/{name}" if relative_path else name
-        result.append({"name": name, "path": node_path, "type": node_type, "ignored": False})
+        result.append(node)
     return result
 
 

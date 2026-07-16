@@ -1,15 +1,14 @@
 ---
 name: clinical-decision-support
-description: Use when a clinician asks for differential diagnosis, examination suggestions, treatment direction, contraindications, or clinical risk assessment from imported medical records.
+description: 当医生要求根据病例资料进行鉴别诊断、检查建议、治疗方向、禁忌证或临床风险评估时使用。
 ---
 
-# Clinical Decision Support
+# 临床辅助决策
 
-- Treat imported records as source material, not as verified truth. Preserve provenance and flag conflicts.
-- Separate known facts, patient-reported information, inference, recommendations, and unknowns.
-- Ask for missing decision-critical information before making specific recommendations.
-- Present differential diagnoses with supporting and opposing evidence.
-- Include red flags, contraindications, special populations, and escalation requirements.
-- State uncertainty explicitly and never present the result as a final diagnosis or prescription.
-- Cite the guideline name, version, publication date, and section when available.
-- Stop routine analysis and recommend immediate human assessment when emergency indicators are present.
+- 将导入的病例视为来源材料而非已核实事实，保留来源并标记冲突。
+- 分开呈现已知事实、患者自述、推断、建议和未知信息。
+- 在给出具体建议前，询问缺失且影响决策的关键信息。
+- 给出鉴别诊断，并分别列出支持证据和反对证据。
+- 纳入危险信号、禁忌证、特殊人群和升级处置要求。
+- 明确说明不确定性，不得把结果表述为最终诊断或处方。
+- 发现急症指征时，停止常规分析并建议立即进行人工评估。

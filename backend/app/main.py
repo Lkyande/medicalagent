@@ -8,14 +8,16 @@ from app.auth.dependencies import get_current_user
 from app.models import User
 from app.proxy.opencode_proxy import proxy_to_sandbox
 from app.sandbox.manager import ensure_workspace, get_or_create_workspace
-from app.routers import auth, dispatch, sandbox, business, health, workspace
+from app.routers import assistants, auth, dispatch, sandbox, business, health, workspace
+from app.mcp_server import murtagh_mcp
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
-    yield
+    async with murtagh_mcp.session_manager.run():
+        await init_db()
+        yield
 
 
 app = FastAPI(title="Your Platform API", version="0.1.0", lifespan=lifespan)
@@ -35,6 +37,8 @@ app.include_router(dispatch.router, prefix="/api")
 app.include_router(sandbox.router, prefix="/api")
 app.include_router(business.router, prefix="/api")
 app.include_router(workspace.router, prefix="/api")
+app.include_router(assistants.router, prefix="/api")
+app.mount("/mcp/murtagh", murtagh_mcp.streamable_http_app())
 
 
 @app.api_route(

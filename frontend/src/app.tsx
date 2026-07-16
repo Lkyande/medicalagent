@@ -531,9 +531,10 @@ export function AppInterface(props: {
 function Routes(props: { serverScoped?: JSX.Element }) {
   return (
     <>
-      <Route path="/" component={ChatLayout} />
-      <Route path="/chat" component={ChatLayout} />
-      <Route path="/chat/:id" component={ChatLayout} />
+      <Route
+        path={["/", "/chat", "/chat/:id", "/clinical", "/clinical/:id"]}
+        component={ChatLayout}
+      />
     </>
   )
 }

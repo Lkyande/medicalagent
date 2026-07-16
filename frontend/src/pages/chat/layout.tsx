@@ -1,6 +1,6 @@
 import { createEffect, createMemo, Show, createSignal, onMount, onCleanup } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
-import { useParams, useNavigate } from "@solidjs/router"
+import { useLocation, useParams, useNavigate } from "@solidjs/router"
 import type { Message, Part, Session, SessionStatus } from "@opencode-ai/sdk/v2"
 import { ApiError, backend } from "@/api/backend"
 import { getChatClient, getToken, setToken } from "./chat-client"
@@ -13,6 +13,15 @@ import { ChatEmptyState } from "./empty-state"
 import { WorkspacePanel } from "./workspace-panel"
 import { subscribeChatEvents } from "./chat-events"
 import { useDialog } from "@/ui/context/dialog"
+import {
+  CLINICAL_CONVERSATION_TYPE,
+  GENERAL_CONVERSATION_TYPE,
+  conversationHref,
+  conversationMetadata,
+  conversationTypeFromSession,
+  detectLegacyConversationType,
+  type ConversationType,
+} from "./conversation-type"
 import {
   appendPartDelta,
   filterRevertedMessages,
@@ -27,35 +36,61 @@ import {
 } from "./message-normalize"
 
 export function ChatLayout() {
+  const location = useLocation()
+  const clinical = createMemo(() => location.pathname === "/clinical" || location.pathname.startsWith("/clinical/"))
   const [loggedIn, setLoggedIn] = createSignal<boolean | undefined>(undefined)
+  const [authError, setAuthError] = createSignal("")
 
-  onMount(async () => {
+  const verifyIdentity = async () => {
     if (!getToken()) {
       setLoggedIn(false)
       return
     }
 
+    setLoggedIn(undefined)
+    setAuthError("")
     try {
       await backend.me()
       setLoggedIn(true)
     } catch (error) {
-      if (error instanceof ApiError && error.status === 401) setToken(null)
+      if (error instanceof ApiError && error.status === 401) {
+        setToken(null)
+        setLoggedIn(false)
+        return
+      }
+      setAuthError(error instanceof Error ? error.message : "身份验证失败")
       setLoggedIn(false)
     }
-  })
+  }
+
+  onMount(verifyIdentity)
 
   return (
     <Show when={loggedIn() !== undefined} fallback={<div class="chat-loading chat-loading-page">正在验证身份...</div>}>
-      <Show when={loggedIn()} fallback={<LoginPage onLogin={() => setLoggedIn(true)} />}>
-        <ChatWorkspace />
+      <Show
+        when={loggedIn()}
+        fallback={
+          <>
+            <Show when={authError()}>
+              <div class="chat-auth-error" role="alert">
+                <span>{authError()}</span>
+                <button type="button" onClick={verifyIdentity}>重试</button>
+              </div>
+            </Show>
+            <LoginPage onLogin={() => setLoggedIn(true)} />
+          </>
+        }
+      >
+        <ChatWorkspace clinical={clinical()} />
       </Show>
     </Show>
   )
 }
 
-function ChatWorkspace() {
+function ChatWorkspace(props: { clinical?: boolean }) {
   const params = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const dialog = useDialog()
   const sessionId = createMemo(() => params.id)
 
@@ -73,6 +108,7 @@ function ChatWorkspace() {
   const [currentSession, setCurrentSession] = createSignal<Session>()
   const [revertingMessageID, setRevertingMessageID] = createSignal<string>()
   const [localGeneratingMessageID, setLocalGeneratingMessageID] = createSignal<string>()
+  const [messagesLoadedSession, setMessagesLoadedSession] = createSignal<string>()
 
   onMount(() => {
     try {
@@ -92,6 +128,23 @@ function ChatWorkspace() {
   })
 
   const sessionInfo = createMemo(() => sessions().find((s) => s.id === sessionId()))
+  const persistedConversationType = createMemo<ConversationType | undefined>(() => {
+    const current = conversationTypeFromSession(currentSession())
+    return current ?? sessionInfo()?.conversationType
+  })
+  const detectedConversationType = createMemo<ConversationType | undefined>(() => {
+    const id = sessionId()
+    if (!id || messagesLoadedSession() !== id) return undefined
+    return detectLegacyConversationType(raw(), !!props.clinical)
+  })
+  const conversationType = createMemo<ConversationType | undefined>(() => {
+    if (!sessionId()) return props.clinical ? CLINICAL_CONVERSATION_TYPE : GENERAL_CONVERSATION_TYPE
+    return persistedConversationType() ?? detectedConversationType()
+  })
+  const conversationTypeReady = createMemo(() => !sessionId() || conversationType() !== undefined)
+  const clinical = createMemo(
+    () => conversationType() === CLINICAL_CONVERSATION_TYPE || (!conversationTypeReady() && !!props.clinical),
+  )
   const isGenerating = createMemo(() => sessionStatus().type !== "idle" || !!localGeneratingMessageID())
 
   const sessionTime = (info: Session) => info.time?.updated ?? info.time?.created ?? 0
@@ -108,6 +161,7 @@ function ChatWorkspace() {
           id: s.id,
           title: s.title || "新会话",
           time: s.time?.updated ?? s.time?.created ?? 0,
+          conversationType: conversationTypeFromSession(s),
         })),
       )
     } catch (e) {
@@ -125,6 +179,7 @@ function ChatWorkspace() {
     const revision = eventRevision
     if (!id) {
       setRaw([])
+      setMessagesLoadedSession(undefined)
       setMessagesLoading(false)
       return
     }
@@ -139,10 +194,12 @@ function ChatWorkspace() {
           ? mergeMessageSnapshot(snapshot, current)
           : snapshot,
       )
+      setMessagesLoadedSession(id)
     } catch (e) {
       console.error("Failed to load messages", e)
       if (request !== messageRequest || id !== sessionId()) return
       if (eventRevision === revision) setRaw([])
+      setSessionError("会话消息加载失败，暂时无法确认会话类型")
     } finally {
       if (request === messageRequest) setMessagesLoading(false)
     }
@@ -160,6 +217,7 @@ function ChatWorkspace() {
       const status = Array.isArray(data)
         ? data.find((item: any) => item?.sessionID === id || item?.id === id)?.status
         : data[id]
+      if (id !== sessionId()) return
       setSessionStatus(status ?? { type: "idle" })
     } catch (error) {
       console.debug("Failed to load session status", error)
@@ -187,12 +245,15 @@ function ChatWorkspace() {
   }
 
   let lastLoadedSession: string | undefined
+  let classificationRequest: string | undefined
   createEffect(() => {
     const id = sessionId()
     if (id === lastLoadedSession) return
     lastLoadedSession = id
     eventRevision++
-    setRaw([])
+    setRaw((current) => current.filter((message) => message.info.sessionID === id))
+    setMessagesLoadedSession(undefined)
+    classificationRequest = undefined
     setCurrentSession(undefined)
     setSessionError("")
     setLocalGeneratingMessageID(undefined)
@@ -209,6 +270,7 @@ function ChatWorkspace() {
         id: info.id,
         title: info.title || "新会话",
         time: sessionTime(info),
+        conversationType: conversationTypeFromSession(info),
       }
       if (idx >= 0) {
         const copy = [...prev]
@@ -218,6 +280,36 @@ function ChatWorkspace() {
       return [next, ...prev]
     })
   }
+
+  createEffect(() => {
+    const id = sessionId()
+    const type = detectedConversationType()
+    if (!id || !type || persistedConversationType()) return
+    const requestKey = `${id}:${type}`
+    if (classificationRequest === requestKey) return
+    classificationRequest = requestKey
+    const metadata = conversationMetadata(type, currentSession()?.metadata)
+    getChatClient().session.update({ sessionID: id, metadata } as any).then((response: any) => {
+      if (id !== sessionId()) return
+      const updated = response?.data as Session | undefined
+      if (updated) setCurrentSession(updated)
+      else setCurrentSession((current) => current ? { ...current, metadata } : current)
+      setSessions((current) =>
+        current.map((session) => session.id === id ? { ...session, conversationType: type } : session),
+      )
+    }).catch((error: unknown) => {
+      if (id !== sessionId()) return
+      setSessionError(error instanceof Error ? error.message : "无法保存会话类型")
+    })
+  })
+
+  createEffect(() => {
+    const id = sessionId()
+    const type = persistedConversationType()
+    if (!id || !type) return
+    const target = conversationHref(id, type)
+    if (location.pathname !== target) navigate(target, { replace: true })
+  })
 
   const pendingParts = new Map<string, Map<string, Part>>()
   const pendingDeltas = new Map<string, Array<{ partID: string; field: string; delta: string }>>()
@@ -313,7 +405,7 @@ function ChatWorkspace() {
         setSessions((prev) => prev.filter((s) => s.id !== sid))
         if (sid === sessionId()) {
           setLocalGeneratingMessageID(undefined)
-          navigate("/chat")
+          navigate(clinical() ? "/clinical" : "/chat")
         }
       },
       onFileEdited: () => setWorkspaceRefresh((value) => value + 1),
@@ -351,12 +443,6 @@ function ChatWorkspace() {
   const handleSendFailed = (messageID: string) => {
     if (localGeneratingMessageID() === messageID) setLocalGeneratingMessageID(undefined)
     setRaw((prev) => removeMessage(prev, messageID))
-  }
-
-  const handleReloadSession = () => {
-    loadMessages()
-    loadSessions()
-    loadStatus()
   }
 
   const revertedMessages = createMemo(() => {
@@ -421,7 +507,7 @@ function ChatWorkspace() {
     try {
       await getChatClient().session.delete({ sessionID: sid } as any)
       setSessions((prev) => prev.filter((s) => s.id !== sid))
-      if (sid === sessionId()) navigate("/chat")
+      if (sid === sessionId()) navigate(clinical() ? "/clinical" : "/chat")
     } catch (e: any) {
       alert("删除失败: " + (e?.message ?? String(e)))
     }
@@ -441,6 +527,7 @@ function ChatWorkspace() {
         sessions={sessions()}
         loading={sessionsLoading()}
         currentSessionId={sessionId()}
+        clinical={clinical()}
         open={sidebarOpen()}
         collapsed={sidebarCollapsed()}
         onClose={() => setSidebarOpen(false)}
@@ -450,7 +537,7 @@ function ChatWorkspace() {
       />
       <div class="chat-main">
         <ChatHeader
-          title={sessionInfo()?.title || "新对话"}
+          title={sessionInfo()?.title || (clinical() ? "诊疗助手" : "新对话")}
           generating={isGenerating()}
           sidebarExpanded={!sidebarCollapsed()}
           onToggleSidebar={() => {
@@ -459,7 +546,7 @@ function ChatWorkspace() {
           }}
           onOpenWorkspace={openWorkspace}
         />
-        <Show when={sessionId()} fallback={<ChatEmptyState />}>
+        <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} />}>
           <Show
             when={!messagesLoading() || messages.length > 0}
             fallback={<div class="chat-loading">加载消息中...</div>}
@@ -483,8 +570,9 @@ function ChatWorkspace() {
           onDraftConsumed={() => setComposerDraft("")}
           onSent={handleSent}
           onSendFailed={handleSendFailed}
-          onReloadSession={handleReloadSession}
           onAbortComplete={refreshAfterAbort}
+          clinical={clinical()}
+          conversationTypeReady={conversationTypeReady()}
         />
       </div>
     </div>

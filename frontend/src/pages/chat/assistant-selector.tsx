@@ -1,40 +1,95 @@
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
-import type { Agent } from "@opencode-ai/sdk/v2"
-import { getChatClient } from "./chat-client"
+import { useNavigate } from "@solidjs/router"
+import { backend, type PlatformAssistant } from "@/api/backend"
 
-const PRIMARY_AGENTS = ["build", "plan"]
+export const DEFAULT_ASSISTANT_ID = "build"
+export const CLINICAL_ASSISTANT_ID = "clinical-assistant"
 
-const labels: Record<string, string> = {
-  build: "Build",
-  plan: "Plan",
+export type AssistantOption = {
+  id: string
+  name: string
+  description: string
+  baseAgent: "build" | "plan"
+  systemPrompt?: string
+  platform?: PlatformAssistant
+}
+
+const BUILTIN_ASSISTANTS: AssistantOption[] = [
+  {
+    id: "build",
+    name: "Build",
+    description: "基础执行 Agent，负责开发、修改和工具调用。",
+    baseAgent: "build",
+  },
+  {
+    id: "plan",
+    name: "Plan",
+    description: "基础规划 Agent，只进行分析和方案设计。",
+    baseAgent: "plan",
+  },
+]
+
+export function assistantOptions(catalog: PlatformAssistant[], includePlatform = false): AssistantOption[] {
+  if (!includePlatform) return BUILTIN_ASSISTANTS
+  return [...BUILTIN_ASSISTANTS, ...catalog.map(platformAssistantOption)]
+}
+
+function platformAssistantOption(assistant: PlatformAssistant): AssistantOption {
+  return {
+    id: assistant.id,
+    name: assistant.name,
+    description: assistant.description,
+    baseAgent: assistant.baseAgent,
+    systemPrompt: assistant.systemPrompt,
+    platform: assistant,
+  }
+}
+
+export function resolveAssistant(catalog: PlatformAssistant[], selected: string, includePlatform = false): AssistantOption {
+  return assistantOptions(catalog, includePlatform).find((assistant) => assistant.id === selected) ?? BUILTIN_ASSISTANTS[0]
 }
 
 export function ChatAssistantSelector(props: {
   selected: string
-  onSelect: (agent: string) => void
+  sessionId?: string
+  onSelect: (assistant: AssistantOption) => void
 }) {
+  const navigate = useNavigate()
   const [open, setOpen] = createSignal(false)
-  const [agents, setAgents] = createSignal<Agent[]>([])
+  const [catalog, setCatalog] = createSignal<PlatformAssistant[]>([])
+  const [enabling, setEnabling] = createSignal("")
+  const [enabled, setEnabled] = createSignal(new Set<string>())
   const [error, setError] = createSignal("")
   let ref: HTMLDivElement | undefined
 
-  const available = createMemo(() =>
-    agents()
-      .filter((agent) => !agent.hidden && agent.mode !== "subagent" && PRIMARY_AGENTS.includes(agent.name))
-      .sort((a, b) => PRIMARY_AGENTS.indexOf(a.name) - PRIMARY_AGENTS.indexOf(b.name)),
-  )
+  const options = createMemo(() => assistantOptions(catalog()))
+  const current = createMemo(() => resolveAssistant(catalog(), props.selected))
+
+  const enablePlatformAssistant = async (assistant: AssistantOption, closeAfterEnable: boolean) => {
+    if (!assistant.platform || enabling()) return
+    setEnabling(assistant.id)
+    setError("")
+    try {
+      const result = await backend.enableAssistant(assistant.id)
+      setEnabled((items) => new Set([...items, assistant.id]))
+      props.onSelect({ ...assistant, platform: result })
+      if (closeAfterEnable) setOpen(false)
+      if (result.requiresNewSession && props.sessionId) navigate("/chat")
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "启用助手能力失败")
+    } finally {
+      setEnabling("")
+    }
+  }
 
   onMount(async () => {
     try {
-      const response = await getChatClient().app.agents()
-      const data = (response as { data?: Agent[] }).data ?? response
-      const list = Array.isArray(data) ? data : []
-      setAgents(list)
-      const first = list.find((agent) => !agent.hidden && agent.mode !== "subagent" && agent.name === "build")
-        ?? list.find((agent) => !agent.hidden && agent.mode !== "subagent" && agent.name === "plan")
-      if (!props.selected && first) props.onSelect(first.name)
+      const platformAssistants = await backend.assistants()
+      setCatalog(platformAssistants)
+      const selected = resolveAssistant(platformAssistants, props.selected)
+      if (selected.id !== props.selected) props.onSelect(selected)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "无法加载 OpenCode Agent")
+      setError(cause instanceof Error ? cause.message : "无法加载助手能力")
     }
 
     const close = (event: MouseEvent) => {
@@ -44,7 +99,14 @@ export function ChatAssistantSelector(props: {
     onCleanup(() => document.removeEventListener("click", close))
   })
 
-  const current = createMemo(() => available().find((agent) => agent.name === props.selected))
+  const select = async (assistant: AssistantOption) => {
+    if (!assistant.platform) {
+      props.onSelect(assistant)
+      setOpen(false)
+      return
+    }
+    await enablePlatformAssistant(assistant, true)
+  }
 
   return (
     <div class="chat-assistant-selector" ref={ref}>
@@ -54,34 +116,38 @@ export function ChatAssistantSelector(props: {
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open()}
         aria-haspopup="listbox"
+        title="选择工作模式"
       >
         <span class="chat-assistant-indicator" />
-        <span>{current() ? labels[current()!.name] ?? current()!.name : labels[props.selected] ?? "选择 Agent"}</span>
+        <span>{current().name}</span>
       </button>
       <Show when={open()}>
-        <div class="chat-assistant-dropdown" role="listbox" aria-label="选择 Agent">
-          <For each={available()}>
-            {(agent) => (
+        <div class="chat-assistant-dropdown" role="listbox" aria-label="选择工作模式">
+          <For each={options()}>
+            {(assistant) => (
               <button
                 type="button"
                 class="chat-assistant-option"
-                classList={{ active: agent.name === props.selected }}
+                classList={{ active: assistant.id === props.selected }}
+                disabled={!!enabling()}
                 role="option"
-                aria-selected={agent.name === props.selected}
-                onClick={() => {
-                  props.onSelect(agent.name)
-                  setOpen(false)
-                }}
+                aria-selected={assistant.id === props.selected}
+                onClick={() => select(assistant)}
               >
-                <span class="chat-assistant-option-name">{labels[agent.name] ?? agent.name}</span>
-                <Show when={agent.description}>
-                  <span class="chat-assistant-option-description">{agent.description}</span>
-                </Show>
+                <span class="chat-assistant-option-row">
+                  <span class="chat-assistant-option-name">{assistant.name}</span>
+                  <Show when={assistant.platform}>
+                    <span class="chat-assistant-install-action">
+                      {enabling() === assistant.id ? "启用中..." : enabled().has(assistant.id) ? "已启用" : "启用"}
+                    </span>
+                  </Show>
+                </span>
+                <span class="chat-assistant-option-description">{assistant.description}</span>
               </button>
             )}
           </For>
-          <Show when={available().length === 0}>
-            <div class="chat-assistant-empty">{error() || "OpenCode Server 未返回 Build 或 Plan Agent"}</div>
+          <Show when={error()}>
+            <div class="chat-assistant-error">{error()}</div>
           </Show>
         </div>
       </Show>

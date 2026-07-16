@@ -31,6 +31,8 @@ const documentExtensions = new Set(["md", "mdx", "txt", "pdf", "doc", "docx", "r
 const codeExtensions = new Set([
   "js", "jsx", "ts", "tsx", "css", "scss", "html", "json", "yaml", "yml", "toml", "py", "go", "rs", "java", "kt", "c", "h", "cpp", "hpp", "cs", "php", "rb", "sh", "sql", "vue", "svelte",
 ])
+const WORKSPACE_POLL_INTERVAL_MS = 30_000
+const WORKSPACE_EVENT_DEBOUNCE_MS = 400
 
 function categoryOf(node: WorkspaceNode): Exclude<FileCategory, "all"> {
   const extension = node.name.split(".").at(-1)?.toLowerCase() ?? ""
@@ -58,36 +60,78 @@ export function WorkspacePanel(props: {
   const [category, setCategory] = createSignal<FileCategory>("all")
   const directoryRequests = new Map<string, number>()
   let contentRequest = 0
+  let pollTimer: number | undefined
+  let eventRefreshTimer: number | undefined
+  let refreshPromise: Promise<boolean> | undefined
+  let refreshAgain = false
+  let initialized = false
+  let pendingEventRefresh = false
+  let disposed = false
 
-  const loadDirectory = async (path: string, silent = false) => {
+  const loadDirectory = async (path: string, silent = false): Promise<boolean> => {
     const request = (directoryRequests.get(path) ?? 0) + 1
     directoryRequests.set(path, request)
     if (!silent) setLoading(true)
     try {
       const nodes = sortNodes(await backend.workspaceFiles(path))
-      if (directoryRequests.get(path) !== request) return
+      if (directoryRequests.get(path) !== request || disposed) return false
       setChildren((current) => ({ ...current, [path]: nodes }))
       setError("")
+      return true
     } catch (cause: any) {
-      if (directoryRequests.get(path) !== request) return
+      if (directoryRequests.get(path) !== request || disposed) return false
       setError(cause?.message ?? "工作目录加载失败")
+      return false
     } finally {
-      if (path === "" && directoryRequests.get(path) === request) setLoading(false)
+      if (!disposed && path === "" && directoryRequests.get(path) === request) setLoading(false)
     }
   }
 
-  const refresh = async (silent = false) => {
-    await loadDirectory("", silent)
+  const runRefresh = async (silent: boolean) => {
+    const rootLoaded = await loadDirectory("", silent)
+    if (!rootLoaded || disposed) return false
     const paths = Object.keys(expanded()).filter((path) => expanded()[path])
     await Promise.all(paths.map((path) => loadDirectory(path, true)))
+    return true
+  }
+
+  const refresh = (silent = false): Promise<boolean> => {
+    if (refreshPromise) {
+      refreshAgain = true
+      return refreshPromise
+    }
+
+    const current = (async () => {
+      let success = false
+      let nextSilent = silent
+      do {
+        refreshAgain = false
+        success = await runRefresh(nextSilent)
+        nextSilent = true
+      } while (refreshAgain && !disposed)
+      return success
+    })()
+    refreshPromise = current
+    void current.finally(() => {
+      if (refreshPromise === current) refreshPromise = undefined
+    })
+    return current
   }
 
   const initialize = async () => {
     try {
-      const workspace = await backend.workspace()
+      const [workspace, loaded] = await Promise.all([backend.workspace(), refresh()])
+      if (disposed) return
       setDirectory(workspace.directory)
-      await refresh()
+      if (!loaded || disposed) return
+      initialized = true
+      if (pendingEventRefresh) {
+        pendingEventRefresh = false
+        void refresh(true)
+      }
+      pollTimer = window.setInterval(() => void refresh(true), WORKSPACE_POLL_INTERVAL_MS)
     } catch (cause: any) {
+      if (disposed) return
       setError(cause?.message ?? "工作目录初始化失败")
       setLoading(false)
     }
@@ -95,8 +139,11 @@ export function WorkspacePanel(props: {
 
   onMount(() => {
     void initialize()
-    const timer = window.setInterval(() => void refresh(true), 5000)
-    onCleanup(() => window.clearInterval(timer))
+    onCleanup(() => {
+      disposed = true
+      if (pollTimer !== undefined) window.clearInterval(pollTimer)
+      if (eventRefreshTimer !== undefined) window.clearTimeout(eventRefreshTimer)
+    })
   })
 
   let lastRefresh = props.refreshVersion
@@ -104,7 +151,15 @@ export function WorkspacePanel(props: {
     const version = props.refreshVersion
     if (version === lastRefresh) return
     lastRefresh = version
-    void refresh(true)
+    if (!initialized) {
+      pendingEventRefresh = true
+      return
+    }
+    if (eventRefreshTimer !== undefined) window.clearTimeout(eventRefreshTimer)
+    eventRefreshTimer = window.setTimeout(() => {
+      eventRefreshTimer = undefined
+      void refresh(true)
+    }, WORKSPACE_EVENT_DEBOUNCE_MS)
   })
 
   const toggleDirectory = async (path: string) => {

@@ -12,17 +12,48 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiFetch<T = unknown>(path: string, init?: RequestInit): Promise<T> {
+export type PlatformAssistant = {
+  id: string
+  name: string
+  description: string
+  version: string
+  baseAgent: "build" | "plan"
+  systemPrompt: string
+  skills: string[]
+  tools: string[]
+}
+
+export type AssistantEnableResult = PlatformAssistant & {
+  enabled: boolean
+  changed: boolean
+  mcpStatus: "connected"
+  requiresNewSession: boolean
+}
+
+export async function apiFetch<T = unknown>(path: string, init?: RequestInit, timeoutMs = 15000): Promise<T> {
   const token = getToken()
-  const resp = await fetch(`${BASE}${path}`, {
-    ...init,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...init?.headers,
-    },
-  })
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), timeoutMs)
+  let resp: Response
+  try {
+    resp = await fetch(`${BASE}${path}`, {
+      ...init,
+      credentials: "include",
+      signal: init?.signal ?? controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...init?.headers,
+      },
+    })
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new ApiError("请求超时，请检查后端和数据库连接", 408)
+    }
+    throw error
+  } finally {
+    window.clearTimeout(timeout)
+  }
   if (!resp.ok) {
     const text = await resp.text().catch(() => resp.statusText)
     throw new ApiError(text || `HTTP ${resp.status}`, resp.status)
@@ -67,8 +98,11 @@ export const backend = {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
-  me: () => apiFetch<{ id: string; email: string }>("/auth/me"),
+  me: () => apiFetch<{ id: string; email: string }>("/auth/me", undefined, 8000),
   dispatch: () => apiFetch<{ sandboxId: string; proxyBase: string; workspace: string }>("/dispatch", { method: "POST" }),
+  assistants: () => apiFetch<PlatformAssistant[]>("/assistants"),
+  enableAssistant: (id: string) =>
+    apiFetch<AssistantEnableResult>(`/assistants/${encodeURIComponent(id)}/install`, { method: "POST" }),
   workspace: () => apiFetch<{ id: string; sandboxId: string; directory: string }>("/workspace"),
   workspaceFiles: (path = "") =>
     apiFetch<Array<{ name: string; path: string; type: "file" | "directory"; ignored: boolean }>>(

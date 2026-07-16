@@ -2,7 +2,20 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from sqlalchemy.orm import DeclarativeBase
 from app.config import settings
 
-engine = create_async_engine(settings.database_url, echo=False)
+
+def _engine_options() -> dict:
+    options = {
+        "echo": False,
+        "pool_pre_ping": True,
+        "pool_recycle": 1800,
+        "pool_timeout": 10,
+    }
+    if settings.database_url.startswith("mysql+"):
+        options["connect_args"] = {"connect_timeout": 5}
+    return options
+
+
+engine = create_async_engine(settings.database_url, **_engine_options())
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 

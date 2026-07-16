@@ -6,9 +6,9 @@ export interface SessionItem {
 
 export type TimeGroup = "today" | "yesterday" | "earlier"
 
-export interface SessionGroup {
+export interface SessionGroup<T extends SessionItem = SessionItem> {
   label: string
-  items: SessionItem[]
+  items: T[]
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -31,8 +31,8 @@ export function classifyByTime(ts: number, now: number = Date.now()): TimeGroup 
   return "earlier"
 }
 
-export function groupByTime(items: SessionItem[], now: number = Date.now()): SessionGroup[] {
-  const buckets: Record<TimeGroup, SessionItem[]> = {
+export function groupByTime<T extends SessionItem>(items: T[], now: number = Date.now()): SessionGroup<T>[] {
+  const buckets: Record<TimeGroup, T[]> = {
     today: [],
     yesterday: [],
     earlier: [],
@@ -48,7 +48,7 @@ export function groupByTime(items: SessionItem[], now: number = Date.now()): Ses
     buckets[group].push(item)
   }
 
-  const sortDesc = (a: SessionItem, b: SessionItem) => getGroupTimestamp(b) - getGroupTimestamp(a)
+  const sortDesc = (a: T, b: T) => getGroupTimestamp(b) - getGroupTimestamp(a)
 
   const labels: Record<TimeGroup, string> = {
     today: "今天",
@@ -56,7 +56,7 @@ export function groupByTime(items: SessionItem[], now: number = Date.now()): Ses
     earlier: "更早",
   }
 
-  const result: SessionGroup[] = []
+  const result: SessionGroup<T>[] = []
   for (const key of ["today", "yesterday", "earlier"] as TimeGroup[]) {
     if (buckets[key].length > 0) {
       result.push({

@@ -2,6 +2,8 @@
 
 基于 [OpenCode](https://opencode.ai) 的 AI 编码平台，保留原始 Agent 功能，新增自定义业务逻辑。
 
+接口细节见 [API.md](./API.md)。
+
 ## 架构
 
 ```
@@ -70,7 +72,7 @@ your-platform/
 │   │   ├── main.py            # 入口 + CORS + OpenCode 代理路由
 │   │   ├── config.py          # 配置 + 沙盒映射
 │   │   ├── database.py        # SQLAlchemy async 连接
-│   │   ├── models.py          # User / SandboxAssignment 模型
+│   │   ├── models.py          # User / SandboxAssignment / UserWorkspace / UserSession 模型
 │   │   ├── auth/
 │   │   │   ├── jwt_handler.py # JWT 签发 / 验证
 │   │   │   └── dependencies.py# get_current_user 依赖
@@ -82,6 +84,7 @@ your-platform/
 │   │       ├── auth.py        # /api/auth/*
 │   │       ├── dispatch.py    # /api/dispatch
 │   │       ├── sandbox.py     # /api/sandboxes/*
+│   │       ├── workspace.py   # /api/workspace/*
 │   │       ├── business.py    # /api/business/*
 │   │       └── health.py      # /api/health
 │   ├── requirements.txt
@@ -92,6 +95,7 @@ your-platform/
 │   └── default.conf           # 生产 Nginx 配置（含 SSE 优化）
 ├── docker-compose.yml         # 容器编排
 ├── Makefile                   # 开发快捷命令
+├── API.md                     # 后端接口文档
 └── README.md
 ```
 
@@ -154,13 +158,14 @@ pip install -r requirements.txt
 
 # 配置环境
 cp .env.example .env
-# 编辑 .env，填入沙盒 IP 和密码
+# 编辑 .env，填入数据库、沙盒 IP 和密码
+#   DATABASE_URL=mysql+aiomysql://root:123456@localhost:3320/your_platform
 #   SANDBOX_A_URL=http://10.0.0.11:4096
 #   SANDBOX_A_PASSWORD=你的沙盒密码
 #   JWT_SECRET=你的JWT密钥
 
-# 启动开发服务器
-uvicorn app.main:app --reload --port 8000
+# 启动开发服务器。远程沙盒需要访问 MCP，因此不能只监听 127.0.0.1。
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 3. 启动前端
@@ -193,6 +198,8 @@ make down           # Docker 停止
 ```
 
 ## API 接口
+
+完整请求/响应示例、错误码和代理规则见 [API.md](./API.md)。后端同时提供 FastAPI 自动文档：开发环境打开 `http://localhost:8000/docs`，OpenAPI JSON 为 `http://localhost:8000/openapi.json`。
 
 ### 认证
 
@@ -246,14 +253,17 @@ curl -X POST http://localhost:8000/api/auth/register \
 |------|------|------|------|
 | `/opencode/{path}` | ALL | JWT | 反向代理到用户沙盒 |
 
-所有 OpenCode HTTP API 都通过此路径转发，包括：
-- `GET /opencode/global/event` — SSE 事件流（透传）
-- `GET /opencode/session` — 会话列表
-- `POST /opencode/session/{id}/prompt_async` — 发送 prompt
-- `GET /opencode/project` — 项目列表
-- `GET /opencode/config` — 配置
-- `GET /opencode/provider` — Provider 列表
-- ... 其他所有 OpenCode API
+代理不是全量暴露 OpenCode API。当前仅开放会话、Provider、Agent、Project、Path、Global 配置/事件/健康检查等 allowlist 路径；`/opencode/session/{id}/shell` 被显式禁用。代理会覆盖 `directory` 参数为当前用户工作目录，并按用户工作目录过滤会话列表、项目列表和 SSE 事件。
+
+常用路径包括：
+- `GET /opencode/global/event` - SSE 事件流（按工作目录过滤）
+- `GET /opencode/session` - 当前用户会话列表
+- `POST /opencode/session` - 创建会话并记录归属
+- `POST /opencode/session/{id}/prompt_async` - 发送 prompt
+- `GET /opencode/session/status` - 当前用户会话状态
+- `GET /opencode/project` - 当前工作目录项目列表
+- `GET /opencode/path` - 返回当前用户工作目录路径
+- `GET /opencode/provider` - Provider 列表
 
 **使用示例（带 JWT）：**
 
@@ -299,12 +309,13 @@ VITE_BACKEND_API_URL=/api
 | `JWT_SECRET` | `dev-secret` | JWT 签名密钥（**生产必须修改**） |
 | `JWT_ALGORITHM` | `HS256` | JWT 签名算法 |
 | `JWT_EXPIRE_DAYS` | `7` | JWT 过期天数 |
-| `DATABASE_URL` | `mysql+aiomysql://root:123456@localhost:3320/your_platform` | MySQL 连接串 |
+| `DATABASE_URL` | `sqlite+aiosqlite:///./dev.db` | SQLAlchemy async 连接串；`.env.example` 使用 MySQL |
 | `CORS_ORIGINS` | `http://localhost:4444,...` | CORS 允许的来源 |
 | `SANDBOX_<ID>_URL` | - | 沙盒实例 URL |
 | `SANDBOX_<ID>_PASSWORD` | - | 沙盒 Basic Auth 密码 |
 | `SANDBOX_<ID>_USERNAME` | `opencode` | 沙盒 Basic Auth 用户名 |
 | `SANDBOX_WORKSPACE_ROOT` | 自动探测 | 所有沙盒的用户工作目录根路径；生产建议显式设置 |
+| `MURTAGH_MCP_URL` | - | 平台内部莫塔医学 MCP 地址，用于按需路由和读取审核后的 skill |
 | `SANDBOX_<ID>_WORKSPACE_ROOT` | 全局值 | 指定沙盒的工作目录根路径 |
 
 **多沙盒配置示例：**
@@ -321,6 +332,30 @@ SANDBOX_B_USERNAME=opencode
 SANDBOX_C_URL=http://10.0.0.13:4096
 SANDBOX_C_PASSWORD=password-c
 ```
+
+### 诊疗助手自动安装
+
+左侧业务入口会显示管理员发布的“诊疗助手”。它不是独立 OpenCode Agent，而是 `build` 基础 Agent 的能力配置。用户进入后，FastAPI 自动把入口 Skill 和 MCP 配置写入该用户的沙盒工作目录；仅在配置实际变化时刷新该目录对应的 OpenCode 实例。前端继续发送 `agent: "build"`，同时通过 `system` 注入诊疗规则。莫塔医学正文不复制到用户目录，而是通过远程 MCP 按需获取。随访助手、统计助手等能力沿用相同机制。
+
+FastAPI 环境需要配置：
+
+```env
+MURTAGH_MCP_URL=http://backend:8000/mcp/murtagh
+MURTAGH_KNOWLEDGE_ROOT=/app/knowledge/murtagh
+```
+
+后端内置的 MCP 地址为 `/mcp/murtagh`，提供 `murtagh_route` 和 `murtagh_get_skills` 工具。`MURTAGH_MCP_URL` 必须填写为 OpenCode 沙盒能够访问的内部地址，不能使用 `localhost` 或只在浏览器侧有效的相对路径。远程沙盒开发环境应让 Uvicorn 监听 `0.0.0.0`，填写后端的内网/Tailscale IP，并仅允许沙盒 IP 访问该端口。FastMCP 的 Host 允许列表会自动加入该 URL 中配置的主机和端口；如果实际访问地址与配置不一致，会返回 `421 Invalid Host header`。安装接口会主动重连并检查 OpenCode `/mcp` 状态，只有 `murtagh-medical` 为 `connected` 时才返回启用成功。
+
+诊疗入口 Skill 的唯一发布源是 `backend/app/assistant_catalog/clinical-assistant/skills/`。仓库根目录 `.opencode/skills/` 下的同名文件只作为本地 OpenCode 开发镜像，并由测试保证与发布源完全一致。`MURTAGH_KNOWLEDGE_ROOT` 指向 `.opencode/skills/disease-guidelines/skill/`，该目录只保存路由索引、注册表和审核后的医学正文，不是入口 `SKILL.md` 的发布源。生产部署需要把该 `skill` 目录以只读方式挂载，并通过内网、防火墙或反向代理认证限制 MCP 访问。
+
+可在沙盒 OpenCode 上检查 MCP 状态：
+
+```bash
+curl -u opencode:你的沙盒密码 \
+  "http://沙盒地址:4096/mcp?directory=用户工作目录"
+```
+
+正常结果中 `murtagh-medical.status` 应为 `connected`。若为 `failed` 且提示无法连接，优先检查后端监听地址、防火墙、Tailscale ACL 和 `MURTAGH_MCP_URL`。
 
 ## 生产部署
 
@@ -365,7 +400,7 @@ location /opencode/ {
 | OpenCode Server | 必须设置 `OPENCODE_SERVER_PASSWORD` |
 | 前端 | 不接触沙盒真实地址和密码 |
 | SSE 代理 | 超时 + 心跳检测，断连自动清理 |
-| API 响应 | `/api/sandboxes` 不返回沙盒 URL |
+| API 响应 | `/api/sandboxes` 不返回沙盒 URL；`/api/sandboxes/{id}/status` 当前会返回 URL，生产建议改为仅管理员可见或移除 URL |
 
 ## 沙盒管理
 

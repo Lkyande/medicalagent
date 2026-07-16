@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     database_url: str = "sqlite+aiosqlite:///./dev.db"
     cors_origins: str = "http://localhost:4444,http://localhost:5173"
     sandbox_workspace_root: str = ""
+    murtagh_mcp_url: str = ""
+    murtagh_knowledge_root: str = ""
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 

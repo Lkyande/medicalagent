@@ -16,3 +16,4 @@ services:
       - ./backend/.env
     volumes:
       - ./backend/data:/app/data
+      - ./.opencode/skills/disease-guidelines/skill:/app/knowledge/murtagh:ro

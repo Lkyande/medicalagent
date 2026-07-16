@@ -2,17 +2,25 @@ import { createMemo, For, Show, createSignal, onCleanup, onMount } from "solid-j
 import { useNavigate, A } from "@solidjs/router"
 import { setToken } from "./chat-client"
 import { groupByTime, formatRelativeTime } from "./group-by-time"
+import {
+  CLINICAL_CONVERSATION_TYPE,
+  GENERAL_CONVERSATION_TYPE,
+  conversationHref,
+  type ConversationType,
+} from "./conversation-type"
 
 export interface SidebarSession {
   id: string
   title: string
   time: number
+  conversationType?: ConversationType
 }
 
 export function ChatSidebar(props: {
   sessions: SidebarSession[]
   loading: boolean
   currentSessionId?: string
+  clinical?: boolean
   open: boolean
   collapsed: boolean
   onClose: () => void
@@ -33,12 +41,24 @@ export function ChatSidebar(props: {
   })
 
   const groups = createMemo(() =>
-    groupByTime(props.sessions.map((s) => ({ id: s.id, title: s.title, time: { updated: s.time } }))),
+    groupByTime(
+      props.sessions.map((s) => ({
+        id: s.id,
+        title: s.title,
+        time: { updated: s.time },
+        conversationType: s.conversationType,
+      })),
+    ),
   )
 
   const newChat = () => {
     props.onClose()
     navigate("/chat")
+  }
+
+  const openClinical = () => {
+    props.onClose()
+    navigate("/clinical")
   }
 
   const handleLogout = () => {
@@ -62,6 +82,10 @@ export function ChatSidebar(props: {
           <button class="chat-rail-action" onClick={newChat} aria-label="新建对话" title="新建对话">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
           </button>
+          <button class="chat-rail-action" classList={{ active: props.clinical }} onClick={openClinical} aria-label="诊疗助手" title="诊疗助手">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
+          </button>
+          <span class="chat-rail-separator" aria-hidden="true" />
           <button class="chat-rail-action" onClick={props.onExpand} aria-label="查看历史会话" title="历史会话">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>
           </button>
@@ -71,7 +95,7 @@ export function ChatSidebar(props: {
         </div>
         <div class="chat-sidebar-expanded">
           <div class="chat-sidebar-header">
-            <div class="chat-sidebar-brand"><span>A</span><strong>Agnes Workspace</strong></div>
+            <div class="chat-sidebar-brand"><span>M</span><strong>Medical Agent</strong></div>
             <button class="chat-sidebar-collapse" onClick={props.onCollapse} aria-label="收起历史会话" title="收起历史会话">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
             </button>
@@ -81,13 +105,23 @@ export function ChatSidebar(props: {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg>
               新建对话
             </button>
+            <button class="chat-clinical-entry" classList={{ active: props.clinical }} onClick={openClinical}>
+              <span class="chat-clinical-entry-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
+              </span>
+              <span>诊疗助手</span>
+            </button>
+          </div>
+          <div class="chat-history-heading">
+            <span>历史对话</span>
+            <span class="chat-history-heading-line" />
           </div>
           <div class="chat-session-list">
           <Show when={props.loading && props.sessions.length === 0}>
             <div class="chat-loading">加载中...</div>
           </Show>
           <Show when={!props.loading && props.sessions.length === 0}>
-            <div class="chat-session-empty">暂无会话</div>
+            <div class="chat-session-empty">暂无历史对话</div>
           </Show>
           <For each={groups()}>
             {(group) => {
@@ -115,14 +149,24 @@ export function ChatSidebar(props: {
                       {(item) => (
                         <div class="chat-session-row">
                           <A
-                            href={`/chat/${item.id}`}
+                            href={conversationHref(
+                              item.id,
+                              item.conversationType ?? GENERAL_CONVERSATION_TYPE,
+                            )}
                             class="chat-session-item"
                             classList={{ active: item.id === props.currentSessionId }}
                             onClick={props.onClose}
                           >
-                            <span class="chat-session-item-title">{item.title}</span>
+                            <span class="chat-session-item-title">
+                              <Show when={item.conversationType === CLINICAL_CONVERSATION_TYPE}>
+                                <span class="chat-session-clinical-mark" title="诊疗助手对话" aria-label="诊疗助手对话">
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
+                                </span>
+                              </Show>
+                              <span>{item.title}</span>
+                            </span>
                             <span class="chat-session-item-time">
-                              {formatRelativeTime(item.time?.updated ?? item.time?.created ?? 0)}
+                              {formatRelativeTime(item.time?.updated ?? 0)}
                             </span>
                           </A>
                           <button
