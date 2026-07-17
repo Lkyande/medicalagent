@@ -357,6 +357,35 @@ curl -u opencode:你的沙盒密码 \
 
 正常结果中 `murtagh-medical.status` 应为 `connected`。若为 `failed` 且提示无法连接，优先检查后端监听地址、防火墙、Tailscale ACL 和 `MURTAGH_MCP_URL`。
 
+### 宣教助手自动安装
+
+“宣教助手”沿用相同的 Build Agent 能力安装机制。平台把 `health-education-content` 入口 Skill、远程 `education-content` MCP 和 `smart-market-hot-topics` MCP 配置写入用户工作目录。宣教 MCP 只封装独立 `wechat_agent` 的异步生成预览接口；热点 MCP 通过 HTTP 封装独立 Smart Market 后端，不复制其数据库和检索逻辑。
+
+第一期仅开放生成和查看微信公众号预览，不向 Agent 暴露创建草稿、正式发布或删除接口。平台后端需要配置：
+
+```env
+# OpenCode 沙盒能够访问的平台 MCP 地址，不能使用沙盒自身的 localhost。
+EDUCATION_MCP_URL=http://backend:8000/mcp/education
+EDUCATION_MCP_TIMEOUT_MS=120000
+# OpenCode 沙盒访问当前平台热点 MCP 的地址。
+HOT_TOPICS_MCP_URL=http://backend:8000/mcp/hot-topics
+HOT_TOPICS_MCP_TIMEOUT_MS=60000
+# 当前平台后端访问 Smart Market HTTP API 的地址。
+SMART_MARKET_BASE_URL=https://mkt.kangqiao.vip/api/v1
+SMART_MARKET_TIMEOUT_SECONDS=30
+# 平台后端访问独立 wechat_agent 的内网地址。
+WECHAT_AGENT_BASE_URL=http://wechat-agent:8330
+WECHAT_AGENT_TIMEOUT_SECONDS=30
+WECHAT_AGENT_PREVIEW_WAIT_SECONDS=60
+WECHAT_AGENT_PREVIEW_POLL_SECONDS=5
+```
+
+宣教 MCP 提供 `education_create_preview`、`education_wait_for_preview`、`education_get_preview` 和 `education_list_templates`。热点 MCP 挂载在 `/mcp/hot-topics`，提供 `hot_topics_search` 和 `hot_topics_list_tracks`，内部调用 `POST /api/v1/track/hot_topics/search` 与 `GET /api/v1/track/tracks`。用户只给出“医院科普宣传”等宽泛意图、受众或图片风格而没有具体医学主题时，Agent 会先询问是否需要结合当前热点素材，不会立即搜索或创建预览；用户确认需要后才搜索。用户已给出明确医学主题且未要求热点时，直接按主题生成。热点只能作为传播背景，不能替代医学证据。
+
+Agent 提交宣教任务并取得 `job_id` 后，使用该编号分段等待后台任务；每段最多 60 秒并明显短于 MCP 超时，未完成时正常返回 `running`，再按同一 `job_id` 续查，不将等待超时视为任务失败。前端也会按任务编号持续查询，并在完成后展示预览链接。热点搜索默认不返回完整正文和图片，以控制模型上下文和上游开销。
+
+`SMART_MARKET_BASE_URL` 是平台后端访问 Smart Market 的 HTTPS API 基地址，已包含 `/api/v1`，与沙盒访问的 `HOT_TOPICS_MCP_URL` 方向不同。线上必须部署 `POST /track/hot_topics/search` 增强接口；如果后续启用 API Key，可通过 `SMART_MARKET_API_KEY` 注入 `X-API-Key` 请求头。
+
 ## 生产部署
 
 ### Docker Compose

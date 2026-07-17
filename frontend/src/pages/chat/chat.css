@@ -397,6 +397,7 @@
 }
 
 .chat-main {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -978,6 +979,236 @@
   transform: rotate(90deg);
 }
 
+.chat-education-progress {
+  padding: 0 12px 12px 56px;
+}
+
+.chat-education-progress-bar {
+  gap: 7px;
+}
+
+.chat-education-progress-bar [data-slot="progress-label"] {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--chat-text-muted);
+  font-size: 12px;
+}
+
+.chat-education-progress-copy {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-education-progress-value {
+  flex: 0 0 auto;
+  color: var(--tool-tone);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.chat-education-progress-bar [data-slot="progress-track"] {
+  height: 7px;
+  border-color: color-mix(in srgb, var(--tool-tone) 18%, transparent);
+  background: color-mix(in srgb, var(--tool-tone) 9%, transparent);
+}
+
+.chat-education-progress-bar [data-slot="progress-fill"] {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--tool-tone) 72%, #fff), var(--tool-tone));
+  transition: width 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.chat-education-progress-bar [data-slot="progress-fill"]::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.5) 48%, transparent 76%);
+  content: "";
+  transform: translateX(-100%);
+  animation: chat-progress-sheen 1.8s ease-in-out infinite;
+}
+
+.chat-education-preview-result {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--tool-tone) 20%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--tool-soft) 65%, transparent);
+  color: var(--chat-text);
+}
+
+.chat-education-preview-result p {
+  margin: 0;
+  color: var(--chat-text-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.chat-education-preview-result a {
+  color: var(--tool-tone);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.chat-education-preview-result a:hover {
+  text-decoration: underline;
+}
+
+.chat-education-preview-failed {
+  margin-top: 8px;
+  color: var(--v2-foreground-fg-danger, #b42318);
+  font-size: 12px;
+}
+
+.chat-interaction-dock {
+  display: flex;
+  width: calc(100% - 48px);
+  max-width: 760px;
+  max-height: min(520px, 45dvh);
+  margin: 0 auto 10px;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--chat-accent) 28%, var(--chat-border));
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--chat-bg) 95%, var(--chat-brand-soft));
+  box-shadow: 0 18px 48px rgba(31, 45, 40, 0.18);
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-interaction-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chat-interaction-heading strong {
+  color: var(--chat-text);
+  font-size: 15px;
+}
+
+.chat-interaction-heading span,
+.chat-interaction-patterns {
+  color: var(--chat-text-muted);
+  font-size: 12px;
+}
+
+.chat-interaction-patterns {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--chat-brand-soft);
+  overflow-wrap: anywhere;
+}
+
+.chat-interaction-question {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chat-interaction-question legend {
+  margin-bottom: 8px;
+  color: var(--chat-text);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.chat-interaction-question button {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--chat-border);
+  border-radius: 10px;
+  background: var(--chat-bubble-assistant);
+  color: var(--chat-text);
+  text-align: left;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.chat-interaction-question button[data-selected="true"] {
+  border-color: var(--chat-accent);
+  background: var(--chat-brand-soft);
+}
+
+.chat-interaction-question button span {
+  color: var(--chat-text-muted);
+  font-size: 12px;
+}
+
+.chat-interaction-custom-answer {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--chat-border);
+  border-radius: 10px;
+  outline: none;
+  background: var(--chat-bubble-assistant);
+  color: var(--chat-text);
+  font: inherit;
+}
+
+.chat-interaction-custom-answer:focus {
+  border-color: var(--chat-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--chat-accent) 12%, transparent);
+}
+
+.chat-interaction-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.chat-interaction-actions button {
+  padding: 8px 12px;
+  border: 1px solid var(--chat-border);
+  border-radius: 9px;
+  background: var(--chat-bubble-assistant);
+  color: var(--chat-text);
+  cursor: pointer;
+}
+
+.chat-interaction-actions button.primary {
+  border-color: var(--chat-accent);
+  background: var(--chat-accent);
+  color: white;
+}
+
+.chat-interaction-actions button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+@media (max-width: 680px) {
+  .chat-interaction-dock {
+    width: calc(100% - 20px);
+    max-height: 50dvh;
+  }
+  .chat-interaction-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .chat-interaction-actions {
+    flex-wrap: wrap;
+  }
+}
+
 .chat-tool-body,
 .chat-thinking-body {
   padding: 10px 12px 12px;
@@ -995,6 +1226,10 @@
 @keyframes chat-tool-enter {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes chat-progress-sheen {
+  55%, 100% { transform: translateX(130%); }
 }
 
 .chat-tool-label {
@@ -2006,7 +2241,8 @@
     animation: chat-typing-pulse 1.4s infinite ease-in-out both;
   }
   .chat-tool-card,
-  .chat-tool-status[data-status="running"] .chat-tool-status-dot {
+  .chat-tool-status[data-status="running"] .chat-tool-status-dot,
+  .chat-education-progress-bar [data-slot="progress-fill"]::after {
     animation: none;
   }
 }

@@ -4,6 +4,7 @@ import { setToken } from "./chat-client"
 import { groupByTime, formatRelativeTime } from "./group-by-time"
 import {
   CLINICAL_CONVERSATION_TYPE,
+  EDUCATION_CONVERSATION_TYPE,
   GENERAL_CONVERSATION_TYPE,
   conversationHref,
   type ConversationType,
@@ -21,6 +22,7 @@ export function ChatSidebar(props: {
   loading: boolean
   currentSessionId?: string
   clinical?: boolean
+  education?: boolean
   open: boolean
   collapsed: boolean
   onClose: () => void
@@ -61,6 +63,11 @@ export function ChatSidebar(props: {
     navigate("/clinical")
   }
 
+  const openEducation = () => {
+    props.onClose()
+    navigate("/education")
+  }
+
   const handleLogout = () => {
     setToken(null)
     window.location.reload()
@@ -84,6 +91,9 @@ export function ChatSidebar(props: {
           </button>
           <button class="chat-rail-action" classList={{ active: props.clinical }} onClick={openClinical} aria-label="诊疗助手" title="诊疗助手">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
+          </button>
+          <button class="chat-rail-action" classList={{ active: props.education }} onClick={openEducation} aria-label="宣教助手" title="宣教助手">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/><path d="M9 18v3M15 18v3"/></svg>
           </button>
           <span class="chat-rail-separator" aria-hidden="true" />
           <button class="chat-rail-action" onClick={props.onExpand} aria-label="查看历史会话" title="历史会话">
@@ -110,6 +120,12 @@ export function ChatSidebar(props: {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
               </span>
               <span>诊疗助手</span>
+            </button>
+            <button class="chat-clinical-entry" classList={{ active: props.education }} onClick={openEducation}>
+              <span class="chat-clinical-entry-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/><path d="M9 18v3M15 18v3"/></svg>
+              </span>
+              <span>宣教助手</span>
             </button>
           </div>
           <div class="chat-history-heading">
@@ -161,6 +177,11 @@ export function ChatSidebar(props: {
                               <Show when={item.conversationType === CLINICAL_CONVERSATION_TYPE}>
                                 <span class="chat-session-clinical-mark" title="诊疗助手对话" aria-label="诊疗助手对话">
                                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
+                                </span>
+                              </Show>
+                              <Show when={item.conversationType === EDUCATION_CONVERSATION_TYPE}>
+                                <span class="chat-session-clinical-mark" title="宣教助手对话" aria-label="宣教助手对话">
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/></svg>
                                 </span>
                               </Show>
                               <span>{item.title}</span>

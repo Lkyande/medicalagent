@@ -2,18 +2,26 @@ import { createEffect, createSignal, Show, For, createMemo, onCleanup } from "so
 import type { Message, Part } from "@opencode-ai/sdk/v2"
 import { useNavigate } from "@solidjs/router"
 import { getChatClient } from "./chat-client"
-import { backend, type AssistantEnableResult, type WorkspaceUploadFile } from "@/api/backend"
+import { ApiError, backend, type AssistantEnableResult, type WorkspaceUploadFile } from "@/api/backend"
 import { ChatModelSelector } from "./model-selector"
-import { ChatAssistantSelector, CLINICAL_ASSISTANT_ID, DEFAULT_ASSISTANT_ID, type AssistantOption } from "./assistant-selector"
+import {
+  ChatAssistantSelector,
+  CLINICAL_ASSISTANT_ID,
+  DEFAULT_ASSISTANT_ID,
+  EDUCATION_ASSISTANT_ID,
+  type AssistantOption,
+} from "./assistant-selector"
 import { ChatStopButton } from "./stop-button"
 import type { RawMessage } from "./message-normalize"
 import { createChatIdentifier } from "./identifier"
 import {
   CLINICAL_CONVERSATION_TYPE,
+  EDUCATION_CONVERSATION_TYPE,
   GENERAL_CONVERSATION_TYPE,
   conversationMetadata,
 } from "./conversation-type"
 import { serializeWorkspaceAttachment } from "./workspace-attachment"
+import { isAbortError } from "@/utils/server-errors"
 
 const MAX_ATTACHMENTS = 5
 const MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024
@@ -40,25 +48,32 @@ export function ChatComposer(props: {
   onWorkspaceChanged: () => void
   onRestore?: () => void
   clinical?: boolean
+  education?: boolean
   conversationTypeReady?: boolean
+  sessionStatusReady?: boolean
 }) {
   const navigate = useNavigate()
   const [text, setText] = createSignal("")
   const [attachments, setAttachments] = createSignal<ComposerAttachment[]>([])
   const [sending, setSending] = createSignal(false)
   const [selectedModel, setSelectedModel] = createSignal<string>("")
+  const initialAssistant = () => props.clinical
+    ? { id: CLINICAL_ASSISTANT_ID, name: "诊疗助手", description: "基于已审核医学资料提供临床辅助决策建议。" }
+    : props.education
+      ? { id: EDUCATION_ASSISTANT_ID, name: "宣教助手", description: "生成医学科普文案、配图和微信公众号排版预览。" }
+      : { id: DEFAULT_ASSISTANT_ID, name: "Build", description: "基础执行 Agent，负责开发、修改和工具调用。" }
   const [selectedAssistant, setSelectedAssistant] = createSignal<AssistantOption>({
-    id: props.clinical ? CLINICAL_ASSISTANT_ID : DEFAULT_ASSISTANT_ID,
-    name: props.clinical ? "诊疗助手" : "Build",
-    description: props.clinical ? "基于已审核医学资料提供临床辅助决策建议。" : "基础执行 Agent，负责开发、修改和工具调用。",
+    ...initialAssistant(),
     baseAgent: "build",
   })
   const [error, setError] = createSignal("")
   const [activeSessionID, setActiveSessionID] = createSignal<string>()
   const [stopping, setStopping] = createSignal(false)
-  const [clinicalStatus, setClinicalStatus] = createSignal<"enabling" | "enabled" | "error">(
-    props.clinical ? "enabling" : "enabled",
+  const [assistantStatus, setAssistantStatus] = createSignal<"enabling" | "enabled" | "error">(
+    props.clinical || props.education ? "enabling" : "enabled",
   )
+  const [assistantRetry, setAssistantRetry] = createSignal(0)
+  let enabledAssistantID: string | undefined
   let textareaRef: HTMLTextAreaElement | undefined
 
   createEffect(() => {
@@ -79,22 +94,36 @@ export function ChatComposer(props: {
   })
 
   createEffect(() => {
-    if (!props.clinical) {
+    assistantRetry()
+    const assistantID = props.clinical
+      ? CLINICAL_ASSISTANT_ID
+      : props.education
+        ? EDUCATION_ASSISTANT_ID
+        : undefined
+    if (!assistantID) {
+      enabledAssistantID = undefined
       setSelectedAssistant({
         id: DEFAULT_ASSISTANT_ID,
         name: "Build",
         description: "基础执行 Agent，负责开发、修改和工具调用。",
         baseAgent: "build",
       })
-      setClinicalStatus("enabled")
+      setAssistantStatus("enabled")
+      return
+    }
+    if (enabledAssistantID === assistantID) return
+    if ((props.sessionId && props.sessionStatusReady === false) || props.isGenerating) {
+      setAssistantStatus("enabling")
       return
     }
     let cancelled = false
+    let retryTimer: ReturnType<typeof setTimeout> | undefined
     onCleanup(() => {
       cancelled = true
+      if (retryTimer) clearTimeout(retryTimer)
     })
-    setClinicalStatus("enabling")
-    backend.enableAssistant(CLINICAL_ASSISTANT_ID).then((assistant: AssistantEnableResult) => {
+    setAssistantStatus("enabling")
+    backend.enableAssistant(assistantID).then((assistant: AssistantEnableResult) => {
       if (cancelled) return
       setSelectedAssistant({
         id: assistant.id,
@@ -104,11 +133,16 @@ export function ChatComposer(props: {
         systemPrompt: assistant.systemPrompt,
         platform: assistant,
       })
-      setClinicalStatus("enabled")
+      enabledAssistantID = assistantID
+      setAssistantStatus("enabled")
     }).catch((cause) => {
       if (cancelled) return
-      setClinicalStatus("error")
-      setError(cause instanceof Error ? cause.message : "诊疗助手启用失败")
+      if (cause instanceof ApiError && cause.status === 409) {
+        retryTimer = setTimeout(() => setAssistantRetry((value) => value + 1), 2000)
+        return
+      }
+      setAssistantStatus("error")
+      setError(cause instanceof Error ? cause.message : "助手启用失败")
     })
   })
 
@@ -184,8 +218,9 @@ export function ChatComposer(props: {
       setError("正在识别会话类型，请稍候")
       return
     }
-    if (props.clinical && clinicalStatus() !== "enabled") {
-      setError(clinicalStatus() === "error" ? "诊疗助手启用失败，请刷新页面后重试" : "诊疗助手正在启用，请稍候")
+    if ((props.clinical || props.education) && assistantStatus() !== "enabled") {
+      const assistantName = props.education ? "宣教助手" : "诊疗助手"
+      setError(assistantStatus() === "error" ? `${assistantName}启用失败，请刷新页面后重试` : `${assistantName}正在启用，请稍候`)
       return
     }
     if (!selectedAssistant()) {
@@ -208,9 +243,11 @@ export function ChatComposer(props: {
 
       if (!sessionID) {
         const createResp = await client.session.create({
-          metadata: conversationMetadata(
-            props.clinical ? CLINICAL_CONVERSATION_TYPE : GENERAL_CONVERSATION_TYPE,
-          ),
+          metadata: conversationMetadata(props.clinical
+            ? CLINICAL_CONVERSATION_TYPE
+            : props.education
+              ? EDUCATION_CONVERSATION_TYPE
+              : GENERAL_CONVERSATION_TYPE),
         })
         sessionID = (createResp as any).data?.id
         if (!sessionID) throw new Error("创建会话失败")
@@ -218,7 +255,7 @@ export function ChatComposer(props: {
         const titleSource = currentText || currentAttachments[0]?.file.name || "文件分析"
         const title = titleSource.length > 40 ? titleSource.slice(0, 40) + "..." : titleSource
         client.session.update({ sessionID, title } as any).catch(() => {})
-        navigate(`${props.clinical ? "/clinical" : "/chat"}/${sessionID}`)
+        navigate(`${props.clinical ? "/clinical" : props.education ? "/education" : "/chat"}/${sessionID}`)
       }
 
       const pendingIndexes = currentAttachments
@@ -320,6 +357,7 @@ export function ChatComposer(props: {
       } as any)
     } catch (e: any) {
       if (optimisticMessageID) props.onSendFailed(optimisticMessageID)
+      if (isAbortError(e)) return
       setError(e?.message ?? "发送失败")
       setText(currentText)
       setAttachments(retryAttachments)
@@ -342,6 +380,10 @@ export function ChatComposer(props: {
       await getChatClient().session.abort({ sessionID } as any)
       await props.onAbortComplete()
     } catch (e: any) {
+      if (isAbortError(e)) {
+        await props.onAbortComplete()
+        return
+      }
       setError(e?.message ?? "停止生成失败")
     } finally {
       setStopping(false)
@@ -387,19 +429,19 @@ export function ChatComposer(props: {
           </div>
         </Show>
 
-        <div class="chat-composer-box" classList={{ "chat-composer-box-clinical": props.clinical }}>
+        <div class="chat-composer-box" classList={{ "chat-composer-box-clinical": props.clinical || props.education }}>
           <Show when={props.conversationTypeReady === false}>
             <div class="chat-conversation-type-loading" role="status">正在识别会话类型...</div>
           </Show>
-          <Show when={props.conversationTypeReady !== false && props.clinical}>
-            <div class="chat-clinical-status" classList={{ error: clinicalStatus() === "error" }} role="status">
+          <Show when={props.conversationTypeReady !== false && (props.clinical || props.education)}>
+            <div class="chat-clinical-status" classList={{ error: assistantStatus() === "error" }} role="status">
               <span class="chat-clinical-status-icon" aria-hidden="true">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
               </span>
-              <strong>诊疗助手</strong>
+              <strong>{props.education ? "宣教助手" : "诊疗助手"}</strong>
               <span class="chat-clinical-status-dot" />
-              <span>{clinicalStatus() === "enabling" ? "正在启用" : clinicalStatus() === "error" ? "启用失败" : "已启用"}</span>
-              <span class="chat-clinical-status-detail">临床辅助决策</span>
+              <span>{assistantStatus() === "enabling" ? "正在启用" : assistantStatus() === "error" ? "启用失败" : "已启用"}</span>
+              <span class="chat-clinical-status-detail">{props.education ? "科普排版预览" : "临床辅助决策"}</span>
             </div>
           </Show>
           <textarea
@@ -409,6 +451,8 @@ export function ChatComposer(props: {
                 ? "正在加载会话..."
                 : props.clinical
                   ? "描述症状、病史或检查结果..."
+                  : props.education
+                    ? "输入科普主题、目标受众和宣传重点..."
                   : "输入消息... (Enter 发送, Shift+Enter 换行)"
             }
             aria-label="消息"
@@ -437,7 +481,7 @@ export function ChatComposer(props: {
                   onChange={handleFileUpload}
                 />
               </label>
-              <Show when={!props.clinical}>
+              <Show when={!props.clinical && !props.education}>
                 <ChatAssistantSelector selected={selectedAssistant().id} sessionId={props.sessionId} onSelect={selectAssistant} />
               </Show>
               <ChatModelSelector selected={selectedModel()} onSelect={setSelectedModel} />

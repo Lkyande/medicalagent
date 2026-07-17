@@ -1,3 +1,4 @@
+import type { PermissionRequest, QuestionRequest } from "@opencode-ai/sdk/v2"
 import { getToken } from "@/pages/chat/chat-client"
 
 const BASE = import.meta.env.VITE_BACKEND_API_URL ?? "/api"
@@ -37,6 +38,22 @@ export type WorkspaceUploadFile = {
   size: number
   url: string
   direct: boolean
+}
+
+export type EducationPreviewProgress = {
+  jobId: string
+  status: "running" | "completed" | "failed"
+  stage: string
+  label: string
+  percent: number
+  title?: string | null
+  summary?: string | null
+  editableHtmlUrl?: string | null
+}
+
+export type PendingInteractions = {
+  permissions: PermissionRequest[]
+  questions: QuestionRequest[]
 }
 
 export async function apiFetch<T = unknown>(path: string, init?: RequestInit, timeoutMs = 15000): Promise<T> {
@@ -124,6 +141,25 @@ export const backend = {
   assistants: () => apiFetch<PlatformAssistant[]>("/assistants"),
   enableAssistant: (id: string) =>
     apiFetch<AssistantEnableResult>(`/assistants/${encodeURIComponent(id)}/install`, { method: "POST" }),
+  educationPreviewProgress: (sessionID: string, jobID: string) =>
+    apiFetch<EducationPreviewProgress>(
+      `/education/preview-progress/${encodeURIComponent(jobID)}?session_id=${encodeURIComponent(sessionID)}`,
+      undefined,
+      10_000,
+    ),
+  pendingInteractions: () => apiFetch<PendingInteractions>("/interactions", undefined, 10_000),
+  replyPermission: (requestID: string, reply: "once" | "always" | "reject") =>
+    apiFetch<boolean>(`/interactions/permission/${encodeURIComponent(requestID)}/reply`, {
+      method: "POST",
+      body: JSON.stringify({ reply }),
+    }),
+  replyQuestion: (requestID: string, answers: string[][]) =>
+    apiFetch<boolean>(`/interactions/question/${encodeURIComponent(requestID)}/reply`, {
+      method: "POST",
+      body: JSON.stringify({ answers }),
+    }),
+  rejectQuestion: (requestID: string) =>
+    apiFetch<boolean>(`/interactions/question/${encodeURIComponent(requestID)}/reject`, { method: "POST" }),
   workspace: () => apiFetch<{ id: string; sandboxId: string; directory: string }>("/workspace"),
   workspaceFiles: (path = "") =>
     apiFetch<Array<{ name: string; path: string; type: "file" | "directory"; ignored: boolean }>>(

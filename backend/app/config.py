@@ -16,6 +16,17 @@ class Settings(BaseSettings):
     murtagh_mcp_url: str = ""
     murtagh_knowledge_root: str = ""
     murtagh_mcp_timeout_ms: int = 30000
+    education_mcp_url: str = ""
+    education_mcp_timeout_ms: int = 120000
+    hot_topics_mcp_url: str = ""
+    hot_topics_mcp_timeout_ms: int = 60000
+    smart_market_base_url: str = ""
+    smart_market_timeout_seconds: float = 30.0
+    smart_market_api_key: str = ""
+    wechat_agent_base_url: str = ""
+    wechat_agent_timeout_seconds: float = 30.0
+    wechat_agent_preview_wait_seconds: int = 60
+    wechat_agent_preview_poll_seconds: float = 5.0
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 

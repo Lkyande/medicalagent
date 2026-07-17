@@ -14,6 +14,8 @@ export interface DisplayTool {
   output?: string
   error?: string
   title?: string
+  educationJobID?: string
+  educationWaitTimedOut?: boolean
 }
 
 export interface DisplayFile {
@@ -63,6 +65,17 @@ function toolFromPart(part: ToolPart): DisplayTool {
     status: state.status,
     input: "input" in state ? state.input : undefined,
   }
+  const toolInput = base.input
+  if (
+    part.tool.endsWith("education_wait_for_preview") &&
+    toolInput &&
+    typeof toolInput === "object" &&
+    "job_id" in toolInput &&
+    typeof toolInput.job_id === "string" &&
+    /^[A-Za-z0-9_-]{1,80}$/.test(toolInput.job_id)
+  ) {
+    base.educationJobID = toolInput.job_id
+  }
   if (state.status === "completed") {
     base.output = state.output
     base.title = state.title
@@ -70,6 +83,13 @@ function toolFromPart(part: ToolPart): DisplayTool {
     base.error = state.error
   } else if (state.status === "running") {
     base.title = state.title
+  }
+  if (
+    base.educationJobID &&
+    state.status === "error" &&
+    /(?:MCP error -32001|Request timed out|operation timed out)/i.test(state.error)
+  ) {
+    base.educationWaitTimedOut = true
   }
   return base
 }

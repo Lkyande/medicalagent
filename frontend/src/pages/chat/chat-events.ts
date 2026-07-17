@@ -1,4 +1,4 @@
-import type { GlobalEvent, Message, Part, Session, SessionStatus } from "@opencode-ai/sdk/v2"
+import type { GlobalEvent, Message, Part, PermissionRequest, QuestionRequest, Session, SessionStatus } from "@opencode-ai/sdk/v2"
 import { batch } from "solid-js"
 import { getChatClient } from "./chat-client"
 
@@ -17,6 +17,11 @@ export interface ChatEventHandlers {
   onFileWatcherUpdated?: (path: string, event: "add" | "change" | "unlink") => void
   onSessionStatus?: (sessionID: string, status: SessionStatus) => void
   onSessionError?: (sessionID: string | undefined, error: unknown) => void
+  onPermissionAsked?: (request: PermissionRequest) => void
+  onPermissionReplied?: (sessionID: string, requestID: string) => void
+  onQuestionAsked?: (request: QuestionRequest) => void
+  onQuestionResolved?: (sessionID: string, requestID: string) => void
+  onConnected?: () => void
   onError?: (error: unknown) => void
 }
 
@@ -73,6 +78,19 @@ function dispatch(payload: Payload, handlers: ChatEventHandlers) {
     case "session.error":
       handlers.onSessionError?.(payload.properties.sessionID, payload.properties.error)
       return
+    case "permission.asked":
+      handlers.onPermissionAsked?.(payload.properties)
+      return
+    case "permission.replied":
+      handlers.onPermissionReplied?.(payload.properties.sessionID, payload.properties.requestID)
+      return
+    case "question.asked":
+      handlers.onQuestionAsked?.(payload.properties)
+      return
+    case "question.replied":
+    case "question.rejected":
+      handlers.onQuestionResolved?.(payload.properties.sessionID, payload.properties.requestID)
+      return
   }
 }
 
@@ -127,6 +145,7 @@ export function subscribeChatEvents(handlers: ChatEventHandlers): () => void {
             handlers.onError?.(error)
           },
         })
+        handlers.onConnected?.()
         for await (const event of events.stream as AsyncGenerator<GlobalEvent>) {
           if (stopped) break
           if (!event?.payload) continue

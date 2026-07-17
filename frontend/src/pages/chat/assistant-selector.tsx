@@ -4,6 +4,7 @@ import { backend, type PlatformAssistant } from "@/api/backend"
 
 export const DEFAULT_ASSISTANT_ID = "build"
 export const CLINICAL_ASSISTANT_ID = "clinical-assistant"
+export const EDUCATION_ASSISTANT_ID = "education-assistant"
 
 export type AssistantOption = {
   id: string

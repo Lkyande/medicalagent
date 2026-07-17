@@ -1,4 +1,5 @@
 import { render } from "solid-js/web"
+import { isAbortError } from "@/utils/server-errors"
 import { Show, createSignal, onMount, createMemo, For, onCleanup } from "solid-js"
 import { LoginPage } from "@/pages/chat/login"
 import { getChatClient, isLoggedIn, setToken } from "@/pages/chat/chat-client"
@@ -159,7 +160,7 @@ function ChatView(props: {
       getChatClient().session.update({ sessionID: sid, title }).catch(() => {})
       await client.session.promptAsync({ sessionID: sid, agent: props.agentMode(), model: props.selectedModel() || undefined, parts: [{ type: "text", text }] } as any)
       window.location.href = "/chat/" + sid
-    } catch (err: any) { setError(err?.message ?? "发送失败"); inputRef.disabled = false }
+    } catch (err: any) { if (!isAbortError(err)) setError(err?.message ?? "发送失败"); inputRef.disabled = false }
     finally { setSending(false) }
   }
 
@@ -219,7 +220,7 @@ function SessionView(props: {
     try {
       await getChatClient().session.promptAsync({ sessionID: id, agent: props.agentMode(), model: props.selectedModel() || undefined, parts: [{ type: "text", text }] } as any)
       el.value = ""; setTimeout(() => load(), 600)
-    } catch (err: any) { setError(err?.message ?? "发送失败"); el.disabled = false }
+    } catch (err: any) { if (!isAbortError(err)) setError(err?.message ?? "发送失败"); el.disabled = false }
     finally { setSending(false) }
   }
 

@@ -35,6 +35,27 @@ export function formatServerError(error: unknown, translate?: Translator, fallba
   return tr(translate, "error.chain.unknown", "Unknown error")
 }
 
+export function isAbortError(error: unknown) {
+  if (error instanceof DOMException && error.name === "AbortError") return true
+  if (error instanceof Error && error.name === "AbortError") return true
+  if (error instanceof Error && /\baborted\b/i.test(error.message)) return true
+
+  if (typeof error === "object" && error !== null) {
+    const value = error as Record<string, unknown>
+    if (value.name === "AbortError" || value.name === "MessageAbortedError") return true
+    if (typeof value.message === "string" && /\baborted\b/i.test(value.message)) return true
+    const data = value.data
+    if (typeof data === "object" && data !== null) {
+      const message = (data as Record<string, unknown>).message
+      if (typeof message === "string" && /\baborted\b/i.test(message)) return true
+    }
+  }
+
+  const unwrapped = unwrapNamedError(error)
+  if (unwrapped === error) return false
+  return isAbortError(unwrapped)
+}
+
 function unwrapNamedError(error: unknown): unknown {
   if (error instanceof Error && error.cause && typeof error.cause === "object" && "body" in error.cause) {
     return (error.cause as Record<string, unknown>).body

@@ -1,7 +1,7 @@
 import { createEffect, createMemo, Show, createSignal, onMount, onCleanup } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
 import { useLocation, useParams, useNavigate } from "@solidjs/router"
-import type { Message, Part, Session, SessionStatus } from "@opencode-ai/sdk/v2"
+import type { Message, Part, PermissionRequest, QuestionRequest, Session, SessionStatus } from "@opencode-ai/sdk/v2"
 import { ApiError, backend } from "@/api/backend"
 import { getChatClient, getToken, setToken } from "./chat-client"
 import { LoginPage } from "./login"
@@ -15,6 +15,7 @@ import { subscribeChatEvents } from "./chat-events"
 import { useDialog } from "@/ui/context/dialog"
 import {
   CLINICAL_CONVERSATION_TYPE,
+  EDUCATION_CONVERSATION_TYPE,
   GENERAL_CONVERSATION_TYPE,
   conversationHref,
   conversationMetadata,
@@ -35,10 +36,13 @@ import {
   type RawMessage,
 } from "./message-normalize"
 import { parseWorkspaceAttachment } from "./workspace-attachment"
+import { isAbortError } from "@/utils/server-errors"
+import { ChatInteractionDock } from "./interaction-dock"
 
 export function ChatLayout() {
   const location = useLocation()
   const clinical = createMemo(() => location.pathname === "/clinical" || location.pathname.startsWith("/clinical/"))
+  const education = createMemo(() => location.pathname === "/education" || location.pathname.startsWith("/education/"))
   const [loggedIn, setLoggedIn] = createSignal<boolean | undefined>(undefined)
   const [authError, setAuthError] = createSignal("")
 
@@ -82,13 +86,13 @@ export function ChatLayout() {
           </>
         }
       >
-        <ChatWorkspace clinical={clinical()} />
+        <ChatWorkspace clinical={clinical()} education={education()} />
       </Show>
     </Show>
   )
 }
 
-function ChatWorkspace(props: { clinical?: boolean }) {
+function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
   const params = useParams()
   const navigate = useNavigate()
   const location = useLocation()
@@ -110,6 +114,9 @@ function ChatWorkspace(props: { clinical?: boolean }) {
   const [revertingMessageID, setRevertingMessageID] = createSignal<string>()
   const [localGeneratingMessageID, setLocalGeneratingMessageID] = createSignal<string>()
   const [messagesLoadedSession, setMessagesLoadedSession] = createSignal<string>()
+  const [permissions, setPermissions] = createSignal<PermissionRequest[]>([])
+  const [questions, setQuestions] = createSignal<QuestionRequest[]>([])
+  const [sessionStatusReady, setSessionStatusReady] = createSignal(false)
 
   onMount(() => {
     try {
@@ -136,17 +143,45 @@ function ChatWorkspace(props: { clinical?: boolean }) {
   const detectedConversationType = createMemo<ConversationType | undefined>(() => {
     const id = sessionId()
     if (!id || messagesLoadedSession() !== id) return undefined
-    return detectLegacyConversationType(raw(), !!props.clinical)
+    return detectLegacyConversationType(
+      raw(),
+      props.clinical
+        ? CLINICAL_CONVERSATION_TYPE
+        : props.education
+          ? EDUCATION_CONVERSATION_TYPE
+          : GENERAL_CONVERSATION_TYPE,
+    )
   })
   const conversationType = createMemo<ConversationType | undefined>(() => {
-    if (!sessionId()) return props.clinical ? CLINICAL_CONVERSATION_TYPE : GENERAL_CONVERSATION_TYPE
+    if (!sessionId()) {
+      return props.clinical
+        ? CLINICAL_CONVERSATION_TYPE
+        : props.education
+          ? EDUCATION_CONVERSATION_TYPE
+          : GENERAL_CONVERSATION_TYPE
+    }
     return persistedConversationType() ?? detectedConversationType()
   })
   const conversationTypeReady = createMemo(() => !sessionId() || conversationType() !== undefined)
   const clinical = createMemo(
     () => conversationType() === CLINICAL_CONVERSATION_TYPE || (!conversationTypeReady() && !!props.clinical),
   )
+  const education = createMemo(
+    () => conversationType() === EDUCATION_CONVERSATION_TYPE || (!conversationTypeReady() && !!props.education),
+  )
   const isGenerating = createMemo(() => sessionStatus().type !== "idle" || !!localGeneratingMessageID())
+  const pendingPermission = createMemo(() => permissions().find((item) => item.sessionID === sessionId()))
+  const pendingQuestion = createMemo(() => questions().find((item) => item.sessionID === sessionId()))
+
+  const loadInteractions = async () => {
+    try {
+      const pending = await backend.pendingInteractions()
+      setPermissions(pending.permissions)
+      setQuestions(pending.questions)
+    } catch (error) {
+      console.debug("Failed to load pending interactions", error)
+    }
+  }
 
   const sessionTime = (info: Session) => info.time?.updated ?? info.time?.created ?? 0
 
@@ -165,6 +200,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
           conversationType: conversationTypeFromSession(s),
         })),
       )
+      void loadInteractions()
     } catch (e) {
       console.error("Failed to load sessions", e)
     } finally {
@@ -210,6 +246,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
     const id = sessionId()
     if (!id) {
       setSessionStatus({ type: "idle" })
+      setSessionStatusReady(true)
       return
     }
     try {
@@ -220,6 +257,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
         : data[id]
       if (id !== sessionId()) return
       setSessionStatus(status ?? { type: "idle" })
+      setSessionStatusReady(true)
     } catch (error) {
       console.debug("Failed to load session status", error)
     }
@@ -241,6 +279,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
   const refreshAfterAbort = async () => {
     setLocalGeneratingMessageID(undefined)
     setSessionStatus({ type: "idle" })
+    setSessionStatusReady(false)
     await loadMessages()
     await loadStatus()
   }
@@ -259,6 +298,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
     setSessionError("")
     setLocalGeneratingMessageID(undefined)
     setSessionStatus({ type: "idle" })
+    setSessionStatusReady(false)
     loadMessages()
     loadStatus()
     loadCurrentSession()
@@ -346,6 +386,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
 
   onMount(() => {
     loadSessions()
+    void loadInteractions()
 
     const unsubscribe = subscribeChatEvents({
       onMessageUpdated: (sid, info: Message) => {
@@ -406,13 +447,14 @@ function ChatWorkspace(props: { clinical?: boolean }) {
         setSessions((prev) => prev.filter((s) => s.id !== sid))
         if (sid === sessionId()) {
           setLocalGeneratingMessageID(undefined)
-          navigate(clinical() ? "/clinical" : "/chat")
+          navigate(clinical() ? "/clinical" : education() ? "/education" : "/chat")
         }
       },
       onFileEdited: () => setWorkspaceRefresh((value) => value + 1),
       onFileWatcherUpdated: () => setWorkspaceRefresh((value) => value + 1),
       onSessionStatus: (sid, status) => {
         if (sid !== sessionId()) return
+        setSessionStatusReady(true)
         setSessionStatus(status)
         if (status.type !== "idle") setSessionError("")
         if (status.type === "idle") {
@@ -422,6 +464,11 @@ function ChatWorkspace(props: { clinical?: boolean }) {
       },
       onSessionError: (sid, error) => {
         if (sid && sid !== sessionId()) return
+        if (isAbortError(error)) {
+          setLocalGeneratingMessageID(undefined)
+          setSessionStatus({ type: "idle" })
+          return
+        }
         const data = error && typeof error === "object" && "data" in error
           ? (error as { data?: { message?: string } }).data
           : undefined
@@ -429,6 +476,19 @@ function ChatWorkspace(props: { clinical?: boolean }) {
         setLocalGeneratingMessageID(undefined)
         setSessionStatus({ type: "idle" })
       },
+      onPermissionAsked: (request) => {
+        setPermissions((current) => [...current.filter((item) => item.id !== request.id), request])
+      },
+      onPermissionReplied: (_, requestID) => {
+        setPermissions((current) => current.filter((item) => item.id !== requestID))
+      },
+      onQuestionAsked: (request) => {
+        setQuestions((current) => [...current.filter((item) => item.id !== request.id), request])
+      },
+      onQuestionResolved: (_, requestID) => {
+        setQuestions((current) => current.filter((item) => item.id !== requestID))
+      },
+      onConnected: loadInteractions,
       onError: (error) => console.debug("[chat] event stream error", error),
     })
 
@@ -511,7 +571,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
     try {
       await getChatClient().session.delete({ sessionID: sid } as any)
       setSessions((prev) => prev.filter((s) => s.id !== sid))
-      if (sid === sessionId()) navigate(clinical() ? "/clinical" : "/chat")
+      if (sid === sessionId()) navigate(clinical() ? "/clinical" : education() ? "/education" : "/chat")
     } catch (e: any) {
       alert("删除失败: " + (e?.message ?? String(e)))
     }
@@ -532,6 +592,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
         loading={sessionsLoading()}
         currentSessionId={sessionId()}
         clinical={clinical()}
+        education={education()}
         open={sidebarOpen()}
         collapsed={sidebarCollapsed()}
         onClose={() => setSidebarOpen(false)}
@@ -541,7 +602,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
       />
       <div class="chat-main">
         <ChatHeader
-          title={sessionInfo()?.title || (clinical() ? "诊疗助手" : "新对话")}
+          title={sessionInfo()?.title || (clinical() ? "诊疗助手" : education() ? "宣教助手" : "新对话")}
           generating={isGenerating()}
           sidebarExpanded={!sidebarCollapsed()}
           onToggleSidebar={() => {
@@ -550,19 +611,28 @@ function ChatWorkspace(props: { clinical?: boolean }) {
           }}
           onOpenWorkspace={openWorkspace}
         />
-        <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} />}>
+        <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} education={education()} />}>
           <Show
             when={!messagesLoading() || messages.length > 0}
             fallback={<div class="chat-loading">加载消息中...</div>}
           >
             <ChatMessageList
               messages={messages}
+              sessionID={sessionId()}
               generating={isGenerating()}
               revertingMessageID={revertingMessageID()}
               onRevert={handleRevert}
             />
           </Show>
         </Show>
+        <ChatInteractionDock
+          permission={pendingQuestion() ? undefined : pendingPermission()}
+          question={pendingQuestion()}
+          onResolved={(requestID) => {
+            setPermissions((current) => current.filter((item) => item.id !== requestID))
+            setQuestions((current) => current.filter((item) => item.id !== requestID))
+          }}
+        />
         <ChatComposer
           sessionId={sessionId()}
           isGenerating={isGenerating()}
@@ -577,7 +647,9 @@ function ChatWorkspace(props: { clinical?: boolean }) {
           onAbortComplete={refreshAfterAbort}
           onWorkspaceChanged={() => setWorkspaceRefresh((value) => value + 1)}
           clinical={clinical()}
+          education={education()}
           conversationTypeReady={conversationTypeReady()}
+          sessionStatusReady={sessionStatusReady()}
         />
       </div>
     </div>

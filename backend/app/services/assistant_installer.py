@@ -26,6 +26,7 @@ class AssistantDefinition:
     skills: tuple[str, ...]
     tools: tuple[str, ...]
     files: tuple[str, ...]
+    mcp_servers: tuple[tuple[str, str, str], ...]
 
 
 CLINICAL_ASSISTANT = AssistantDefinition(
@@ -51,10 +52,43 @@ CLINICAL_ASSISTANT = AssistantDefinition(
         "skills/clinical-decision-support/SKILL.md",
         "skills/disease-guidelines/SKILL.md",
     ),
+    mcp_servers=(("murtagh-medical", "murtagh_mcp_url", "murtagh_mcp_timeout_ms"),),
 )
 
-ASSISTANTS = {CLINICAL_ASSISTANT.id: CLINICAL_ASSISTANT}
+EDUCATION_ASSISTANT = AssistantDefinition(
+    id="education-assistant",
+    name="宣教助手",
+    description="面向公众生成医学科普宣传文案、配图和微信公众号排版预览。",
+    version="1.6.0",
+    base_agent="build",
+    system_prompt=(
+        "本会话启用了宣教助手能力。你仍然是 Build 基础 Agent，但必须按照医学科普宣教模式工作。\n\n"
+        "1. 先判断用户是否给出具体医学主题。若只有医院科普宣传、健康宣教等宽泛意图以及受众、渠道或图片风格，必须先询问是否需要结合当前热点素材选题，不得立即搜索热点或创建预览。\n"
+        "2. 生成微信公众号科普预览时必须加载 health-education-content 技能，并按其要求调用 education-content 工具。\n"
+        "3. 用户明确要求结合热点，或对上一条询问回答需要时，先调用 smart-market-hot-topics 搜索；用户回答不需要时，不得搜索热点，应询问具体主题或提供常规宣教主题供选择。\n"
+        "4. 用户已给出具体疾病、症状、专科或健康主题且未要求热点时，直接按主题生成，不得强制搜索或重复询问热点。热点结果只用于传播背景，不得把热榜观点当作医学证据。\n"
+        "5. 必须先调用 education_create_preview，并在拿到 job_id 后调用 education_wait_for_preview；后续只能使用同一 job_id，禁止重复创建任务。\n"
+        "6. pending、running、timed_out 及 MCP -32001/Request timed out 都不代表任务失败；必须从工具输入恢复同一 job_id 继续查询，禁止显示任务执行失败或重新创建。只有 completed 或明确 failed 才能结束，completed 时必须提供 editable_html_url。\n"
+        "7. 不得编造患病率、疗效、诊断标准、指南结论、机构背书或来源。资料不足时使用审慎的通用表述并标记待审核。\n"
+        "8. 不针对具体患者作诊断或处方；个案诊疗问题应建议进入诊疗助手或由医生评估。\n"
+        "9. 出现急症危险信号时优先提示立即就医，不得将普通科普内容替代紧急处置。\n"
+        "10. 当前只允许生成和查看预览，不得创建微信草稿、提交发布或删除内容。"
+    ),
+    skills=("health-education-content",),
+    tools=("education-content", "smart-market-hot-topics"),
+    files=("skills/health-education-content/SKILL.md",),
+    mcp_servers=(
+        ("education-content", "education_mcp_url", "education_mcp_timeout_ms"),
+        ("smart-market-hot-topics", "hot_topics_mcp_url", "hot_topics_mcp_timeout_ms"),
+    ),
+)
+
+ASSISTANTS = {
+    CLINICAL_ASSISTANT.id: CLINICAL_ASSISTANT,
+    EDUCATION_ASSISTANT.id: EDUCATION_ASSISTANT,
+}
 _install_locks: dict[str, asyncio.Lock] = {}
+_reload_pending: set[str] = set()
 _mcp_connect_attempts = 10
 _mcp_connect_delay = 0.5
 
@@ -67,9 +101,9 @@ const configDir = path.join(root, ".opencode");
 fs.mkdirSync(configDir, { recursive: true });
 let changed = false;
 
-// Remove the obsolete standalone agent from earlier profile versions.
-if (payload.id === "clinical-assistant") {
-  const obsoleteAgent = path.join(configDir, "agent", "clinical-assistant.md");
+// Remove obsolete standalone agents from earlier profile versions.
+if (["clinical-assistant", "education-assistant"].includes(payload.id)) {
+  const obsoleteAgent = path.join(configDir, "agent", payload.id + ".md");
   if (fs.existsSync(obsoleteAgent)) {
     fs.rmSync(obsoleteAgent, { force: true });
     changed = true;
@@ -98,15 +132,17 @@ let config = { $schema: "https://opencode.ai/config.json" };
 if (fs.existsSync(jsonConfig)) config = JSON.parse(fs.readFileSync(jsonConfig, "utf8"));
 config.$schema = config.$schema || "https://opencode.ai/config.json";
 config.mcp = config.mcp || {};
-const desiredMcp = {
-  type: "remote",
-  url: payload.mcpUrl,
-  enabled: true,
-  timeout: payload.mcpTimeoutMs
-};
-if (JSON.stringify(config.mcp["murtagh-medical"]) !== JSON.stringify(desiredMcp)) {
-  config.mcp["murtagh-medical"] = desiredMcp;
-  changed = true;
+for (const server of payload.mcpServers) {
+  const desiredMcp = {
+    type: "remote",
+    url: server.url,
+    enabled: true,
+    timeout: server.timeoutMs
+  };
+  if (JSON.stringify(config.mcp[server.name]) !== JSON.stringify(desiredMcp)) {
+    config.mcp[server.name] = desiredMcp;
+    changed = true;
+  }
 }
 if (changed || !fs.existsSync(jsonConfig)) {
   const configTemp = jsonConfig + ".tmp";
@@ -157,8 +193,14 @@ def _package_payload(assistant: AssistantDefinition) -> str:
         {
             "id": assistant.id,
             "files": files,
-            "mcpUrl": settings.murtagh_mcp_url,
-            "mcpTimeoutMs": settings.murtagh_mcp_timeout_ms,
+            "mcpServers": [
+                {
+                    "name": name,
+                    "url": getattr(settings, url_setting).rstrip("/") + "/",
+                    "timeoutMs": getattr(settings, timeout_setting),
+                }
+                for name, url_setting, timeout_setting in assistant.mcp_servers
+            ],
         },
         ensure_ascii=False,
         separators=(",", ":"),
@@ -167,14 +209,24 @@ def _package_payload(assistant: AssistantDefinition) -> str:
 
 
 async def install_assistant(sandbox: dict, workspace: UserWorkspace, assistant: AssistantDefinition) -> bool:
-    if not settings.murtagh_mcp_url:
+    missing_servers = [
+        name
+        for name, url_setting, _timeout_setting in assistant.mcp_servers
+        if not getattr(settings, url_setting)
+    ]
+    if missing_servers:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="MURTAGH_MCP_URL is not configured",
+            detail=f"MCP URL is not configured for: {', '.join(missing_servers)}",
         )
-    lock_key = f"{sandbox['id']}\0{workspace.directory}\0{assistant.id}"
+    lock_key = f"{sandbox['id']}\0{workspace.directory}"
     lock = _install_locks.setdefault(lock_key, asyncio.Lock())
     async with lock:
+        if await _workspace_has_active_sessions(sandbox, workspace.directory):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Assistant update is waiting for active workspace tasks to finish",
+            )
         code, _ = await run_sandbox_command_capture(
             sandbox,
             workspace.directory,
@@ -192,10 +244,37 @@ async def install_assistant(sandbox: dict, workspace: UserWorkspace, assistant: 
             )
         changed = code == 20
         if changed:
+            _reload_pending.add(lock_key)
+        requires_reload = lock_key in _reload_pending
+        if requires_reload:
+            if await _workspace_has_active_sessions(sandbox, workspace.directory):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Assistant update is waiting for active workspace tasks to finish",
+                )
             await _dispose_workspace_instance(sandbox, workspace.directory)
+            _reload_pending.discard(lock_key)
         for server_name in assistant.tools:
             await _wait_for_mcp_connection(sandbox, workspace.directory, server_name)
-        return changed
+        return changed or requires_reload
+
+
+async def _workspace_has_active_sessions(sandbox: dict, directory: str) -> bool:
+    try:
+        async with httpx.AsyncClient(timeout=10.0, auth=sandbox_auth(sandbox)) as client:
+            response = await client.get(
+                f"{sandbox['url']}/session/status",
+                params={"directory": directory},
+            )
+            response.raise_for_status()
+            payload = response.json()
+    except (httpx.HTTPError, ValueError, TypeError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Unable to verify whether the workspace is idle before updating the assistant",
+        ) from exc
+    statuses = payload.values() if isinstance(payload, dict) else payload if isinstance(payload, list) else []
+    return any(isinstance(item, dict) and item.get("type") != "idle" for item in statuses)
 
 
 async def _dispose_workspace_instance(sandbox: dict, directory: str) -> None:

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import type { SessionNotFoundError } from "@opencode-ai/sdk/v2/client"
 import type { ConfigInvalidError, ProviderModelNotFoundError } from "./server-errors"
-import { formatServerError, isSessionNotFoundError, parseReadableConfigInvalidError } from "./server-errors"
+import { formatServerError, isAbortError, isSessionNotFoundError, parseReadableConfigInvalidError } from "./server-errors"
 
 function fill(text: string, vars?: Record<string, string | number>) {
   if (!vars) return text
@@ -141,6 +141,31 @@ describe("formatServerError", () => {
     const wrapped = new Error("ConfigInvalidError", { cause: { body, status: 400 } })
 
     expect(formatServerError(wrapped, language.t)).toBe("Arquivo de config em config invalido: Missing host")
+  })
+})
+
+describe("isAbortError", () => {
+  test("matches DOM abort errors", () => {
+    expect(isAbortError(new DOMException("Aborted", "AbortError"))).toBe(true)
+  })
+
+  test("matches error names and aborted messages", () => {
+    expect(isAbortError(Object.assign(new Error("The operation was aborted"), { name: "AbortError" }))).toBe(true)
+    expect(isAbortError(new Error("Aborted"))).toBe(true)
+  })
+
+  test("matches SDK-wrapped abort errors from cause.body", () => {
+    const body = { name: "AbortError", message: "Aborted" }
+
+    expect(isAbortError(new Error("Request failed", { cause: { body, status: 499 } }))).toBe(true)
+  })
+
+  test("matches SDK message-aborted objects", () => {
+    expect(isAbortError({ name: "MessageAbortedError", data: { message: "Aborted" } })).toBe(true)
+  })
+
+  test("rejects regular errors", () => {
+    expect(isAbortError(new Error("Request failed with status 503"))).toBe(false)
   })
 })
 

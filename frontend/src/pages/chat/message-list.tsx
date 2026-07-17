@@ -4,6 +4,7 @@ import type { DisplayMessage } from "./message-normalize"
 
 export function ChatMessageList(props: {
   messages: DisplayMessage[]
+  sessionID?: string
   generating?: boolean
   revertingMessageID?: string
   onRevert?: (messageID: string) => void
@@ -70,6 +71,7 @@ export function ChatMessageList(props: {
           {(msg) => (
             <ChatMessageBubble
               message={msg}
+              sessionID={props.sessionID}
               reverting={props.revertingMessageID === msg.id}
               onRevert={props.onRevert}
             />

@@ -105,6 +105,78 @@ describe("normalizeMessages", () => {
     expect(result.map((message) => message.id)).toEqual(["u1", "assistant-turn:u1", "u2", "assistant-turn:u2"])
   })
 
+  test("exposes a valid education preview job for progress polling", () => {
+    const result = normalizeMessages([
+      user("u1", 1000),
+      assistant("a1", "u1", 1100, 0, [
+        {
+          id: "tool",
+          sessionID: "session",
+          messageID: "a1",
+          type: "tool",
+          callID: "call",
+          tool: "education-content_education_wait_for_preview",
+          state: {
+            status: "running",
+            input: { job_id: "job_123" },
+            time: { start: 1150 },
+          },
+        } as Part,
+      ]),
+    ], true)
+
+    expect(result[1]?.blocks[0]).toMatchObject({
+      type: "tool",
+      tool: { educationJobID: "job_123", status: "running" },
+    })
+  })
+
+  test("does not expose invalid or unrelated tool inputs for progress polling", () => {
+    const result = normalizeMessages([
+      user("u1", 1000),
+      assistant("a1", "u1", 1100, 0, [
+        {
+          id: "tool",
+          sessionID: "session",
+          messageID: "a1",
+          type: "tool",
+          callID: "call",
+          tool: "education-content_education_wait_for_preview",
+          state: { status: "running", input: { job_id: "../secret" }, time: { start: 1150 } },
+        } as Part,
+      ]),
+    ], true)
+
+    expect(result[1]?.blocks[0]).not.toHaveProperty("tool.educationJobID")
+  })
+
+  test("marks an education MCP request timeout as recoverable background work", () => {
+    const result = normalizeMessages([
+      user("u1", 1000),
+      assistant("a1", "u1", 1100, 1200, [
+        {
+          id: "tool",
+          sessionID: "session",
+          messageID: "a1",
+          type: "tool",
+          callID: "call",
+          tool: "education-content_education_wait_for_preview",
+          state: {
+            status: "error",
+            input: { job_id: "job_123" },
+            error: "MCP error -32001: Request timed out",
+            time: { start: 1150, end: 1200 },
+          },
+        } as Part,
+      ]),
+    ])
+
+    expect(result[1]?.blocks[0]).toMatchObject({
+      type: "tool",
+      tool: { educationJobID: "job_123", educationWaitTimedOut: true, status: "error" },
+    })
+  })
+
   test("renders a persisted workspace attachment once and hides its marker", () => {
     const raw = user("u1", 1000)
     const marker = serializeWorkspaceAttachment({

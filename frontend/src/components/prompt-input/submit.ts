@@ -17,7 +17,7 @@ import { Identifier } from "@/utils/id"
 import { Worktree as WorktreeState } from "@/utils/worktree"
 import { buildRequestParts } from "./build-request-parts"
 import { setCursorPosition } from "./editor-dom"
-import { formatServerError } from "@/utils/server-errors"
+import { formatServerError, isAbortError } from "@/utils/server-errors"
 import { ScopedKey } from "@/utils/server-scope"
 import { createPromptSubmissionState } from "./submission-state"
 
@@ -575,6 +575,7 @@ export function createPromptSubmit(input: PromptSubmitInput) {
       if (sessionDirectory === projectDirectory) {
         sync().set("session_status", session.id, { type: "idle" })
       }
+      if (isAbortError(err)) return
       showToast({
         title: language.t("prompt.toast.promptSendFailed.title"),
         description: errorMessage(err),

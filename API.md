@@ -173,6 +173,8 @@ FastAPI 业务错误通常返回：
 ]
 ```
 
+当前目录同时包含 `education-assistant`（宣教助手）。它安装 `health-education-content` Skill 和 `education-content` MCP，第一期只允许生成及查询微信公众号排版预览。
+
 ### `GET /api/sandboxes/{sandbox_id}/status`
 
 检查沙盒健康状态。当前实现会返回沙盒 URL，生产环境建议改为管理员接口或移除 `url` 字段。
@@ -447,9 +449,9 @@ curl http://localhost:8000/opencode/session \
 }
 ```
 
-启用内容包括两个入口 Skill 和远程 `murtagh-medical` MCP 配置。前端发送消息时仍使用 `agent: "build"`，并通过 `system` 注入诊疗能力规则。安装是幂等的：`changed` 仅在 Skill、清单或 MCP 配置实际变化时为 `true`，此时 `requiresNewSession` 也为 `true`，后端只刷新当前工作目录的 OpenCode 实例。配置未变化时不会刷新实例，避免中止正在进行的会话。
+启用内容由助手目录决定：诊疗助手安装两个入口 Skill 和 `murtagh-medical` MCP；宣教助手安装 `health-education-content` Skill、`education-content` MCP 和 `smart-market-hot-topics` MCP。热点 MCP 通过 HTTP 调用 Smart Market 的结构化热点搜索接口。宽泛宣教请求若没有具体医学主题，助手先询问是否需要结合当前热点素材；用户确认后才搜索。明确主题且未要求热点时不强制搜索。前端发送消息时仍使用 `agent: "build"`，并通过 `system` 注入对应能力规则。安装是幂等的：`changed` 仅在 Skill、清单或 MCP 配置实际变化时为 `true`，此时 `requiresNewSession` 也为 `true`，后端只刷新当前工作目录的 OpenCode 实例。配置未变化时不会刷新实例，避免中止正在进行的会话。
 
-接口返回成功前还会查询沙盒 OpenCode 的 `/mcp` 状态；只有 `murtagh-medical` 为 `connected` 时才返回 `mcpStatus: "connected"`。MCP 不可达时返回 `502`，不会让前端误显示“已启用”。
+接口返回成功前还会查询沙盒 OpenCode 的 `/mcp` 状态；助手声明的所有 MCP 都为 `connected` 时才返回 `mcpStatus: "connected"`。宣教助手会同时检查 `education-content` 和 `smart-market-hot-topics`；任一 MCP 不可达时返回 `502`，不会让前端误显示“已启用”。
 
 入口 Skill 的唯一发布源为 `backend/app/assistant_catalog/<assistant_id>/skills/`。根目录 `.opencode/skills/` 下的同名文件是本地开发镜像，不是安装源；测试会校验两者内容一致。`MURTAGH_KNOWLEDGE_ROOT` 仅包含莫塔路由索引、注册表和审核后的 Markdown 正文，不会复制到用户沙盒。
 
@@ -482,6 +484,13 @@ curl http://localhost:8000/opencode/session \
 | `SANDBOX_WORKSPACE_ROOT` | 空 | 所有沙盒默认工作目录根路径；为空时通过 `/path` 自动探测 |
 | `MURTAGH_MCP_URL` | 空 | 沙盒可访问的莫塔医学远程 MCP 地址；不能使用远程沙盒自身的 `localhost` |
 | `MURTAGH_KNOWLEDGE_ROOT` | 仓库内莫塔 skill 目录 | 莫塔索引、注册表和审核后 Markdown 的只读目录 |
+| `EDUCATION_MCP_URL` | 空 | 沙盒可访问的宣教远程 MCP 地址 |
+| `EDUCATION_MCP_TIMEOUT_MS` | `120000` | 宣教 MCP 请求超时，单位毫秒 |
+| `HOT_TOPICS_MCP_URL` | 空 | 沙盒可访问的平台热点远程 MCP 地址 |
+| `HOT_TOPICS_MCP_TIMEOUT_MS` | `60000` | 热点 MCP 请求超时，单位毫秒 |
+| `SMART_MARKET_BASE_URL` | 空 | 平台后端访问 Smart Market API 的基地址，包含 `/api/v1` |
+| `SMART_MARKET_TIMEOUT_SECONDS` | `30` | Smart Market HTTP 请求超时，单位秒 |
+| `SMART_MARKET_API_KEY` | 空 | 可选服务间 API Key，通过 `X-API-Key` 请求头发送 |
 | `SANDBOX_<ID>_URL` | - | OpenCode 沙盒 URL |
 | `SANDBOX_<ID>_PASSWORD` | 空 | OpenCode 沙盒 Basic Auth 密码 |
 | `SANDBOX_<ID>_USERNAME` | `opencode` | OpenCode 沙盒 Basic Auth 用户名 |
