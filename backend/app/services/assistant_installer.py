@@ -101,7 +101,8 @@ config.mcp = config.mcp || {};
 const desiredMcp = {
   type: "remote",
   url: payload.mcpUrl,
-  enabled: true
+  enabled: true,
+  timeout: payload.mcpTimeoutMs
 };
 if (JSON.stringify(config.mcp["murtagh-medical"]) !== JSON.stringify(desiredMcp)) {
   config.mcp["murtagh-medical"] = desiredMcp;
@@ -153,7 +154,12 @@ def _package_payload(assistant: AssistantDefinition) -> str:
         }
     )
     payload = json.dumps(
-        {"id": assistant.id, "files": files, "mcpUrl": settings.murtagh_mcp_url},
+        {
+            "id": assistant.id,
+            "files": files,
+            "mcpUrl": settings.murtagh_mcp_url,
+            "mcpTimeoutMs": settings.murtagh_mcp_timeout_ms,
+        },
         ensure_ascii=False,
         separators=(",", ":"),
     ).encode()
@@ -226,7 +232,11 @@ async def _wait_for_mcp_connection(sandbox: dict, directory: str, server_name: s
                     params={"directory": directory},
                 )
                 reconnect.raise_for_status()
-        except (httpx.HTTPError, ValueError, TypeError) as exc:
+        except httpx.HTTPStatusError as exc:
+            error = f"HTTP {exc.response.status_code}: {exc.response.text[:300]}"
+        except httpx.RequestError as exc:
+            error = f"{exc.__class__.__name__}: {exc}"
+        except (ValueError, TypeError) as exc:
             error = str(exc)
         if attempt + 1 < _mcp_connect_attempts:
             await asyncio.sleep(_mcp_connect_delay)

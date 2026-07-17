@@ -10,6 +10,7 @@ from app.proxy.opencode_proxy import proxy_to_sandbox
 from app.sandbox.manager import ensure_workspace, get_or_create_workspace
 from app.routers import assistants, auth, dispatch, sandbox, business, health, workspace
 from app.mcp_server import murtagh_mcp
+from app.middleware.request_size import UploadSizeLimitMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -21,6 +22,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Your Platform API", version="0.1.0", lifespan=lifespan)
+
+app.add_middleware(UploadSizeLimitMiddleware, maximum_bytes=55 * 1024 * 1024)
 
 app.add_middleware(
     CORSMiddleware,

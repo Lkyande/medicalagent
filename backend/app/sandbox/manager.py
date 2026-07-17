@@ -12,6 +12,8 @@ import re
 import time
 import uuid
 from contextlib import suppress
+from pathlib import PurePosixPath
+from typing import BinaryIO
 from urllib.parse import urlencode
 
 from websockets.asyncio.client import connect
@@ -68,6 +70,191 @@ process.stdin.once("data", () => {
   child.once("exit", (code) => finish(code));
 });
 """.strip()
+_upload_receiver_script = r"""
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+const { pathToFileURL } = require("url");
+
+const rootInput = process.argv[1];
+const relative = process.argv[2];
+const expectedSize = Number(process.argv[3]);
+const expectedHash = process.argv[4];
+const marker = process.argv[5];
+const transferID = process.argv[6];
+let handle;
+let temporary;
+let target;
+let parentReal;
+let rootReal;
+let received = 0;
+let sequence = 0;
+let input = "";
+let chain = Promise.resolve();
+let finished = false;
+const hash = crypto.createHash("sha256");
+
+function emit(message, onFlushed) {
+  process.stdout.write(marker + JSON.stringify(message) + "\n", onFlushed);
+}
+
+function contained(root, candidate) {
+  const relativePath = path.relative(root, candidate);
+  return relativePath === "" || (
+    relativePath !== ".." &&
+    !relativePath.startsWith(".." + path.sep) &&
+    !path.isAbsolute(relativePath)
+  );
+}
+
+async function cleanup() {
+  if (handle) {
+    try { await handle.close(); } catch (_) {}
+    handle = undefined;
+  }
+  if (temporary) {
+    try { await fs.promises.unlink(temporary); } catch (_) {}
+  }
+}
+
+async function fail(error) {
+  if (finished) return;
+  finished = true;
+  await cleanup();
+  emit(
+    { type: "error", detail: error instanceof Error ? error.message : String(error) },
+    () => setTimeout(() => process.exit(1), 100),
+  );
+}
+
+async function writeAll(buffer) {
+  let offset = 0;
+  while (offset < buffer.length) {
+    const result = await handle.write(buffer, offset, buffer.length - offset, null);
+    if (!result.bytesWritten) throw new Error("Unable to write upload data");
+    offset += result.bytesWritten;
+  }
+}
+
+async function frame(line) {
+  if (finished || !line) return;
+  const message = JSON.parse(line);
+  if (message.type === "chunk") {
+    if (message.seq !== sequence || typeof message.data !== "string") {
+      throw new Error("Invalid upload sequence");
+    }
+    const chunk = Buffer.from(message.data, "base64");
+    if (received + chunk.length > expectedSize) throw new Error("Upload exceeds expected size");
+    await writeAll(chunk);
+    hash.update(chunk);
+    received += chunk.length;
+    emit({ type: "ack", seq: sequence });
+    sequence += 1;
+    return;
+  }
+  if (message.type !== "finish" || message.seq !== sequence) {
+    throw new Error("Invalid upload frame");
+  }
+  if (received !== expectedSize) throw new Error("Upload size mismatch");
+  const actualHash = hash.digest("hex");
+  if (actualHash !== expectedHash) throw new Error("Upload hash mismatch");
+  await handle.sync();
+  await handle.close();
+  handle = undefined;
+
+  const rootAgain = await fs.promises.realpath(rootInput);
+  const parentAgain = await fs.promises.realpath(path.dirname(target));
+  if (rootAgain !== rootReal) throw new Error("Workspace root changed during upload");
+  if (parentAgain !== parentReal || !contained(rootAgain, parentAgain)) {
+    throw new Error("Upload parent changed during upload");
+  }
+  const finalTarget = path.join(parentAgain, path.basename(target));
+  try {
+    await fs.promises.lstat(finalTarget);
+    throw new Error("Upload target already exists");
+  } catch (error) {
+    if (!error || error.code !== "ENOENT") throw error;
+  }
+  await fs.promises.rename(temporary, finalTarget);
+  temporary = undefined;
+  finished = true;
+  const url = pathToFileURL(finalTarget).href;
+  for (let offset = 0; offset < url.length; offset += 32) {
+    emit({ type: "url", data: url.slice(offset, offset + 32) });
+  }
+  emit({ type: "done" }, () => setTimeout(() => process.exit(0), 100));
+}
+
+async function initialize() {
+  const root = await fs.promises.realpath(rootInput);
+  rootReal = root;
+  target = path.resolve(root, ...relative.split("/"));
+  const targetParent = path.dirname(target);
+  if (!contained(root, targetParent)) throw new Error("Upload target is outside the workspace");
+  await fs.promises.mkdir(targetParent, { recursive: true });
+  parentReal = await fs.promises.realpath(targetParent);
+  if (!contained(root, parentReal)) throw new Error("Upload parent is outside the workspace");
+  temporary = path.join(parentReal, `.upload-${transferID}.tmp`);
+  handle = await fs.promises.open(temporary, "wx", 0o600);
+  if (process.stdin.isTTY && process.stdin.setRawMode) process.stdin.setRawMode(true);
+  process.stdin.setEncoding("utf8");
+  process.stdin.on("data", (chunk) => {
+    input += chunk;
+    let newline;
+    while ((newline = input.indexOf("\n")) >= 0) {
+      const line = input.slice(0, newline).replace(/\r$/, "");
+      input = input.slice(newline + 1);
+      chain = chain.then(() => frame(line)).catch(fail);
+    }
+  });
+  process.stdin.on("end", () => chain.then(() => {
+    if (!finished) return fail(new Error("Upload stream ended early"));
+  }));
+  emit({ type: "ready" });
+}
+
+initialize().catch(fail);
+""".strip()
+_delete_uploaded_files_script = r"""
+const fs = require("fs");
+const path = require("path");
+const rootInput = process.argv[1];
+const files = JSON.parse(Buffer.from(process.argv[2], "base64").toString("utf8"));
+
+function contained(root, candidate) {
+  const relativePath = path.relative(root, candidate);
+  return relativePath === "" || (
+    relativePath !== ".." &&
+    !relativePath.startsWith(".." + path.sep) &&
+    !path.isAbsolute(relativePath)
+  );
+}
+
+(async () => {
+  const root = await fs.promises.realpath(rootInput);
+  for (const relative of files) {
+    try {
+      const target = path.resolve(root, ...relative.split("/"));
+      if (!contained(root, target)) continue;
+      const parent = await fs.promises.realpath(path.dirname(target));
+      if (!contained(root, parent)) continue;
+      const stat = await fs.promises.lstat(target);
+      if (stat.isFile() || stat.isSymbolicLink()) await fs.promises.unlink(target);
+    } catch (_) {}
+  }
+})().catch(() => process.exit(1));
+""".strip()
+
+_upload_chunk_bytes = 48 * 1024
+_ansi_csi_pattern = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
+
+
+def _parse_upload_event(payload: str) -> dict | None:
+    try:
+        event = json.loads(_ansi_csi_pattern.sub("", payload.rstrip("\r")))
+    except json.JSONDecodeError:
+        return None
+    return event if isinstance(event, dict) else None
 
 
 async def get_workspace_root(sandbox: dict) -> str:
@@ -341,6 +528,236 @@ async def run_sandbox_command(
         capture_output=False,
     )
     return exit_code
+
+
+def _validate_upload_relative_path(relative_path: str) -> str:
+    if "\x00" in relative_path or "\\" in relative_path:
+        raise ValueError("Invalid sandbox upload path")
+    path = PurePosixPath(relative_path)
+    if (
+        not relative_path
+        or path.is_absolute()
+        or any(part in {"", ".", ".."} or ":" in part for part in path.parts)
+        or str(path) != relative_path
+    ):
+        raise ValueError("Invalid sandbox upload path")
+    return relative_path
+
+
+async def upload_sandbox_file(
+    sandbox: dict,
+    directory: str,
+    relative_path: str,
+    source: BinaryIO | bytes,
+    size: int,
+    sha256: str,
+    timeout_seconds: float = 120.0,
+) -> str:
+    """Stream one file through an authenticated sandbox PTY and return its remote file URL."""
+    relative_path = _validate_upload_relative_path(relative_path)
+    if size < 0 or not re.fullmatch(r"[0-9a-f]{64}", sha256):
+        raise ValueError("Invalid sandbox upload metadata")
+
+    auth = sandbox_auth(sandbox)
+    pty_id: str | None = None
+    websocket = None
+    receiver: asyncio.Task | None = None
+    events: asyncio.Queue[dict] = asyncio.Queue()
+    marker = f"__U{uuid.uuid4().hex[:12]}__"
+    transfer_id = uuid.uuid4().hex
+    temporary_path = str(
+        PurePosixPath(relative_path).parent / f".upload-{transfer_id}.tmp"
+    )
+    protocol_buffer = ""
+    uploaded = False
+
+    async def next_event() -> dict:
+        try:
+            event = await asyncio.wait_for(events.get(), timeout=timeout_seconds)
+        except asyncio.TimeoutError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_504_GATEWAY_TIMEOUT,
+                detail="Sandbox upload timed out",
+            ) from exc
+        if event.get("type") == "transport_error":
+            raise RuntimeError(event.get("detail", "Sandbox upload connection closed"))
+        if event.get("type") == "error":
+            raise RuntimeError(event.get("detail", "Sandbox rejected the upload"))
+        return event
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0, auth=auth) as client:
+            response = await client.post(
+                f"{sandbox['url']}/pty",
+                params={"directory": directory},
+                json={
+                    "command": "node",
+                    "args": [
+                        "-e",
+                        _upload_receiver_script,
+                        directory,
+                        relative_path,
+                        str(size),
+                        sha256,
+                        marker,
+                        transfer_id,
+                    ],
+                    "cwd": directory,
+                    "title": f"Upload {PurePosixPath(relative_path).name}",
+                },
+            )
+            response.raise_for_status()
+            info = response.json()
+            pty_id = info.get("id")
+            if not isinstance(pty_id, str) or not pty_id:
+                raise ValueError("Sandbox did not return a PTY id")
+
+        scheme = "wss" if sandbox["url"].startswith("https://") else "ws"
+        base_url = sandbox["url"].split("://", 1)[-1].rstrip("/")
+        query = {"directory": directory, "cursor": "0"}
+        if auth:
+            query["auth_token"] = base64.b64encode(f"{auth[0]}:{auth[1]}".encode()).decode()
+        websocket = await asyncio.wait_for(
+            connect(f"{scheme}://{base_url}/pty/{pty_id}/connect?{urlencode(query)}"),
+            timeout=5.0,
+        )
+
+        async def receive_events() -> None:
+            nonlocal protocol_buffer
+            try:
+                async for message in websocket:
+                    if isinstance(message, bytes):
+                        if message.startswith(b"\x00"):
+                            continue
+                        text = message.decode("utf-8", errors="replace")
+                    else:
+                        text = message
+                    protocol_buffer += text
+                    while True:
+                        start = protocol_buffer.find(marker)
+                        if start < 0:
+                            protocol_buffer = protocol_buffer[-max(len(marker), 4096):]
+                            break
+                        end = protocol_buffer.find("\n", start + len(marker))
+                        if end < 0:
+                            protocol_buffer = protocol_buffer[start:]
+                            break
+                        payload = protocol_buffer[start + len(marker):end]
+                        protocol_buffer = protocol_buffer[end + 1:]
+                        event = _parse_upload_event(payload)
+                        if event is not None:
+                            events.put_nowait(event)
+            except WebSocketException as exc:
+                events.put_nowait({"type": "transport_error", "detail": str(exc)})
+            finally:
+                events.put_nowait(
+                    {"type": "transport_error", "detail": "Sandbox PTY closed during upload"}
+                )
+
+        receiver = asyncio.create_task(receive_events())
+        ready = await next_event()
+        if ready.get("type") != "ready":
+            raise RuntimeError("Sandbox did not initialize the upload receiver")
+
+        if isinstance(source, bytes):
+            source_view = memoryview(source)
+            offset = 0
+
+            def read_chunk() -> bytes:
+                nonlocal offset
+                chunk = bytes(source_view[offset:offset + _upload_chunk_bytes])
+                offset += len(chunk)
+                return chunk
+        else:
+            source.seek(0)
+
+            def read_chunk() -> bytes:
+                return source.read(_upload_chunk_bytes)
+
+        sent = 0
+        sequence = 0
+        while chunk := read_chunk():
+            sent += len(chunk)
+            if sent > size:
+                raise ValueError("Upload source is larger than its declared size")
+            await websocket.send(
+                json.dumps(
+                    {
+                        "type": "chunk",
+                        "seq": sequence,
+                        "data": base64.b64encode(chunk).decode(),
+                    },
+                    separators=(",", ":"),
+                )
+                + "\n"
+            )
+            acknowledgement = await next_event()
+            if acknowledgement.get("type") != "ack" or acknowledgement.get("seq") != sequence:
+                raise RuntimeError("Invalid sandbox upload acknowledgement")
+            sequence += 1
+        if sent != size:
+            raise ValueError("Upload source is smaller than its declared size")
+
+        await websocket.send(
+            json.dumps({"type": "finish", "seq": sequence}, separators=(",", ":")) + "\n"
+        )
+        url_parts: list[str] = []
+        while True:
+            completed = await next_event()
+            if completed.get("type") == "url" and isinstance(completed.get("data"), str):
+                url_parts.append(completed["data"])
+                continue
+            break
+        url = "".join(url_parts)
+        if completed.get("type") != "done" or not url.startswith("file:"):
+            raise RuntimeError("Sandbox returned an invalid upload result")
+        uploaded = True
+        return url
+    except HTTPException:
+        raise
+    except (httpx.HTTPError, WebSocketException, OSError, RuntimeError, ValueError, TypeError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Unable to upload file to the sandbox",
+        ) from exc
+    finally:
+        if receiver:
+            receiver.cancel()
+            with suppress(asyncio.CancelledError):
+                await receiver
+        if websocket:
+            with suppress(Exception):
+                await websocket.close()
+        if pty_id:
+            try:
+                async with httpx.AsyncClient(timeout=5.0, auth=auth) as client:
+                    await client.delete(
+                        f"{sandbox['url']}/pty/{pty_id}",
+                        params={"directory": directory},
+                    )
+            except httpx.HTTPError:
+                pass
+        if not uploaded and pty_id:
+            with suppress(Exception):
+                await delete_sandbox_files(sandbox, directory, [temporary_path])
+
+
+async def delete_sandbox_files(sandbox: dict, directory: str, relative_paths: list[str]) -> None:
+    paths = [_validate_upload_relative_path(path) for path in relative_paths]
+    if not paths:
+        return
+    encoded_paths = base64.b64encode(
+        json.dumps(paths, ensure_ascii=False, separators=(",", ":")).encode()
+    ).decode()
+    await run_sandbox_command(
+        sandbox=sandbox,
+        directory=directory,
+        command="node",
+        args=["-e", _delete_uploaded_files_script, directory, encoded_paths],
+        cwd=directory,
+        title="Clean up failed upload",
+        timeout_seconds=30.0,
+    )
 
 
 async def ensure_workspace(sandbox: dict, workspace: UserWorkspace, db: AsyncSession) -> None:

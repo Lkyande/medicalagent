@@ -250,6 +250,34 @@ FastAPI 业务错误通常返回：
 - 响应会过滤非法节点和不在目标目录下的节点。
 - 后端对同一目录有短时间缓存，删除等操作会强制刷新。
 
+### `POST /api/workspace/uploads`
+
+将消息附件上传到当前用户工作目录。请求使用 `multipart/form-data`：
+
+- `session_id`：会话 ID，只允许字母、数字、`_` 和 `-`。
+- `files`：一个或多个文件字段。
+
+文件保存到 `attachments/<session_id>/`。每次最多上传 5 个文件，单文件最大 `10 MiB`，批次总大小最大 `50 MiB`。所有格式均可保存，但只有检测为 UTF-8 文本、PNG、JPEG、GIF、WebP 或 PDF 的文件会返回 `direct: true`，其他文件应由 Agent 使用工作目录工具读取或转换，不能自动执行或解压。
+
+响应：
+
+```json
+{
+  "files": [
+    {
+      "name": "病例.txt",
+      "path": "attachments/ses_123/7f2c-病例.txt",
+      "mime": "text/plain",
+      "size": 128,
+      "url": "file:///workspace/attachments/ses_123/7f2c-%E7%97%85%E4%BE%8B.txt",
+      "direct": true
+    }
+  ]
+}
+```
+
+上传使用远程沙盒的认证 PTY 分块写入，服务端按实际字节数限制大小并校验 SHA-256，完成前写入临时文件，校验成功后原子重命名。批次失败会清理本批次已写入的文件。
+
 ### `GET /api/workspace/content?path=<file>`
 
 读取单个文件内容。
@@ -283,9 +311,9 @@ FastAPI 业务错误通常返回：
 | `404` | 文件不存在 |
 | `502` | 沙盒返回非法响应 |
 
-### `GET /api/workspace/download?path=<file>`
+### `GET /api/workspace/download?path=<file>&filename=<display-name>`
 
-下载单个文件。响应体是文件内容，响应头包含：
+下载单个文件。可选的 `filename` 只影响下载显示名，不改变读取路径。响应体是文件内容，响应头包含：
 
 ```http
 Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.md

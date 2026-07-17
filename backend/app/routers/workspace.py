@@ -1,15 +1,22 @@
 import base64
 import binascii
 import asyncio
+import codecs
+import hashlib
 import mimetypes
+import re
 import tempfile
 import time
+import unicodedata
+import uuid
 import zipfile
+from contextlib import suppress
 from pathlib import PurePosixPath
+from typing import Annotated
 from urllib.parse import quote
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Response, UploadFile, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,10 +27,12 @@ from app.database import get_db
 from app.models import User, UserWorkspace
 from app.proxy.opencode_proxy import basic_auth_header
 from app.sandbox.manager import (
+    delete_sandbox_files,
     ensure_workspace,
     get_or_create_workspace,
     run_sandbox_command,
     run_sandbox_command_capture,
+    upload_sandbox_file,
 )
 
 
@@ -32,6 +41,12 @@ router = APIRouter(prefix="/workspace", tags=["workspace"])
 MAX_ARCHIVE_FILES = 2000
 MAX_ARCHIVE_BYTES = 200 * 1024 * 1024
 MAX_ARCHIVE_DEPTH = 24
+MAX_UPLOAD_FILES = 5
+MAX_UPLOAD_FILE_BYTES = 10 * 1024 * 1024
+MAX_UPLOAD_TOTAL_BYTES = 50 * 1024 * 1024
+UPLOAD_READ_BYTES = 64 * 1024
+UPLOAD_SPOOL_BYTES = 1024 * 1024
+MAX_UPLOAD_FILENAME_BYTES = 150
 FILE_CHECK_START = "__OPENCODE_FILE_CHECK_START__"
 FILE_CHECK_END = "__OPENCODE_FILE_CHECK_END__"
 FILE_CHECK_SCRIPT = (
@@ -44,10 +59,179 @@ FILE_CHECK_SCRIPT = (
 )
 _directory_locks: dict[str, asyncio.Lock] = {}
 _directory_cache: dict[str, tuple[float, list[dict]]] = {}
+_session_id_pattern = re.compile(r"[A-Za-z0-9_-]{1,128}")
+_mime_type_pattern = re.compile(r"[A-Za-z0-9!#$&^_.+-]+/[A-Za-z0-9!#$&^_.+-]+")
+_windows_device_pattern = re.compile(r"(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])", re.IGNORECASE)
+_windows_filename_characters = set('<>:"/\\|?*')
 
 
 class DeleteWorkspaceEntry(BaseModel):
     path: str
+
+
+def validate_upload_session_id(value: str) -> str:
+    if not _session_id_pattern.fullmatch(value):
+        raise ValueError("Invalid upload session_id")
+    return value
+
+
+def _truncate_utf8(value: str, maximum_bytes: int) -> str:
+    encoded = value.encode("utf-8")
+    if len(encoded) <= maximum_bytes:
+        return value
+    return encoded[:maximum_bytes].decode("utf-8", errors="ignore")
+
+
+def sanitize_upload_filename(value: str | None) -> str:
+    basename = re.split(r"[/\\]", value or "")[-1]
+    basename = unicodedata.normalize("NFKC", basename)
+    cleaned = "".join(
+        "_"
+        if character in _windows_filename_characters or unicodedata.category(character).startswith("C")
+        else character
+        for character in basename
+    ).strip()
+    cleaned = cleaned.rstrip(". ")
+    if not cleaned or cleaned in {".", ".."}:
+        cleaned = "upload"
+    device_stem = cleaned.split(".", 1)[0].rstrip(" ")
+    if _windows_device_pattern.fullmatch(device_stem):
+        cleaned = "_" + cleaned
+    cleaned = _truncate_utf8(cleaned, MAX_UPLOAD_FILENAME_BYTES).rstrip(". ")
+    return cleaned or "upload"
+
+
+def normalize_declared_mime(value: str | None) -> str:
+    candidate = (value or "").split(";", 1)[0].strip().lower()
+    if len(candidate) <= 127 and _mime_type_pattern.fullmatch(candidate):
+        return candidate
+    return "application/octet-stream"
+
+
+def _supported_magic(prefix: bytes) -> str | None:
+    if prefix.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "image/png"
+    if prefix.startswith(b"\xff\xd8\xff"):
+        return "image/jpeg"
+    if prefix.startswith((b"GIF87a", b"GIF89a")):
+        return "image/gif"
+    if len(prefix) >= 12 and prefix.startswith(b"RIFF") and prefix[8:12] == b"WEBP":
+        return "image/webp"
+    if prefix.startswith(b"%PDF-"):
+        return "application/pdf"
+    return None
+
+
+def _classify_upload_content(
+    prefix: bytes,
+    declared_mime: str | None,
+    utf8_valid: bool,
+    has_nul: bool,
+    control_characters: int,
+    character_count: int,
+) -> tuple[str, bool]:
+    magic_mime = _supported_magic(prefix)
+    if magic_mime:
+        return magic_mime, True
+    control_ratio = control_characters / max(character_count, 1)
+    if utf8_valid and not has_nul and control_ratio <= 0.02:
+        return "text/plain", True
+    return normalize_declared_mime(declared_mime), False
+
+
+def detect_upload_content(data: bytes, declared_mime: str | None = None) -> tuple[str, bool]:
+    try:
+        text = data.decode("utf-8", errors="strict")
+        utf8_valid = True
+    except UnicodeDecodeError:
+        text = ""
+        utf8_valid = False
+    controls = sum(
+        character not in "\t\r\n" and unicodedata.category(character) == "Cc"
+        for character in text
+    )
+    return _classify_upload_content(
+        data[:16],
+        declared_mime,
+        utf8_valid,
+        "\x00" in text,
+        controls,
+        len(text),
+    )
+
+
+async def spool_upload_file(upload: UploadFile, total_before: int) -> dict:
+    spool = tempfile.SpooledTemporaryFile(max_size=UPLOAD_SPOOL_BYTES, mode="w+b")
+    digest = hashlib.sha256()
+    decoder = codecs.getincrementaldecoder("utf-8")("strict")
+    prefix = bytearray()
+    size = 0
+    utf8_valid = True
+    has_nul = False
+    control_characters = 0
+    character_count = 0
+
+    def inspect_text(chunk: bytes, final: bool = False) -> None:
+        nonlocal utf8_valid, has_nul, control_characters, character_count
+        if not utf8_valid:
+            return
+        try:
+            text = decoder.decode(chunk, final=final)
+        except UnicodeDecodeError:
+            utf8_valid = False
+            return
+        has_nul = has_nul or "\x00" in text
+        character_count += len(text)
+        control_characters += sum(
+            character not in "\t\r\n" and unicodedata.category(character) == "Cc"
+            for character in text
+        )
+
+    try:
+        while chunk := await upload.read(UPLOAD_READ_BYTES):
+            size += len(chunk)
+            if size > MAX_UPLOAD_FILE_BYTES:
+                raise HTTPException(
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    detail="An uploaded file exceeds 10 MiB",
+                )
+            if total_before + size > MAX_UPLOAD_TOTAL_BYTES:
+                raise HTTPException(
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    detail="The upload batch exceeds 50 MiB",
+                )
+            spool.write(chunk)
+            digest.update(chunk)
+            if len(prefix) < 16:
+                prefix.extend(chunk[:16 - len(prefix)])
+            inspect_text(chunk)
+        inspect_text(b"", final=True)
+        mime, direct = _classify_upload_content(
+            bytes(prefix),
+            upload.content_type,
+            utf8_valid,
+            has_nul,
+            control_characters,
+            character_count,
+        )
+        spool.seek(0)
+        return {
+            "name": sanitize_upload_filename(upload.filename),
+            "spool": spool,
+            "size": size,
+            "sha256": digest.hexdigest(),
+            "mime": mime,
+            "direct": direct,
+        }
+    except BaseException:
+        spool.close()
+        raise
+
+
+def invalidate_workspace_directory_cache(sandbox: dict, workspace: UserWorkspace) -> None:
+    prefix = f"{sandbox['id']}\0{workspace.directory}\0"
+    for key in [key for key in _directory_cache if key.startswith(prefix)]:
+        _directory_cache.pop(key, None)
 
 
 def safe_relative_path(value: str, allow_root: bool = False) -> str:
@@ -233,6 +417,77 @@ async def get_workspace(
     }
 
 
+@router.post("/uploads")
+async def upload_workspace_files(
+    session_id: Annotated[str, Form(...)],
+    files: Annotated[list[UploadFile], File(...)],
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    try:
+        safe_session_id = validate_upload_session_id(session_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    if not files:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="At least one file is required")
+    if len(files) > MAX_UPLOAD_FILES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="No more than 5 files may be uploaded at once",
+        )
+
+    prepared: list[dict] = []
+    uploaded_paths: list[str] = []
+    sandbox = None
+    workspace = None
+    total_size = 0
+    try:
+        for upload in files:
+            item = await spool_upload_file(upload, total_size)
+            total_size += item["size"]
+            item["path"] = (
+                f"attachments/{safe_session_id}/{uuid.uuid4().hex}-{item['name']}"
+            )
+            prepared.append(item)
+
+        sandbox, workspace = await workspace_context(user, db)
+        response_files = []
+        for item in prepared:
+            url = await upload_sandbox_file(
+                sandbox=sandbox,
+                directory=workspace.directory,
+                relative_path=item["path"],
+                source=item["spool"],
+                size=item["size"],
+                sha256=item["sha256"],
+            )
+            uploaded_paths.append(item["path"])
+            response_files.append(
+                {
+                    "name": item["name"],
+                    "path": item["path"],
+                    "mime": item["mime"],
+                    "size": item["size"],
+                    "url": url,
+                    "direct": item["direct"],
+                }
+            )
+        invalidate_workspace_directory_cache(sandbox, workspace)
+        return {"files": response_files}
+    except BaseException:
+        if sandbox is not None and workspace is not None and uploaded_paths:
+            with suppress(BaseException):
+                await asyncio.shield(delete_sandbox_files(sandbox, workspace.directory, uploaded_paths))
+            invalidate_workspace_directory_cache(sandbox, workspace)
+        raise
+    finally:
+        for item in prepared:
+            item["spool"].close()
+        for upload in files:
+            with suppress(BaseException):
+                await upload.close()
+
+
 @router.get("/files")
 async def list_workspace_files(
     path: str = Query(""),
@@ -262,6 +517,7 @@ async def read_workspace_file(
 @router.get("/download")
 async def download_workspace_file(
     path: str = Query(...),
+    filename: str | None = Query(None),
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -271,12 +527,12 @@ async def download_workspace_file(
     async with httpx.AsyncClient(timeout=30.0) as client:
         payload = await remote_json(client, sandbox, workspace, "file/content", relative_path)
     content, payload_media_type = decode_file_content(payload)
-    filename = PurePosixPath(relative_path).name
-    guessed_media_type = mimetypes.guess_type(filename)[0]
+    download_name = sanitize_upload_filename(filename) if filename else PurePosixPath(relative_path).name
+    guessed_media_type = mimetypes.guess_type(download_name)[0]
     return Response(
         content=content,
         media_type=payload_media_type or guessed_media_type or "application/octet-stream",
-        headers={"Content-Disposition": content_disposition(filename)},
+        headers={"Content-Disposition": content_disposition(download_name)},
     )
 
 

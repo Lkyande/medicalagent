@@ -30,18 +30,28 @@ export type AssistantEnableResult = PlatformAssistant & {
   requiresNewSession: boolean
 }
 
+export type WorkspaceUploadFile = {
+  name: string
+  path: string
+  mime: string
+  size: number
+  url: string
+  direct: boolean
+}
+
 export async function apiFetch<T = unknown>(path: string, init?: RequestInit, timeoutMs = 15000): Promise<T> {
   const token = getToken()
   const controller = new AbortController()
   const timeout = window.setTimeout(() => controller.abort(), timeoutMs)
   let resp: Response
+  const formData = typeof FormData !== "undefined" && init?.body instanceof FormData
   try {
     resp = await fetch(`${BASE}${path}`, {
       ...init,
       credentials: "include",
       signal: init?.signal ?? controller.signal,
       headers: {
-        "Content-Type": "application/json",
+        ...(formData ? {} : { "Content-Type": "application/json" }),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...init?.headers,
       },
@@ -63,10 +73,21 @@ export async function apiFetch<T = unknown>(path: string, init?: RequestInit, ti
 
 async function apiDownload(path: string, fallbackName: string): Promise<void> {
   const token = getToken()
-  const resp = await fetch(`${BASE}${path}`, {
-    credentials: "include",
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  })
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), 120_000)
+  let resp: Response
+  try {
+    resp = await fetch(`${BASE}${path}`, {
+      credentials: "include",
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      signal: controller.signal,
+    })
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") throw new ApiError("文件下载超时，请重试", 408)
+    throw error
+  } finally {
+    window.clearTimeout(timeout)
+  }
   if (!resp.ok) {
     const text = await resp.text().catch(() => resp.statusText)
     throw new ApiError(text || `HTTP ${resp.status}`, resp.status)
@@ -112,8 +133,20 @@ export const backend = {
     apiFetch<{ type: "text" | "binary"; content: string; encoding?: "base64"; mimeType?: string }>(
       `/workspace/content?path=${encodeURIComponent(path)}`,
     ),
-  downloadWorkspaceFile: (path: string) =>
-    apiDownload(`/workspace/download?path=${encodeURIComponent(path)}`, path.split("/").at(-1) ?? "download"),
+  uploadWorkspaceFiles: (sessionID: string, files: File[]) => {
+    const form = new FormData()
+    form.append("session_id", sessionID)
+    for (const file of files) form.append("files", file, file.name)
+    return apiFetch<{ files: WorkspaceUploadFile[] }>("/workspace/uploads", {
+      method: "POST",
+      body: form,
+    }, 300_000)
+  },
+  downloadWorkspaceFile: (path: string, filename?: string) =>
+    apiDownload(
+      `/workspace/download?path=${encodeURIComponent(path)}${filename ? `&filename=${encodeURIComponent(filename)}` : ""}`,
+      filename ?? path.split("/").at(-1) ?? "download",
+    ),
   downloadWorkspaceArchive: () => apiDownload("/workspace/archive", "workspace.zip"),
   deleteWorkspaceEntry: (path: string) =>
     apiFetch<{ deleted: string; type: "file" | "directory" }>("/workspace/files", {

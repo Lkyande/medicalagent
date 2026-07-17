@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     sandbox_workspace_root: str = ""
     murtagh_mcp_url: str = ""
     murtagh_knowledge_root: str = ""
+    murtagh_mcp_timeout_ms: int = 30000
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 

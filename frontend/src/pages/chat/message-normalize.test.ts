@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import type { Message, Part } from "@opencode-ai/sdk/v2"
 import { appendPartDelta, filterRevertedMessages, mergeMessageSnapshot, normalizeMessages, upsertMessage, upsertPart, type RawMessage } from "./message-normalize"
+import { serializeWorkspaceAttachment } from "./workspace-attachment"
 
 const user = (id: string, created: number): RawMessage => ({
   info: {
@@ -102,6 +103,44 @@ describe("normalizeMessages", () => {
     ])
 
     expect(result.map((message) => message.id)).toEqual(["u1", "assistant-turn:u1", "u2", "assistant-turn:u2"])
+  })
+
+  test("renders a persisted workspace attachment once and hides its marker", () => {
+    const raw = user("u1", 1000)
+    const marker = serializeWorkspaceAttachment({
+      name: "病例.txt",
+      path: "attachments/session/file.txt",
+      mime: "text/plain",
+      size: 128,
+      direct: true,
+      filePartID: "file-part",
+    })
+    raw.parts = [
+      text("marker", "u1", marker),
+      {
+        id: "file-part",
+        sessionID: "session",
+        messageID: "u1",
+        type: "file",
+        mime: "text/plain",
+        filename: "病例.txt",
+        url: "file:///workspace/attachments/session/file.txt",
+      } as Part,
+    ]
+
+    const message = normalizeMessages([raw])[0]
+
+    expect(message?.text).toBe("")
+    expect(message?.blocks).toHaveLength(1)
+    expect(message?.blocks[0]).toMatchObject({
+      type: "file",
+      file: {
+        filename: "病例.txt",
+        workspacePath: "attachments/session/file.txt",
+        size: 128,
+        direct: true,
+      },
+    })
   })
 })
 

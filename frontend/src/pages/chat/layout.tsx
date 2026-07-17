@@ -34,6 +34,7 @@ import {
   type DisplayMessage,
   type RawMessage,
 } from "./message-normalize"
+import { parseWorkspaceAttachment } from "./workspace-attachment"
 
 export function ChatLayout() {
   const location = useLocation()
@@ -465,7 +466,10 @@ function ChatWorkspace(props: { clinical?: boolean }) {
       setCurrentSession((session) => session ? { ...session, revert: { messageID } } : session)
       setComposerDraft(
         target.parts
-          .filter((part): part is Extract<Part, { type: "text" }> => part.type === "text" && !part.synthetic)
+          .filter(
+            (part): part is Extract<Part, { type: "text" }> =>
+              part.type === "text" && !part.synthetic && !parseWorkspaceAttachment(part.text),
+          )
           .map((part) => part.text)
           .join("\n\n"),
       )
@@ -571,6 +575,7 @@ function ChatWorkspace(props: { clinical?: boolean }) {
           onSent={handleSent}
           onSendFailed={handleSendFailed}
           onAbortComplete={refreshAfterAbort}
+          onWorkspaceChanged={() => setWorkspaceRefresh((value) => value + 1)}
           clinical={clinical()}
           conversationTypeReady={conversationTypeReady()}
         />

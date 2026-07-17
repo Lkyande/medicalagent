@@ -2,7 +2,7 @@ import { createEffect, createSignal, Show, For, createMemo, onCleanup } from "so
 import type { Message, Part } from "@opencode-ai/sdk/v2"
 import { useNavigate } from "@solidjs/router"
 import { getChatClient } from "./chat-client"
-import { backend, type AssistantEnableResult } from "@/api/backend"
+import { backend, type AssistantEnableResult, type WorkspaceUploadFile } from "@/api/backend"
 import { ChatModelSelector } from "./model-selector"
 import { ChatAssistantSelector, CLINICAL_ASSISTANT_ID, DEFAULT_ASSISTANT_ID, type AssistantOption } from "./assistant-selector"
 import { ChatStopButton } from "./stop-button"
@@ -13,9 +13,19 @@ import {
   GENERAL_CONVERSATION_TYPE,
   conversationMetadata,
 } from "./conversation-type"
+import { serializeWorkspaceAttachment } from "./workspace-attachment"
 
-const MAX_IMAGES = 5
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024
+const MAX_ATTACHMENTS = 5
+const MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024
+const MAX_ATTACHMENT_TOTAL_SIZE = 50 * 1024 * 1024
+const PREVIEW_IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"])
+
+type ComposerAttachment = {
+  file: File
+  uploaded?: WorkspaceUploadFile
+  uploadedSessionID?: string
+}
+
 export function ChatComposer(props: {
   sessionId?: string
   isGenerating: boolean
@@ -27,13 +37,14 @@ export function ChatComposer(props: {
   onSent: (msg: RawMessage) => void
   onSendFailed: (messageID: string) => void
   onAbortComplete: () => Promise<void>
+  onWorkspaceChanged: () => void
   onRestore?: () => void
   clinical?: boolean
   conversationTypeReady?: boolean
 }) {
   const navigate = useNavigate()
   const [text, setText] = createSignal("")
-  const [images, setImages] = createSignal<File[]>([])
+  const [attachments, setAttachments] = createSignal<ComposerAttachment[]>([])
   const [sending, setSending] = createSignal(false)
   const [selectedModel, setSelectedModel] = createSignal<string>("")
   const [selectedAssistant, setSelectedAssistant] = createSignal<AssistantOption>({
@@ -101,7 +112,7 @@ export function ChatComposer(props: {
     })
   })
 
-  const canSend = createMemo(() => text().trim().length > 0 || images().length > 0)
+  const canSend = createMemo(() => text().trim().length > 0 || attachments().length > 0)
 
   const selectAssistant = (assistant: AssistantOption) => {
     setSelectedAssistant(assistant)
@@ -130,28 +141,33 @@ export function ChatComposer(props: {
     }
   }
 
-  const handleImageUpload = (e: Event) => {
+  const handleFileUpload = (e: Event) => {
     const target = e.target as HTMLInputElement
+    if (sending()) {
+      target.value = ""
+      return
+    }
     if (target.files) {
       const selected = Array.from(target.files)
-      const invalid = selected.find((file) => !file.type.startsWith("image/"))
-      const oversized = selected.find((file) => file.size > MAX_IMAGE_SIZE)
-      if (invalid) {
-        setError(`仅支持图片文件：${invalid.name}`)
-      } else if (oversized) {
-        setError(`图片不能超过 10 MB：${oversized.name}`)
-      } else if (images().length + selected.length > MAX_IMAGES) {
-        setError(`最多上传 ${MAX_IMAGES} 张图片`)
+      const oversized = selected.find((file) => file.size > MAX_ATTACHMENT_SIZE)
+      const totalSize = attachments().reduce((total, attachment) => total + attachment.file.size, 0)
+      if (oversized) {
+        setError(`文件不能超过 10 MB：${oversized.name}`)
+      } else if (attachments().length + selected.length > MAX_ATTACHMENTS) {
+        setError(`每条消息最多上传 ${MAX_ATTACHMENTS} 个文件`)
+      } else if (totalSize + selected.reduce((total, file) => total + file.size, 0) > MAX_ATTACHMENT_TOTAL_SIZE) {
+        setError("每条消息的附件总大小不能超过 50 MB")
       } else {
         setError("")
-        setImages((prev) => [...prev, ...selected])
+        setAttachments((prev) => [...prev, ...selected.map((file) => ({ file }))])
       }
     }
     target.value = ""
   }
 
-  const removeImage = (idx: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== idx))
+  const removeAttachment = (idx: number) => {
+    if (sending()) return
+    setAttachments((prev) => prev.filter((_, i) => i !== idx))
   }
 
   const resolveModel = () => {
@@ -180,9 +196,10 @@ export function ChatComposer(props: {
 
     const client = getChatClient()
     const currentText = text().trim()
-    const currentImages = images()
+    const currentAttachments = attachments()
+    let retryAttachments = currentAttachments
     let optimisticMessageID: string | undefined
-    if (!currentText && images().length === 0) return
+    if (!currentText && currentAttachments.length === 0) return
 
     setSending(true)
 
@@ -198,9 +215,31 @@ export function ChatComposer(props: {
         sessionID = (createResp as any).data?.id
         if (!sessionID) throw new Error("创建会话失败")
         setActiveSessionID(sessionID)
-        const title = currentText.length > 40 ? currentText.slice(0, 40) + "..." : currentText
+        const titleSource = currentText || currentAttachments[0]?.file.name || "文件分析"
+        const title = titleSource.length > 40 ? titleSource.slice(0, 40) + "..." : titleSource
         client.session.update({ sessionID, title } as any).catch(() => {})
         navigate(`${props.clinical ? "/clinical" : "/chat"}/${sessionID}`)
+      }
+
+      const pendingIndexes = currentAttachments
+        .map((attachment, index) => attachment.uploaded && attachment.uploadedSessionID === sessionID ? -1 : index)
+        .filter((index) => index >= 0)
+      if (pendingIndexes.length > 0) {
+        const uploaded = await backend.uploadWorkspaceFiles(
+          sessionID,
+          pendingIndexes.map((index) => currentAttachments[index].file),
+        )
+        if (uploaded.files.length !== pendingIndexes.length) throw new Error("部分文件上传失败，请重试")
+        retryAttachments = [...currentAttachments]
+        pendingIndexes.forEach((attachmentIndex, resultIndex) => {
+          retryAttachments[attachmentIndex] = {
+            ...retryAttachments[attachmentIndex],
+            uploaded: uploaded.files[resultIndex],
+            uploadedSessionID: sessionID,
+          }
+        })
+        setAttachments(retryAttachments)
+        props.onWorkspaceChanged()
       }
 
       const now = Date.now()
@@ -217,18 +256,37 @@ export function ChatComposer(props: {
           text: currentText,
         } as Part)
       }
-      for (const img of currentImages) {
-        const base64 = await fileToBase64(img)
-        const partID = createChatIdentifier("prt")
-        promptParts.push({ id: partID, type: "file", mime: img.type, filename: img.name, url: base64 })
+      for (const attachment of retryAttachments) {
+        const uploaded = attachment.uploaded
+        if (!uploaded || attachment.uploadedSessionID !== sessionID) throw new Error(`文件尚未上传：${attachment.file.name}`)
+        const markerPartID = createChatIdentifier("prt")
+        const filePartID = uploaded.direct ? createChatIdentifier("prt") : undefined
+        const marker = serializeWorkspaceAttachment({
+          name: uploaded.name,
+          path: uploaded.path,
+          mime: uploaded.mime,
+          size: uploaded.size,
+          direct: uploaded.direct,
+          filePartID,
+        })
+        promptParts.push({ id: markerPartID, type: "text", text: marker })
         optimisticParts.push({
-          id: partID,
+          id: markerPartID,
+          sessionID,
+          messageID: optimisticMessageID,
+          type: "text",
+          text: marker,
+        } as Part)
+        if (!filePartID) continue
+        promptParts.push({ id: filePartID, type: "file", mime: uploaded.mime, filename: uploaded.name, url: uploaded.url })
+        optimisticParts.push({
+          id: filePartID,
           sessionID,
           messageID: optimisticMessageID,
           type: "file",
-          mime: img.type,
-          filename: img.name,
-          url: base64,
+          mime: uploaded.mime,
+          filename: uploaded.name,
+          url: uploaded.url,
         } as Part)
       }
 
@@ -246,7 +304,7 @@ export function ChatComposer(props: {
       props.onSent(optimistic)
 
       setText("")
-      setImages([])
+      setAttachments([])
       if (textareaRef) {
         textareaRef.value = ""
         autoResize(textareaRef)
@@ -264,7 +322,7 @@ export function ChatComposer(props: {
       if (optimisticMessageID) props.onSendFailed(optimisticMessageID)
       setError(e?.message ?? "发送失败")
       setText(currentText)
-      setImages(currentImages)
+      setAttachments(retryAttachments)
       if (textareaRef) {
         textareaRef.value = currentText
         autoResize(textareaRef)
@@ -308,13 +366,19 @@ export function ChatComposer(props: {
           <div class="chat-error" role="alert">{error()}</div>
         </Show>
 
-        <Show when={images().length > 0}>
+        <Show when={attachments().length > 0}>
           <div class="chat-attachments">
-            <For each={images()}>
-              {(img, idx) => (
-                <div class="chat-attachment-preview">
-                  <ImagePreview file={img} />
-                  <button class="chat-attachment-remove" aria-label={`移除图片 ${img.name}`} onClick={() => removeImage(idx())}>
+            <For each={attachments()}>
+              {(attachment, idx) => (
+                <div class="chat-attachment-preview" classList={{ "chat-attachment-preview-image": PREVIEW_IMAGE_TYPES.has(attachment.file.type) }}>
+                  <AttachmentPreview attachment={attachment} />
+                  <button
+                    type="button"
+                    class="chat-attachment-remove"
+                    aria-label={`移除文件 ${attachment.file.name}`}
+                    disabled={sending()}
+                    onClick={() => removeAttachment(idx())}
+                  >
                     ×
                   </button>
                 </div>
@@ -348,7 +412,7 @@ export function ChatComposer(props: {
                   : "输入消息... (Enter 发送, Shift+Enter 换行)"
             }
             aria-label="消息"
-            disabled={props.conversationTypeReady === false}
+            disabled={props.conversationTypeReady === false || sending()}
             onInput={handleInput}
             onKeyDown={handleKeyDown}
             ref={textareaRef}
@@ -356,16 +420,21 @@ export function ChatComposer(props: {
 
           <div class="chat-composer-toolbar">
             <div class="chat-composer-tools">
-              <label class="chat-icon-btn" title="上传图片" aria-label="上传图片">
+              <label
+                class="chat-icon-btn"
+                classList={{ disabled: sending() }}
+                title="上传文件"
+                aria-label="上传文件"
+              >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
                 </svg>
                 <input
                   type="file"
-                  accept="image/*"
                   multiple
+                  disabled={sending()}
                   style={{ display: "none" }}
-                  onChange={handleImageUpload}
+                  onChange={handleFileUpload}
                 />
               </label>
               <Show when={!props.clinical}>
@@ -376,12 +445,12 @@ export function ChatComposer(props: {
 
             <div class="chat-composer-actions">
               <Show
-                when={props.isGenerating || sending()}
+                when={props.isGenerating}
                 fallback={
                   <button
                     class="chat-send-btn"
                     aria-label="发送消息"
-                    disabled={!canSend() || props.conversationTypeReady === false}
+                    disabled={!canSend() || props.conversationTypeReady === false || sending()}
                     onClick={handleSend}
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -400,17 +469,30 @@ export function ChatComposer(props: {
   )
 }
 
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
+function formatFileSize(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(bytes < 10 * 1024 ? 1 : 0)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-function ImagePreview(props: { file: File }) {
-  const url = URL.createObjectURL(props.file)
+function AttachmentPreview(props: { attachment: ComposerAttachment }) {
+  const file = props.attachment.file
+  if (!PREVIEW_IMAGE_TYPES.has(file.type)) {
+    return (
+      <div class="chat-pending-file">
+        <span class="chat-pending-file-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2h8l4 4v16H6z"/><path d="M14 2v5h5"/>
+          </svg>
+        </span>
+        <span class="chat-pending-file-copy">
+          <strong>{file.name}</strong>
+          <span>{formatFileSize(file.size)}{props.attachment.uploaded ? " · 已上传" : ""}</span>
+        </span>
+      </div>
+    )
+  }
+  const url = URL.createObjectURL(file)
   onCleanup(() => URL.revokeObjectURL(url))
-  return <img src={url} alt={props.file.name} />
+  return <img src={url} alt={file.name} />
 }

@@ -1,5 +1,6 @@
 import { Show, For, Match, Switch, createMemo, createSignal, type JSX } from "solid-js"
 import { Markdown } from "@/session-ui/markdown"
+import { backend } from "@/api/backend"
 import type { DisplayBlock, DisplayFile, DisplayMessage, DisplayTool } from "./message-normalize"
 
 type ToolKind = "terminal" | "file" | "search" | "edit" | "task" | "checklist" | "question" | "skill" | "web" | "connector"
@@ -119,14 +120,60 @@ function ToolCard(props: { tool: DisplayTool }) {
 }
 
 function FileBlock(props: { file: DisplayFile }) {
+  const [downloading, setDownloading] = createSignal(false)
+  const [error, setError] = createSignal("")
+  const size = createMemo(() => {
+    const bytes = props.file.size
+    if (typeof bytes !== "number") return ""
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(bytes < 10 * 1024 ? 1 : 0)} KB`
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  })
+  const download = async () => {
+    const path = props.file.workspacePath
+    if (!path || downloading()) return
+    setDownloading(true)
+    setError("")
+    try {
+      await backend.downloadWorkspaceFile(path, props.file.filename)
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "文件下载失败")
+    } finally {
+      setDownloading(false)
+    }
+  }
+
+  if (props.file.workspacePath) {
+    return (
+      <div class="chat-attachments">
+        <button type="button" class="chat-file-card" onClick={download} disabled={downloading()}>
+          <span class="chat-file-card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M6 2h8l4 4v16H6z"/><path d="M14 2v5h5"/><path d="M9 13h6m-6 4h4"/>
+            </svg>
+          </span>
+          <span class="chat-file-card-copy">
+            <strong>{props.file.filename ?? "附件"}</strong>
+            <span>{size()}{size() ? " · " : ""}{props.file.direct ? "可供模型读取" : "工作区文件"}</span>
+          </span>
+          <span class="chat-file-card-action">{downloading() ? "下载中" : "下载"}</span>
+        </button>
+        <Show when={error()}><span class="chat-file-error" role="alert">{error()}</span></Show>
+      </div>
+    )
+  }
+
+  const safeUrl = /^(?:data:|blob:|https?:)/i.test(props.file.url)
   return (
     <div class="chat-attachments">
       <Show
-        when={props.file.mime.startsWith("image/")}
+        when={safeUrl && props.file.mime.startsWith("image/")}
         fallback={
-          <a class="chat-file-chip" href={props.file.url} target="_blank" rel="noreferrer">
-            {props.file.filename ?? "附件"}
-          </a>
+          <Show when={safeUrl} fallback={<span class="chat-file-chip">{props.file.filename ?? "附件"}</span>}>
+            <a class="chat-file-chip" href={props.file.url} target="_blank" rel="noreferrer">
+              {props.file.filename ?? "附件"}
+            </a>
+          </Show>
         }
       >
         <img class="chat-attachment-img" src={props.file.url} alt={props.file.filename ?? ""} />

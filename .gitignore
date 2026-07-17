@@ -1,5 +1,8 @@
 /backend/.env
 /backend/tests/
+!/backend/tests/
+/backend/tests/*
+!/backend/tests/test_workspace_uploads.py
 /backend/server.err
 /backend/server.log
 __pycache__/

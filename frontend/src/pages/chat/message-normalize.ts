@@ -1,4 +1,5 @@
 import type { AssistantMessage, Message, Part, ToolPart, UserMessage } from "@opencode-ai/sdk/v2"
+import { parseWorkspaceAttachment } from "./workspace-attachment"
 
 export interface RawMessage {
   info: Message
@@ -20,6 +21,9 @@ export interface DisplayFile {
   url: string
   mime: string
   filename?: string
+  workspacePath?: string
+  size?: number
+  direct?: boolean
 }
 
 export type DisplayBlock =
@@ -80,11 +84,38 @@ function assistantError(info: Message): string | undefined {
 
 function normalizeBlocks(parts: Part[]): DisplayBlock[] {
   const blocks: DisplayBlock[] = []
+  const workspaceAttachments = new Map<string, NonNullable<ReturnType<typeof parseWorkspaceAttachment>>>()
+  const linkedFileParts = new Set<string>()
+  for (const part of parts ?? []) {
+    if (part.type !== "text") continue
+    const attachment = parseWorkspaceAttachment(part.text)
+    if (!attachment) continue
+    workspaceAttachments.set(part.id, attachment)
+    if (attachment.filePartID) linkedFileParts.add(attachment.filePartID)
+  }
   for (const part of parts ?? []) {
     switch (part.type) {
-      case "text":
+      case "text": {
+        const attachment = workspaceAttachments.get(part.id)
+        if (attachment) {
+          blocks.push({
+            id: part.id,
+            type: "file",
+            file: {
+              id: part.id,
+              url: "",
+              mime: attachment.mime,
+              filename: attachment.name,
+              workspacePath: attachment.path,
+              size: attachment.size,
+              direct: attachment.direct,
+            },
+          })
+          break
+        }
         if (!part.synthetic && !part.ignored && part.text) blocks.push({ id: part.id, type: "text", text: part.text })
         break
+      }
       case "reasoning":
         if (part.text) blocks.push({ id: part.id, type: "reasoning", text: part.text })
         break
@@ -92,6 +123,7 @@ function normalizeBlocks(parts: Part[]): DisplayBlock[] {
         blocks.push({ id: part.id, type: "tool", tool: toolFromPart(part) })
         break
       case "file":
+        if (linkedFileParts.has(part.id)) break
         blocks.push({
           id: part.id,
           type: "file",
