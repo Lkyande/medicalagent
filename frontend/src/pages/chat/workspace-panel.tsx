@@ -2,6 +2,8 @@ import { For, Show, createEffect, createMemo, createSignal, onCleanup, onMount }
 import { backend } from "@/api/backend"
 import { DialogBody, DialogHeader, DialogTitle, DialogV2 } from "@/ui/v2/dialog-v2"
 import { FileIcon } from "@/ui/file-icon"
+import { useDialog } from "@/ui/context/dialog"
+import { EducationHtmlEditor } from "./education-html-editor"
 
 export interface WorkspaceNode {
   name: string
@@ -33,6 +35,7 @@ const codeExtensions = new Set([
 ])
 const WORKSPACE_POLL_INTERVAL_MS = 30_000
 const WORKSPACE_EVENT_DEBOUNCE_MS = 400
+const EDUCATION_PREVIEW_PATH = /^education-previews\/([A-Za-z0-9_-]{1,80})\.html$/
 
 function categoryOf(node: WorkspaceNode): Exclude<FileCategory, "all"> {
   const extension = node.name.split(".").at(-1)?.toLowerCase() ?? ""
@@ -44,7 +47,11 @@ function categoryOf(node: WorkspaceNode): Exclude<FileCategory, "all"> {
 
 export function WorkspacePanel(props: {
   refreshVersion: number
+  sessionID?: string
+  initialPath?: string
+  onWorkspaceChanged?: () => void
 }) {
+  const dialog = useDialog()
   const [directory, setDirectory] = createSignal("")
   const [children, setChildren] = createSignal<Record<string, WorkspaceNode[]>>({})
   const [expanded, setExpanded] = createSignal<Record<string, boolean>>({})
@@ -58,6 +65,7 @@ export function WorkspacePanel(props: {
   const [deleting, setDeleting] = createSignal("")
   const [actionError, setActionError] = createSignal("")
   const [category, setCategory] = createSignal<FileCategory>("all")
+  const [highlightedPath, setHighlightedPath] = createSignal(props.initialPath ?? "")
   const directoryRequests = new Map<string, number>()
   let contentRequest = 0
   let pollTimer: number | undefined
@@ -125,6 +133,16 @@ export function WorkspacePanel(props: {
       setDirectory(workspace.directory)
       if (!loaded || disposed) return
       initialized = true
+      const initialPath = props.initialPath
+      if (initialPath) {
+        const parts = initialPath.split("/").filter(Boolean)
+        let parent = ""
+        for (const part of parts.slice(0, -1)) {
+          parent = parent ? `${parent}/${part}` : part
+          setExpanded((current) => ({ ...current, [parent]: true }))
+          await loadDirectory(parent, true)
+        }
+      }
       if (pendingEventRefresh) {
         pendingEventRefresh = false
         void refresh(true)
@@ -168,7 +186,43 @@ export function WorkspacePanel(props: {
     if (next && !children()[path]) await loadDirectory(path, true)
   }
 
+  const revealFile = async (path: string) => {
+    setCategory("all")
+    setSelectedPath("")
+    setHighlightedPath("")
+    const parts = path.split("/").filter(Boolean)
+    let parent = ""
+    for (const part of parts.slice(0, -1)) {
+      parent = parent ? `${parent}/${part}` : part
+      setExpanded((current) => ({ ...current, [parent]: true }))
+      await loadDirectory(parent, true)
+    }
+    await refresh(true)
+    setHighlightedPath(path)
+  }
+
   const openFile = async (path: string) => {
+    setHighlightedPath("")
+    const preview = EDUCATION_PREVIEW_PATH.exec(path)
+    if (preview && props.sessionID) {
+      let editorDirty = false
+      void dialog.push(() => (
+        <EducationHtmlEditor
+          sessionID={props.sessionID!}
+          jobID={preview[1]!}
+          onDirtyChange={(dirty) => { editorDirty = dirty }}
+          onSaved={(artifact) => {
+            props.onWorkspaceChanged?.()
+            void revealFile(artifact.path)
+          }}
+          onViewInWorkspace={(savedPath) => {
+            void revealFile(savedPath)
+            dialog.close()
+          }}
+        />
+      ), () => !editorDirty || window.confirm("排版还有未保存的修改，确定关闭编辑器吗？"))
+      return
+    }
     const request = ++contentRequest
     setSelectedPath(path)
     setContentLoading(true)
@@ -335,6 +389,7 @@ export function WorkspacePanel(props: {
                   onDelete={deleteEntry}
                   downloading={downloading()}
                   deleting={deleting()}
+                  highlightedPath={highlightedPath()}
                 />
                 <Show when={(children()[""] ?? []).length === 0}>
                   <div class="chat-workspace-state">目录为空，Agent 创建的文件会显示在这里</div>
@@ -364,17 +419,28 @@ function WorkspaceTree(props: {
   onDelete: (node: WorkspaceNode) => void
   downloading: string
   deleting: string
+  highlightedPath: string
 }) {
   const visible = () => props.nodes.filter((node) => node.type === "directory" || props.category === "all" || categoryOf(node) === props.category)
   return (
     <For each={visible()}>
       {(node) => (
         <>
-          <div class="chat-workspace-node-row" style={{ "padding-left": `${8 + props.depth * 16}px` }}>
+          <div
+            class="chat-workspace-node-row"
+            classList={{ "chat-workspace-node-highlighted": node.path === props.highlightedPath }}
+            ref={(element) => {
+              if (node.path === props.highlightedPath) {
+                queueMicrotask(() => element.scrollIntoView({ block: "nearest" }))
+              }
+            }}
+            style={{ "padding-left": `${8 + props.depth * 16}px` }}
+          >
             <button
               type="button"
               class="chat-workspace-node"
               classList={{ "chat-workspace-node-directory": node.type === "directory" }}
+              aria-current={node.path === props.highlightedPath ? "true" : undefined}
               onClick={() => node.type === "directory" ? props.onToggle(node.path) : props.onOpen(node.path)}
               title={node.path}
             >
@@ -425,6 +491,7 @@ function WorkspaceTree(props: {
               onDelete={props.onDelete}
               downloading={props.downloading}
               deleting={props.deleting}
+              highlightedPath={props.highlightedPath}
             />
           </Show>
         </>

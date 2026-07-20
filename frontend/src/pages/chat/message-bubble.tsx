@@ -1,7 +1,6 @@
-import { Show, For, Match, Switch, createEffect, createMemo, createSignal, onCleanup, type JSX } from "solid-js"
+import { Show, For, Match, Switch, createMemo, createSignal, type JSX } from "solid-js"
 import { Markdown } from "@/session-ui/markdown"
-import { backend, type EducationPreviewProgress } from "@/api/backend"
-import { Progress } from "@/ui/components/progress"
+import { backend } from "@/api/backend"
 import type { DisplayBlock, DisplayFile, DisplayMessage, DisplayTool } from "./message-normalize"
 
 type ToolKind = "terminal" | "file" | "search" | "edit" | "task" | "checklist" | "question" | "skill" | "web" | "connector"
@@ -65,76 +64,7 @@ function ToolGlyph(props: { kind: ToolKind }): JSX.Element {
   }
 }
 
-function EducationPreviewProgressBar(props: { sessionID: string; jobID: string }) {
-  const [progress, setProgress] = createSignal<EducationPreviewProgress>({
-    jobId: props.jobID,
-    status: "running",
-    stage: "pending",
-    label: "正在获取任务进度",
-    percent: 5,
-  })
-
-  createEffect(() => {
-    const sessionID = props.sessionID
-    const jobID = props.jobID
-    let active = true
-    let loading = false
-    let timer: number | undefined
-    const refresh = async () => {
-      if (loading) return
-      loading = true
-      try {
-        const next = await backend.educationPreviewProgress(sessionID, jobID)
-        if (!active) return
-        setProgress((current) => ({
-          ...next,
-          percent: Math.max(current.percent, Math.min(100, Math.max(0, next.percent))),
-        }))
-        if (next.status !== "running" && timer !== undefined) {
-          window.clearInterval(timer)
-          timer = undefined
-        }
-      } catch {
-        // Keep the last checkpoint visible during transient polling failures.
-      } finally {
-        loading = false
-      }
-    }
-    void refresh()
-    timer = window.setInterval(() => void refresh(), 4_000)
-    onCleanup(() => {
-      active = false
-      if (timer !== undefined) window.clearInterval(timer)
-    })
-  })
-
-  return (
-    <div class="chat-education-progress" role="status" aria-live="polite">
-      <Progress
-        class="chat-education-progress-bar"
-        value={progress().percent}
-        minValue={0}
-        maxValue={100}
-        aria-label={progress().label}
-      >
-        <span class="chat-education-progress-copy">{progress().label}</span>
-        <span class="chat-education-progress-value">{progress().percent}%</span>
-      </Progress>
-      <Show when={progress().status === "completed" && progress().editableHtmlUrl}>
-        <div class="chat-education-preview-result">
-          <Show when={progress().title}><strong>{progress().title}</strong></Show>
-          <Show when={progress().summary}><p>{progress().summary}</p></Show>
-          <a href={progress().editableHtmlUrl!} target="_blank" rel="noreferrer">打开完整预览</a>
-        </div>
-      </Show>
-      <Show when={progress().status === "failed"}>
-        <div class="chat-education-preview-failed">后台生成任务失败，请按任务编号联系管理员排查。</div>
-      </Show>
-    </div>
-  )
-}
-
-function ToolCard(props: { tool: DisplayTool; sessionID?: string }) {
+function ToolCard(props: { tool: DisplayTool }) {
   const kind = createMemo(() => toolKind(props.tool.name))
   const label = createMemo(() => toolLabels[props.tool.name] ?? "调用工具")
   const summary = createMemo(() => toolSummary(props.tool))
@@ -173,9 +103,6 @@ function ToolCard(props: { tool: DisplayTool; sessionID?: string }) {
         </span>
         <svg class="chat-tool-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
       </summary>
-      <Show when={(props.tool.status === "running" || props.tool.educationWaitTimedOut) && props.tool.educationJobID && props.sessionID}>
-        <EducationPreviewProgressBar sessionID={props.sessionID!} jobID={props.tool.educationJobID!} />
-      </Show>
       <div class="chat-tool-body">
         <Show when={inputText()}>
           <div class="chat-tool-label">输入</div>
@@ -273,7 +200,7 @@ function MessageBlock(props: { block: DisplayBlock; streaming: boolean; sessionI
         </details>
       </Match>
       <Match when={props.block.type === "tool"}>
-        <div class="chat-tools"><ToolCard tool={(props.block as Extract<DisplayBlock, { type: "tool" }>).tool} sessionID={props.sessionID} /></div>
+        <div class="chat-tools"><ToolCard tool={(props.block as Extract<DisplayBlock, { type: "tool" }>).tool} /></div>
       </Match>
       <Match when={props.block.type === "file"}>
         <FileBlock file={(props.block as Extract<DisplayBlock, { type: "file" }>).file} />

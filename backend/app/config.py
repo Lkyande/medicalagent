@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     wechat_agent_timeout_seconds: float = 30.0
     wechat_agent_preview_wait_seconds: int = 60
     wechat_agent_preview_poll_seconds: float = 5.0
+    image_upload_url: str = ""
+    image_upload_field_name: str = "file"
+    image_upload_timeout_seconds: float = 120.0
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 

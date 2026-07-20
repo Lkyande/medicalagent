@@ -215,6 +215,75 @@ async function initialize() {
 
 initialize().catch(fail);
 """.strip()
+
+_replace_uploaded_file_script = r"""
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+
+const rootInput = process.argv[1];
+const temporaryRelative = process.argv[2];
+const targetRelative = process.argv[3];
+const expectedHash = process.argv[4];
+const transferID = process.argv[5];
+
+function contained(root, candidate) {
+  const relativePath = path.relative(root, candidate);
+  return relativePath === "" || (
+    relativePath !== ".." &&
+    !relativePath.startsWith(".." + path.sep) &&
+    !path.isAbsolute(relativePath)
+  );
+}
+
+async function hashFile(filename) {
+  const hash = crypto.createHash("sha256");
+  const stream = fs.createReadStream(filename);
+  for await (const chunk of stream) hash.update(chunk);
+  return hash.digest("hex");
+}
+
+async function main() {
+  const root = await fs.promises.realpath(rootInput);
+  const temporary = path.resolve(root, ...temporaryRelative.split("/"));
+  const target = path.resolve(root, ...targetRelative.split("/"));
+  const targetParent = await fs.promises.realpath(path.dirname(target));
+  const temporaryReal = await fs.promises.realpath(temporary);
+  if (!contained(root, targetParent) || !contained(root, temporaryReal)) {
+    throw new Error("Replacement path is outside the workspace");
+  }
+  const targetStat = await fs.promises.lstat(target);
+  if (!targetStat.isFile() || targetStat.isSymbolicLink()) {
+    throw new Error("Replacement target is not a regular file");
+  }
+  if (await hashFile(target) !== expectedHash) process.exit(3);
+
+  const backup = path.join(targetParent, `.replace-${transferID}.bak`);
+  await fs.promises.rename(target, backup);
+  try {
+    if (await hashFile(backup) !== expectedHash) {
+      await fs.promises.rename(backup, target);
+      process.exit(3);
+    }
+    await fs.promises.rename(temporaryReal, target);
+    try { await fs.promises.unlink(backup); } catch (_) {}
+  } catch (error) {
+    try {
+      await fs.promises.lstat(target);
+    } catch (_) {
+      try { await fs.promises.rename(backup, target); } catch (_) {}
+    }
+    throw error;
+  }
+}
+
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});
+""".strip()
+
+_replace_file_locks: dict[str, asyncio.Lock] = {}
 _delete_uploaded_files_script = r"""
 const fs = require("fs");
 const path = require("path");
@@ -740,6 +809,70 @@ async def upload_sandbox_file(
         if not uploaded and pty_id:
             with suppress(Exception):
                 await delete_sandbox_files(sandbox, directory, [temporary_path])
+
+
+async def replace_sandbox_file(
+    sandbox: dict,
+    directory: str,
+    relative_path: str,
+    source: BinaryIO | bytes,
+    size: int,
+    sha256: str,
+    expected_sha256: str,
+) -> None:
+    """Replace a workspace file only when its current hash matches the caller's revision."""
+    relative_path = _validate_upload_relative_path(relative_path)
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_sha256):
+        raise ValueError("Invalid expected sandbox file hash")
+    lock_key = f"{sandbox['id']}\0{directory}\0{relative_path}"
+    lock = _replace_file_locks.setdefault(lock_key, asyncio.Lock())
+    async with lock:
+        transfer_id = uuid.uuid4().hex
+        parent = PurePosixPath(relative_path).parent
+        temporary_path = str(parent / f".replace-{transfer_id}.tmp")
+        moved = False
+        try:
+            await upload_sandbox_file(
+                sandbox=sandbox,
+                directory=directory,
+                relative_path=temporary_path,
+                source=source,
+                size=size,
+                sha256=sha256,
+            )
+            exit_code, _ = await run_sandbox_command_capture(
+                sandbox=sandbox,
+                directory=directory,
+                command="node",
+                args=[
+                    "-e",
+                    _replace_uploaded_file_script,
+                    directory,
+                    temporary_path,
+                    relative_path,
+                    expected_sha256,
+                    transfer_id,
+                ],
+                cwd=directory,
+                title=f"Save {PurePosixPath(relative_path).name}",
+                timeout_seconds=30.0,
+                capture_output=False,
+            )
+            if exit_code == 3:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Workspace file changed since it was opened",
+                )
+            if exit_code != 0:
+                raise HTTPException(
+                    status_code=status.HTTP_502_BAD_GATEWAY,
+                    detail="Unable to replace the workspace file",
+                )
+            moved = True
+        finally:
+            if not moved:
+                with suppress(Exception):
+                    await delete_sandbox_files(sandbox, directory, [temporary_path])
 
 
 async def delete_sandbox_files(sandbox: dict, directory: str, relative_paths: list[str]) -> None:

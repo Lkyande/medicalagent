@@ -106,6 +106,7 @@ export interface ToastAction {
 }
 
 export interface ToastOptions {
+  class?: string
   title?: string
   description?: string
   icon?: IconProps["name"]
@@ -120,6 +121,7 @@ export function showToast(options: ToastOptions | string) {
   return toaster.show((props) => (
     <Toast
       toastId={props.toastId}
+      class={opts.class}
       duration={opts.duration}
       persistent={opts.persistent}
       data-variant={opts.variant ?? "default"}

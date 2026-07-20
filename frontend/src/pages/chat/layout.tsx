@@ -27,6 +27,7 @@ import {
   appendPartDelta,
   filterRevertedMessages,
   mergeMessageSnapshot,
+  latestEducationJobID,
   normalizeMessages,
   removeMessage,
   removePart,
@@ -38,8 +39,11 @@ import {
 import { parseWorkspaceAttachment } from "./workspace-attachment"
 import { isAbortError } from "@/utils/server-errors"
 import { ChatInteractionDock } from "./interaction-dock"
+import { EducationPreviewCoordinator } from "./education-preview-coordinator"
+import { setV2Toast, ToastRegion } from "@/utils/toast"
 
 export function ChatLayout() {
+  setV2Toast(false)
   const location = useLocation()
   const clinical = createMemo(() => location.pathname === "/clinical" || location.pathname.startsWith("/clinical/"))
   const education = createMemo(() => location.pathname === "/education" || location.pathname.startsWith("/education/"))
@@ -71,24 +75,27 @@ export function ChatLayout() {
   onMount(verifyIdentity)
 
   return (
-    <Show when={loggedIn() !== undefined} fallback={<div class="chat-loading chat-loading-page">正在验证身份...</div>}>
-      <Show
-        when={loggedIn()}
-        fallback={
-          <>
-            <Show when={authError()}>
-              <div class="chat-auth-error" role="alert">
-                <span>{authError()}</span>
-                <button type="button" onClick={verifyIdentity}>重试</button>
-              </div>
-            </Show>
-            <LoginPage onLogin={() => setLoggedIn(true)} />
-          </>
-        }
-      >
-        <ChatWorkspace clinical={clinical()} education={education()} />
+    <>
+      <ToastRegion v2={false} />
+      <Show when={loggedIn() !== undefined} fallback={<div class="chat-loading chat-loading-page">正在验证身份...</div>}>
+        <Show
+          when={loggedIn()}
+          fallback={
+            <>
+              <Show when={authError()}>
+                <div class="chat-auth-error" role="alert">
+                  <span>{authError()}</span>
+                  <button type="button" onClick={verifyIdentity}>重试</button>
+                </div>
+              </Show>
+              <LoginPage onLogin={() => setLoggedIn(true)} />
+            </>
+          }
+        >
+          <ChatWorkspace clinical={clinical()} education={education()} />
+        </Show>
       </Show>
-    </Show>
+    </>
   )
 }
 
@@ -172,6 +179,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
   const isGenerating = createMemo(() => sessionStatus().type !== "idle" || !!localGeneratingMessageID())
   const pendingPermission = createMemo(() => permissions().find((item) => item.sessionID === sessionId()))
   const pendingQuestion = createMemo(() => questions().find((item) => item.sessionID === sessionId()))
+  const educationJobID = createMemo(() => latestEducationJobID(messages))
 
   const loadInteractions = async () => {
     try {
@@ -577,8 +585,16 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
     }
   }
 
-  const openWorkspace = () => {
-    void dialog.show(() => <WorkspacePanel refreshVersion={workspaceRefresh()} />)
+  const openWorkspace = (initialPath?: string) => {
+    const sid = sessionId()
+    void dialog.show(() => (
+      <WorkspacePanel
+        refreshVersion={workspaceRefresh()}
+        sessionID={sid}
+        initialPath={initialPath}
+        onWorkspaceChanged={() => setWorkspaceRefresh((value) => value + 1)}
+      />
+    ))
   }
 
   return (
@@ -609,7 +625,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
             if (window.matchMedia("(max-width: 768px)").matches) setSidebarOpen((v) => !v)
             else setSidebarCollapsed((value) => !value)
           }}
-          onOpenWorkspace={openWorkspace}
+          onOpenWorkspace={() => openWorkspace()}
         />
         <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} education={education()} />}>
           <Show
@@ -624,6 +640,14 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
               onRevert={handleRevert}
             />
           </Show>
+        </Show>
+        <Show when={education() && sessionId() && educationJobID()}>
+          <EducationPreviewCoordinator
+            sessionID={sessionId()!}
+            jobID={educationJobID()!}
+            onWorkspaceChanged={() => setWorkspaceRefresh((value) => value + 1)}
+            onOpenWorkspace={openWorkspace}
+          />
         </Show>
         <ChatInteractionDock
           permission={pendingQuestion() ? undefined : pendingPermission()}

@@ -57,6 +57,17 @@ export interface DisplayMessage {
   }
 }
 
+export function latestEducationJobID(messages: DisplayMessage[]): string | undefined {
+  for (let messageIndex = messages.length - 1; messageIndex >= 0; messageIndex--) {
+    const blocks = messages[messageIndex]?.blocks ?? []
+    for (let blockIndex = blocks.length - 1; blockIndex >= 0; blockIndex--) {
+      const block = blocks[blockIndex]
+      if (block?.type === "tool" && block.tool.educationJobID) return block.tool.educationJobID
+    }
+  }
+  return undefined
+}
+
 function toolFromPart(part: ToolPart): DisplayTool {
   const state = part.state
   const base: DisplayTool = {

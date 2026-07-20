@@ -321,6 +321,29 @@ FastAPI 业务错误通常返回：
 Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.md
 ```
 
+### 宣教 HTML artifact
+
+宣教任务必须属于当前用户 Session，且同一 Session 的工具历史中必须同时存在返回该 `job_id` 的 `education_create_preview` 和使用该编号的 `education_wait_for_preview`。
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/education/preview-progress/{job_id}?session_id=...` | 查询脱敏任务进度 |
+| `POST` | `/api/education/previews/{job_id}/materialize?session_id=...` | 将 completed 任务 HTML 保存为 `education-previews/{job_id}.html` |
+| `GET` | `/api/education/previews/{job_id}/html?session_id=...` | 读取工作区 HTML、SHA-256 revision 和文件信息 |
+| `PUT` | `/api/education/previews/{job_id}/html?session_id=...` | 按 revision 比较并保存编辑后的 HTML |
+| `POST` | `/api/education/previews/{job_id}/images?session_id=...` | 上传编辑器图片并返回规范化 HTTPS URL |
+
+保存请求：
+
+```json
+{
+  "html": "<!doctype html><html>...</html>",
+  "revision": "64位SHA-256"
+}
+```
+
+文件在读取后被其他页面或 Agent 修改时返回 `409`，不会静默覆盖。HTML 最大 `10 MiB`。图片使用 multipart 字段 `file`，仅接受经文件头确认的 PNG、JPEG、GIF 和 WebP，单张最大 `10 MiB`。
+
 ### `GET /api/workspace/archive`
 
 下载整个用户工作目录 ZIP。
@@ -491,6 +514,9 @@ curl http://localhost:8000/opencode/session \
 | `SMART_MARKET_BASE_URL` | 空 | 平台后端访问 Smart Market API 的基地址，包含 `/api/v1` |
 | `SMART_MARKET_TIMEOUT_SECONDS` | `30` | Smart Market HTTP 请求超时，单位秒 |
 | `SMART_MARKET_API_KEY` | 空 | 可选服务间 API Key，通过 `X-API-Key` 请求头发送 |
+| `IMAGE_UPLOAD_URL` | 空 | 平台后端访问图片上传服务的地址，不暴露给浏览器 |
+| `IMAGE_UPLOAD_FIELD_NAME` | `file` | 上游 multipart 文件字段名 |
+| `IMAGE_UPLOAD_TIMEOUT_SECONDS` | `120` | 上游图片上传超时，单位秒 |
 | `SANDBOX_<ID>_URL` | - | OpenCode 沙盒 URL |
 | `SANDBOX_<ID>_PASSWORD` | 空 | OpenCode 沙盒 Basic Auth 密码 |
 | `SANDBOX_<ID>_USERNAME` | `opencode` | OpenCode 沙盒 Basic Auth 用户名 |

@@ -13,6 +13,22 @@ export class ApiError extends Error {
   }
 }
 
+function apiErrorMessage(text: string, fallback: string): string {
+  if (!text) return fallback
+  try {
+    const payload = JSON.parse(text) as { detail?: unknown; message?: unknown }
+    if (typeof payload.detail === "string" && payload.detail.trim()) return payload.detail
+    if (typeof payload.message === "string" && payload.message.trim()) return payload.message
+    if (Array.isArray(payload.detail)) {
+      const messages = payload.detail
+        .map((item) => item && typeof item === "object" && "msg" in item ? String(item.msg) : "")
+        .filter(Boolean)
+      if (messages.length) return messages.join("；")
+    }
+  } catch {}
+  return text
+}
+
 export type PlatformAssistant = {
   id: string
   name: string
@@ -56,6 +72,24 @@ export type PendingInteractions = {
   questions: QuestionRequest[]
 }
 
+export type EducationPreviewArtifact = {
+  jobId: string
+  path: string
+  filename: string
+  revision: string
+  size: number
+}
+
+export type EducationPreviewHtml = EducationPreviewArtifact & {
+  html: string
+}
+
+export type EducationPreviewImage = {
+  url: string
+  mime: string
+  size: number
+}
+
 export async function apiFetch<T = unknown>(path: string, init?: RequestInit, timeoutMs = 15000): Promise<T> {
   const token = getToken()
   const controller = new AbortController()
@@ -83,7 +117,7 @@ export async function apiFetch<T = unknown>(path: string, init?: RequestInit, ti
   }
   if (!resp.ok) {
     const text = await resp.text().catch(() => resp.statusText)
-    throw new ApiError(text || `HTTP ${resp.status}`, resp.status)
+    throw new ApiError(apiErrorMessage(text, resp.statusText || `HTTP ${resp.status}`), resp.status)
   }
   return resp.json() as Promise<T>
 }
@@ -147,6 +181,33 @@ export const backend = {
       undefined,
       10_000,
     ),
+  materializeEducationPreview: (sessionID: string, jobID: string) =>
+    apiFetch<EducationPreviewArtifact>(
+      `/education/previews/${encodeURIComponent(jobID)}/materialize?session_id=${encodeURIComponent(sessionID)}`,
+      { method: "POST" },
+      150_000,
+    ),
+  educationPreviewHtml: (sessionID: string, jobID: string) =>
+    apiFetch<EducationPreviewHtml>(
+      `/education/previews/${encodeURIComponent(jobID)}/html?session_id=${encodeURIComponent(sessionID)}`,
+      undefined,
+      30_000,
+    ),
+  saveEducationPreviewHtml: (sessionID: string, jobID: string, html: string, revision: string) =>
+    apiFetch<EducationPreviewArtifact>(
+      `/education/previews/${encodeURIComponent(jobID)}/html?session_id=${encodeURIComponent(sessionID)}`,
+      { method: "PUT", body: JSON.stringify({ html, revision }) },
+      180_000,
+    ),
+  uploadEducationPreviewImage: (sessionID: string, jobID: string, file: File) => {
+    const form = new FormData()
+    form.append("file", file, file.name)
+    return apiFetch<EducationPreviewImage>(
+      `/education/previews/${encodeURIComponent(jobID)}/images?session_id=${encodeURIComponent(sessionID)}`,
+      { method: "POST", body: form },
+      130_000,
+    )
+  },
   pendingInteractions: () => apiFetch<PendingInteractions>("/interactions", undefined, 10_000),
   replyPermission: (requestID: string, reply: "once" | "always" | "reject") =>
     apiFetch<boolean>(`/interactions/permission/${encodeURIComponent(requestID)}/reply`, {

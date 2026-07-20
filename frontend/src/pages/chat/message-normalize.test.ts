@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import type { Message, Part } from "@opencode-ai/sdk/v2"
-import { appendPartDelta, filterRevertedMessages, mergeMessageSnapshot, normalizeMessages, upsertMessage, upsertPart, type RawMessage } from "./message-normalize"
+import { appendPartDelta, filterRevertedMessages, latestEducationJobID, mergeMessageSnapshot, normalizeMessages, upsertMessage, upsertPart, type RawMessage } from "./message-normalize"
 import { serializeWorkspaceAttachment } from "./workspace-attachment"
 
 const user = (id: string, created: number): RawMessage => ({
@@ -175,6 +175,33 @@ describe("normalizeMessages", () => {
       type: "tool",
       tool: { educationJobID: "job_123", educationWaitTimedOut: true, status: "error" },
     })
+  })
+
+  test("selects the latest education job even after the wait tool completed", () => {
+    const result = normalizeMessages([
+      user("u1", 1000),
+      assistant("a1", "u1", 1100, 1200, [{
+        id: "tool-1",
+        sessionID: "session",
+        messageID: "a1",
+        type: "tool",
+        callID: "call-1",
+        tool: "education-content_education_wait_for_preview",
+        state: { status: "completed", input: { job_id: "job_old" }, output: "{}", title: "done", metadata: {}, time: { start: 1100, end: 1200 } },
+      } as Part]),
+      user("u2", 2000),
+      assistant("a2", "u2", 2100, 2200, [{
+        id: "tool-2",
+        sessionID: "session",
+        messageID: "a2",
+        type: "tool",
+        callID: "call-2",
+        tool: "education-content_education_wait_for_preview",
+        state: { status: "completed", input: { job_id: "job_new" }, output: "{}", title: "done", metadata: {}, time: { start: 2100, end: 2200 } },
+      } as Part]),
+    ])
+
+    expect(latestEducationJobID(result)).toBe("job_new")
   })
 
   test("renders a persisted workspace attachment once and hides its marker", () => {
