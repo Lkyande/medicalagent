@@ -36,6 +36,7 @@ const codeExtensions = new Set([
 const WORKSPACE_POLL_INTERVAL_MS = 30_000
 const WORKSPACE_EVENT_DEBOUNCE_MS = 400
 const EDUCATION_PREVIEW_PATH = /^education-previews\/([A-Za-z0-9_-]{1,80})\.html$/
+const HTML_FILE_PATH = /\.html?$/i
 
 function categoryOf(node: WorkspaceNode): Exclude<FileCategory, "all"> {
   const extension = node.name.split(".").at(-1)?.toLowerCase() ?? ""
@@ -48,6 +49,7 @@ function categoryOf(node: WorkspaceNode): Exclude<FileCategory, "all"> {
 export function WorkspacePanel(props: {
   refreshVersion: number
   sessionID?: string
+  educationJobIDs?: string[]
   initialPath?: string
   onWorkspaceChanged?: () => void
 }) {
@@ -204,12 +206,15 @@ export function WorkspacePanel(props: {
   const openFile = async (path: string) => {
     setHighlightedPath("")
     const preview = EDUCATION_PREVIEW_PATH.exec(path)
-    if (preview && props.sessionID) {
+    if (HTML_FILE_PATH.test(path)) {
+      const previewJobID = preview?.[1]
+      const jobID = props.sessionID && previewJobID && props.educationJobIDs?.includes(previewJobID) ? previewJobID : undefined
       let editorDirty = false
       void dialog.push(() => (
         <EducationHtmlEditor
-          sessionID={props.sessionID!}
-          jobID={preview[1]!}
+          sessionID={props.sessionID ?? ""}
+          path={path}
+          jobID={jobID}
           onDirtyChange={(dirty) => { editorDirty = dirty }}
           onSaved={(artifact) => {
             props.onWorkspaceChanged?.()

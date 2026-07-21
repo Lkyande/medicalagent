@@ -18,7 +18,7 @@ from urllib.parse import quote
 import httpx
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Response, UploadFile, status
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.background import BackgroundTask
 
@@ -30,6 +30,7 @@ from app.sandbox.manager import (
     delete_sandbox_files,
     ensure_workspace,
     get_or_create_workspace,
+    replace_sandbox_file,
     run_sandbox_command,
     run_sandbox_command_capture,
     upload_sandbox_file,
@@ -47,6 +48,7 @@ MAX_UPLOAD_TOTAL_BYTES = 50 * 1024 * 1024
 UPLOAD_READ_BYTES = 64 * 1024
 UPLOAD_SPOOL_BYTES = 1024 * 1024
 MAX_UPLOAD_FILENAME_BYTES = 150
+MAX_HTML_BYTES = 10 * 1024 * 1024
 FILE_CHECK_START = "__OPENCODE_FILE_CHECK_START__"
 FILE_CHECK_END = "__OPENCODE_FILE_CHECK_END__"
 FILE_CHECK_SCRIPT = (
@@ -67,6 +69,22 @@ _windows_filename_characters = set('<>:"/\\|?*')
 
 class DeleteWorkspaceEntry(BaseModel):
     path: str
+
+
+class WorkspaceHtmlSave(BaseModel):
+    html: str
+    revision: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class WorkspaceHtmlMetadata(BaseModel):
+    path: str
+    filename: str
+    revision: str
+    size: int
+
+
+class WorkspaceHtmlResponse(WorkspaceHtmlMetadata):
+    html: str
 
 
 def validate_upload_session_id(value: str) -> str:
@@ -247,6 +265,13 @@ def safe_relative_path(value: str, allow_root: bool = False) -> str:
     return str(path)
 
 
+def safe_html_path(value: str) -> str:
+    path = safe_relative_path(value)
+    if PurePosixPath(path).suffix.lower() not in {".html", ".htm"}:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="An HTML file path is required")
+    return path
+
+
 def normalize_node(item: object) -> dict | None:
     if not isinstance(item, dict):
         return None
@@ -404,6 +429,23 @@ async def validate_remote_file(sandbox: dict, workspace: UserWorkspace, relative
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid workspace file")
 
 
+async def read_remote_file_bytes(sandbox: dict, workspace: UserWorkspace, relative_path: str) -> bytes:
+    await validate_remote_file(sandbox, workspace, relative_path)
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        payload = await remote_json(client, sandbox, workspace, "file/content", relative_path)
+    content, _ = decode_file_content(payload)
+    return content
+
+
+def workspace_html_metadata(path: str, content: bytes) -> WorkspaceHtmlMetadata:
+    return WorkspaceHtmlMetadata(
+        path=path,
+        filename=PurePosixPath(path).name,
+        revision=hashlib.sha256(content).hexdigest(),
+        size=len(content),
+    )
+
+
 @router.get("")
 async def get_workspace(
     user: User = Depends(get_current_user),
@@ -512,6 +554,60 @@ async def read_workspace_file(
     if not isinstance(payload, dict):
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Invalid workspace response")
     return payload
+
+
+@router.get("/html", response_model=WorkspaceHtmlResponse)
+async def read_workspace_html(
+    path: str = Query(...),
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    relative_path = safe_html_path(path)
+    sandbox, workspace = await workspace_context(user, db)
+    content = await read_remote_file_bytes(sandbox, workspace, relative_path)
+    if len(content) > MAX_HTML_BYTES:
+        raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="HTML file exceeds 10 MiB")
+    try:
+        html = content.decode("utf-8", errors="strict")
+    except UnicodeDecodeError as exc:
+        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="HTML file is not valid UTF-8") from exc
+    metadata = workspace_html_metadata(relative_path, content)
+    return WorkspaceHtmlResponse(**metadata.model_dump(), html=html)
+
+
+@router.put("/html", response_model=WorkspaceHtmlMetadata)
+async def save_workspace_html(
+    payload: WorkspaceHtmlSave,
+    path: str = Query(...),
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    relative_path = safe_html_path(path)
+    content = payload.html.encode("utf-8")
+    if not payload.html.strip():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="HTML file cannot be empty")
+    if len(content) > MAX_HTML_BYTES:
+        raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="HTML file exceeds 10 MiB")
+
+    sandbox, workspace = await workspace_context(user, db)
+    current = await read_remote_file_bytes(sandbox, workspace, relative_path)
+    current_revision = hashlib.sha256(current).hexdigest()
+    if current_revision != payload.revision:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="HTML file changed since it was opened")
+    metadata = workspace_html_metadata(relative_path, content)
+    if metadata.revision == current_revision:
+        return metadata
+    await replace_sandbox_file(
+        sandbox=sandbox,
+        directory=workspace.directory,
+        relative_path=relative_path,
+        source=content,
+        size=metadata.size,
+        sha256=metadata.revision,
+        expected_sha256=current_revision,
+    )
+    invalidate_workspace_directory_cache(sandbox, workspace)
+    return metadata
 
 
 @router.get("/download")

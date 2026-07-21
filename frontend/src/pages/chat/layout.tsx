@@ -25,6 +25,7 @@ import {
 } from "./conversation-type"
 import {
   appendPartDelta,
+  educationJobIDs,
   filterRevertedMessages,
   mergeMessageSnapshot,
   latestEducationJobID,
@@ -180,6 +181,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
   const pendingPermission = createMemo(() => permissions().find((item) => item.sessionID === sessionId()))
   const pendingQuestion = createMemo(() => questions().find((item) => item.sessionID === sessionId()))
   const educationJobID = createMemo(() => latestEducationJobID(messages))
+  const sessionEducationJobIDs = createMemo(() => educationJobIDs(messages))
 
   const loadInteractions = async () => {
     try {
@@ -591,6 +593,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
       <WorkspacePanel
         refreshVersion={workspaceRefresh()}
         sessionID={sid}
+        educationJobIDs={education() ? sessionEducationJobIDs() : undefined}
         initialPath={initialPath}
         onWorkspaceChanged={() => setWorkspaceRefresh((value) => value + 1)}
       />

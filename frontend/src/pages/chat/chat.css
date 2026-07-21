@@ -1,7 +1,22 @@
 :root {
-  --chat-sidebar-width: 248px;
-  --chat-sidebar-rail-width: 52px;
-  --chat-max-width: 768px;
+  --chat-font-xs: clamp(11px, calc(9.5px + 0.12vw), 13.5px);
+  --chat-font-sm: clamp(12px, calc(10.2px + 0.14vw), 14.5px);
+  --chat-font-ui: clamp(13px, calc(11px + 0.15vw), 15.5px);
+  --chat-font-md: clamp(14px, calc(11.8px + 0.17vw), 17px);
+  --chat-font-body: clamp(15px, calc(12.4px + 0.2vw), 18px);
+  --chat-font-display: clamp(24px, calc(20px + 0.3vw), 30px);
+  --chat-icon-xs: clamp(12px, calc(10px + 0.12vw), 15px);
+  --chat-icon-sm: clamp(14px, calc(11.5px + 0.16vw), 17px);
+  --chat-icon-md: clamp(16px, calc(13px + 0.2vw), 20px);
+  --chat-icon-lg: clamp(20px, calc(16px + 0.24vw), 24px);
+  --chat-control-sm: clamp(30px, calc(26px + 0.25vw), 36px);
+  --chat-control-md: clamp(32px, calc(27px + 0.3vw), 40px);
+  --chat-control-lg: clamp(36px, calc(30px + 0.36vw), 44px);
+  --chat-sidebar-width: clamp(248px, calc(224px + 2vw), 300px);
+  --chat-sidebar-rail-width: clamp(52px, calc(44px + 0.6vw), 64px);
+  --chat-max-width: clamp(768px, 52vw, 980px);
+  --chat-editor-max-width: clamp(1240px, 76vw, 1560px);
+  --chat-editor-max-height: clamp(900px, 82dvh, 1080px);
   --chat-bg: #ffffff;
   --chat-sidebar-bg: #ffffff;
   --chat-bubble-user: rgba(50, 72, 175, 0.1);
@@ -85,8 +100,8 @@
 
 .chat-layout {
   display: flex;
-  height: 100dvh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -96,6 +111,7 @@
   --chat-text-muted: var(--chat-brand-text-muted);
   width: var(--chat-sidebar-width);
   min-width: var(--chat-sidebar-width);
+  box-sizing: border-box;
   background: var(--chat-sidebar-bg);
   border-right: 1px solid var(--chat-border);
   display: flex;
@@ -627,7 +643,6 @@
 
 .chat-workspace-node-highlighted {
   background: color-mix(in srgb, var(--chat-brand-accent) 12%, #fff);
-  box-shadow: inset 3px 0 var(--chat-brand-accent);
 }
 
 .chat-workspace-node {
@@ -1090,6 +1105,29 @@
   color: #fff;
 }
 
+.chat-education-editor-footer-actions .wechat-draft {
+  border-color: color-mix(in srgb, #16865a 55%, var(--chat-brand-border));
+  color: #106b48;
+}
+
+.chat-education-editor-footer-actions .wechat-draft:hover {
+  border-color: #16865a;
+  background: #edf8f2;
+  color: #0b5c3d;
+}
+
+.chat-education-editor-footer-actions .wechat-publish {
+  border-color: #16865a;
+  background: #16865a;
+  color: #fff;
+}
+
+.chat-education-editor-footer-actions .wechat-publish:hover {
+  border-color: #0f714b;
+  background: #0f714b;
+  color: #fff;
+}
+
 .chat-education-editor-footer-actions button:disabled {
   cursor: wait;
   opacity: 0.5;
@@ -1128,8 +1166,8 @@
   display: flex;
   align-items: stretch;
   flex-direction: column;
-  width: min(1240px, calc(100vw - 36px));
-  height: min(900px, calc(100dvh - 36px));
+  width: min(var(--chat-editor-max-width), calc(100vw - 36px));
+  height: min(var(--chat-editor-max-height), calc(100dvh - 36px));
   max-width: none !important;
   max-height: none !important;
   overflow: hidden !important;
@@ -1198,11 +1236,29 @@
   color: var(--chat-brand-strong);
 }
 
-.chat-education-editor-dialog [data-slot="dialog-close-button"] {
+[data-component="dialog-v2"]:has(.chat-education-editor-dialog)
+  .chat-education-editor-layer
+  .chat-education-editor-dialog
+  [data-slot="dialog-header"]
+  [data-slot="dialog-close-button"] {
+  display: inline-flex;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
   margin: 0 0 0 2px;
+  padding: 0;
   border-radius: 7px;
+}
+
+[data-component="dialog-v2"]:has(.chat-education-editor-dialog)
+  .chat-education-editor-layer
+  .chat-education-editor-dialog
+  [data-slot="dialog-header"]
+  [data-slot="dialog-close-button"] svg {
+  width: 14px;
+  height: 14px;
 }
 
 .chat-education-editor-body {
@@ -1278,6 +1334,7 @@
 }
 
 .chat-education-editor-footer-copy {
+  margin-right: auto;
   color: var(--chat-text-muted);
   font-size: 11px;
 }
@@ -1510,6 +1567,11 @@
     padding: 8px;
   }
   .chat-education-editor-dialog [data-slot="dialog-footer"] {
+    justify-content: flex-end;
+  }
+  .chat-education-editor-footer-actions {
+    width: 100%;
+    flex-wrap: wrap;
     justify-content: flex-end;
   }
 }
@@ -2374,6 +2436,175 @@
 .chat-jump-latest:focus-visible {
   outline: 2px solid var(--chat-accent);
   outline-offset: 2px;
+}
+
+/* Shared responsive type scale for the chat shell and its portaled dialogs. */
+.chat-history-heading,
+.chat-session-item-time,
+.chat-files-title-group > span,
+.chat-workspace-preview-header span,
+.chat-workspace-action-error,
+.chat-tool-status,
+.chat-education-editor-meta,
+.chat-education-editor-footer-copy,
+.chat-tool-label,
+.chat-file-card-copy span,
+.chat-pending-file-copy span,
+.chat-file-card-action,
+.chat-file-error {
+  font-size: var(--chat-font-xs);
+}
+
+.chat-preview-toast [data-slot="toast-action"],
+.chat-session-group-label,
+.chat-logout-btn,
+.chat-workspace-toggle,
+.chat-files-categories button,
+.chat-workspace-chevron,
+.chat-workspace-state,
+.chat-header-status,
+.chat-tool-title,
+.chat-education-editor-footer-actions button,
+.chat-education-editor-footer-actions a,
+.chat-education-editor-toolbar button,
+.chat-education-editor-toolbar select,
+.chat-interaction-heading span,
+.chat-interaction-patterns,
+.chat-interaction-question button span,
+.chat-message-meta,
+.chat-revert-dock span,
+.chat-clinical-status,
+.chat-conversation-type-loading,
+.chat-attachment-remove,
+.chat-model-empty,
+.chat-model-option-provider,
+.chat-assistant-install-action,
+.chat-assistant-option-description,
+.chat-assistant-empty,
+.chat-assistant-error {
+  font-size: var(--chat-font-sm);
+}
+
+.chat-preview-toast [data-slot="toast-description"],
+.chat-sidebar-brand strong,
+.chat-new-btn,
+.chat-clinical-entry,
+.chat-session-empty,
+.chat-thinking,
+.chat-tool-card summary,
+.chat-revert-dock strong,
+.chat-clinical-status strong,
+.chat-model-btn,
+.chat-auth-error {
+  font-size: var(--chat-font-ui);
+}
+
+.chat-preview-toast [data-slot="toast-title"],
+.chat-session-item,
+.chat-workspace-node,
+.chat-header-title,
+.chat-bubble-assistant .chat-msg-content code,
+.chat-file-card-copy strong,
+.chat-pending-file-copy strong,
+.chat-model-option-name,
+.chat-loading,
+.chat-error {
+  font-size: var(--chat-font-md);
+}
+
+.chat-bubble,
+.chat-composer-input,
+.chat-empty p,
+.chat-interaction-heading strong,
+.chat-education-editor-dialog [data-slot="dialog-title"],
+.chat-files-dialog [data-slot="dialog-title"] {
+  font-size: var(--chat-font-body);
+}
+
+.chat-empty h2 {
+  font-size: var(--chat-font-display);
+}
+
+.chat-tool-pre {
+  font-size: var(--chat-font-sm);
+}
+
+/* Controls grow with the selected scale while mobile keeps its 44px targets. */
+.chat-rail-brand,
+.chat-rail-action,
+.chat-sidebar-toggle,
+.chat-send-btn,
+.chat-stop-btn {
+  width: var(--chat-control-lg);
+  height: var(--chat-control-lg);
+}
+
+.chat-sidebar-collapse,
+.chat-icon-btn,
+.chat-workspace-header-actions button,
+.chat-workspace-preview-header button,
+.chat-workspace-node-actions button,
+.chat-education-editor-maximize {
+  width: var(--chat-control-md);
+  height: var(--chat-control-md);
+}
+
+.chat-copy-btn,
+.chat-action-btn,
+.chat-session-delete {
+  width: var(--chat-control-sm);
+  height: var(--chat-control-sm);
+}
+
+.chat-new-btn,
+.chat-clinical-entry,
+.chat-session-item,
+.chat-workspace-node-row,
+.chat-workspace-node {
+  min-height: var(--chat-control-lg);
+}
+
+.chat-education-editor-toolbar button,
+.chat-education-editor-toolbar select {
+  min-height: var(--chat-control-sm);
+}
+
+.chat-sidebar svg,
+.chat-header svg,
+.chat-composer svg,
+.chat-files-dialog svg,
+.chat-education-editor-dialog svg,
+.chat-message-actions svg,
+.chat-tool-card svg {
+  width: var(--chat-icon-md);
+  height: var(--chat-icon-md);
+}
+
+.chat-session-clinical-mark svg,
+.chat-session-delete svg,
+.chat-model-btn svg,
+.chat-tool-chevron,
+.chat-education-editor-maximize svg,
+.chat-education-editor-dialog [data-slot="dialog-close-button"] svg {
+  width: var(--chat-icon-sm);
+  height: var(--chat-icon-sm);
+}
+
+.chat-send-btn svg,
+.chat-stop-btn svg {
+  width: var(--chat-icon-lg);
+  height: var(--chat-icon-lg);
+}
+
+.chat-clinical-entry-icon {
+  width: var(--chat-icon-md);
+  height: var(--chat-icon-md);
+}
+
+.chat-workspace-file-icon {
+  width: var(--chat-icon-lg);
+  height: var(--chat-icon-lg);
+  flex-basis: var(--chat-icon-lg);
 }
 
 @media (max-width: 768px) {

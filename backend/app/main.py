@@ -8,7 +8,7 @@ from app.auth.dependencies import get_current_user
 from app.models import User
 from app.proxy.opencode_proxy import proxy_to_sandbox
 from app.sandbox.manager import ensure_workspace, get_or_create_workspace
-from app.routers import assistants, auth, dispatch, education, interactions, sandbox, business, health, workspace
+from app.routers import assistants, auth, dispatch, education, interactions, sandbox, business, health, workspace, wechat
 from app.mcp_server import murtagh_mcp
 from app.education_mcp_server import education_mcp
 from app.hot_topics_mcp_server import hot_topics_mcp
@@ -34,6 +34,7 @@ app.add_middleware(UploadSizeLimitMiddleware, maximum_bytes=55 * 1024 * 1024)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[o.strip() for o in settings.cors_origins.split(",") if o.strip()],
+    allow_origin_regex=settings.cors_origin_regex or None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -49,6 +50,7 @@ app.include_router(workspace.router, prefix="/api")
 app.include_router(assistants.router, prefix="/api")
 app.include_router(education.router, prefix="/api")
 app.include_router(interactions.router, prefix="/api")
+app.include_router(wechat.router, prefix="/api")
 app.mount("/mcp/murtagh", murtagh_mcp.streamable_http_app())
 app.mount("/mcp/education", education_mcp.streamable_http_app())
 app.mount("/mcp/hot-topics", hot_topics_mcp.streamable_http_app())

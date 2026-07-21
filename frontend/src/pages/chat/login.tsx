@@ -4,7 +4,7 @@ import { setToken } from "./chat-client"
 
 export function LoginPage(props: { onLogin: () => void }) {
   const [mode, setMode] = createSignal<"login" | "register">("login")
-  const [email, setEmail] = createSignal("")
+  const [account, setAccount] = createSignal("")
   const [password, setPassword] = createSignal("")
   const [error, setError] = createSignal("")
   const [loading, setLoading] = createSignal(false)
@@ -15,7 +15,7 @@ export function LoginPage(props: { onLogin: () => void }) {
     setLoading(true)
     try {
       const request = mode() === "login" ? backend.login : backend.register
-      const data = await request(email(), password())
+      const data = await request(account(), password())
       setToken(data.token)
       props.onLogin()
       window.location.reload()
@@ -69,10 +69,10 @@ export function LoginPage(props: { onLogin: () => void }) {
 
         <form onSubmit={handleSubmit} style={{ display: "flex", "flex-direction": "column", gap: "12px" }}>
           <input
-            type="email"
-            placeholder="邮箱"
-            value={email()}
-            onInput={(e) => setEmail(e.currentTarget.value)}
+            type="text"
+            placeholder="邮箱 / 手机号"
+            value={account()}
+            onInput={(e) => setAccount(e.currentTarget.value)}
             required
             style={{
               padding: "12px 16px",

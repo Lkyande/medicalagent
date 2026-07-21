@@ -1,7 +1,8 @@
 import type { PermissionRequest, QuestionRequest } from "@opencode-ai/sdk/v2"
 import { getToken } from "@/pages/chat/chat-client"
+import { resolveBrowserUrl } from "@/utils/browser-url"
 
-const BASE = import.meta.env.VITE_BACKEND_API_URL ?? "/api"
+const BASE = resolveBrowserUrl(import.meta.env.VITE_BACKEND_API_URL ?? "/api")
 
 export class ApiError extends Error {
   constructor(
@@ -72,12 +73,19 @@ export type PendingInteractions = {
   questions: QuestionRequest[]
 }
 
-export type EducationPreviewArtifact = {
-  jobId: string
+export type WorkspaceHtmlArtifact = {
   path: string
   filename: string
   revision: string
   size: number
+}
+
+export type WorkspaceHtml = WorkspaceHtmlArtifact & {
+  html: string
+}
+
+export type EducationPreviewArtifact = WorkspaceHtmlArtifact & {
+  jobId: string
 }
 
 export type EducationPreviewHtml = EducationPreviewArtifact & {
@@ -88,6 +96,23 @@ export type EducationPreviewImage = {
   url: string
   mime: string
   size: number
+}
+
+export type WechatAuthorization = {
+  authorized: boolean
+  authorizerAppid?: string | null
+  authUrl?: string | null
+  expiresAt?: string | null
+}
+
+export type EducationWechatRelease = {
+  jobId: string
+  status: "syncing" | "draft" | "publishing" | "submitted" | "unknown" | "failed"
+  mediaId?: string | null
+  contentRevision?: string | null
+  publishId?: string | null
+  authorizerAppid?: string | null
+  updatedAt?: string | null
 }
 
 export async function apiFetch<T = unknown>(path: string, init?: RequestInit, timeoutMs = 15000): Promise<T> {
@@ -160,17 +185,17 @@ async function apiDownload(path: string, fallbackName: string): Promise<void> {
 }
 
 export const backend = {
-  login: (email: string, password: string) =>
-    apiFetch<{ token: string; user: { id: string; email: string } }>("/auth/login", {
+  login: (account: string, password: string) =>
+    apiFetch<{ token: string; user: { id: string; email: string | null; phone: string | null } }>("/auth/login", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ account, password }),
     }),
-  register: (email: string, password: string) =>
-    apiFetch<{ token: string; user: { id: string; email: string } }>("/auth/register", {
+  register: (account: string, password: string) =>
+    apiFetch<{ token: string; user: { id: string; email: string | null; phone: string | null } }>("/auth/register", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ account, password }),
     }),
-  me: () => apiFetch<{ id: string; email: string }>("/auth/me", undefined, 8000),
+  me: () => apiFetch<{ id: string; email: string | null; phone: string | null }>("/auth/me", undefined, 8000),
   dispatch: () => apiFetch<{ sandboxId: string; proxyBase: string; workspace: string }>("/dispatch", { method: "POST" }),
   assistants: () => apiFetch<PlatformAssistant[]>("/assistants"),
   enableAssistant: (id: string) =>
@@ -208,6 +233,33 @@ export const backend = {
       130_000,
     )
   },
+  wechatAuthorization: () => apiFetch<WechatAuthorization>("/wechat/authorization", undefined, 15_000),
+  createWechatAuthorization: () =>
+    apiFetch<WechatAuthorization>("/wechat/authorization", { method: "POST" }, 30_000),
+  educationWechatRelease: (sessionID: string, jobID: string) =>
+    apiFetch<EducationWechatRelease | null>(
+      `/wechat/previews/${encodeURIComponent(jobID)}/release?session_id=${encodeURIComponent(sessionID)}`,
+      undefined,
+      30_000,
+    ),
+  syncEducationWechatDraft: (sessionID: string, jobID: string, revision: string) =>
+    apiFetch<EducationWechatRelease>(
+      `/wechat/previews/${encodeURIComponent(jobID)}/draft?session_id=${encodeURIComponent(sessionID)}`,
+      { method: "POST", body: JSON.stringify({ revision }) },
+      180_000,
+    ),
+  publishEducationWechatDraft: (sessionID: string, jobID: string) =>
+    apiFetch<EducationWechatRelease>(
+      `/wechat/previews/${encodeURIComponent(jobID)}/publish?session_id=${encodeURIComponent(sessionID)}`,
+      { method: "POST" },
+      180_000,
+    ),
+  resolveEducationWechatPublish: (sessionID: string, jobID: string, published: boolean) =>
+    apiFetch<EducationWechatRelease>(
+      `/wechat/previews/${encodeURIComponent(jobID)}/resolve?session_id=${encodeURIComponent(sessionID)}`,
+      { method: "POST", body: JSON.stringify({ published }) },
+      30_000,
+    ),
   pendingInteractions: () => apiFetch<PendingInteractions>("/interactions", undefined, 10_000),
   replyPermission: (requestID: string, reply: "once" | "always" | "reject") =>
     apiFetch<boolean>(`/interactions/permission/${encodeURIComponent(requestID)}/reply`, {
@@ -229,6 +281,14 @@ export const backend = {
   workspaceContent: (path: string) =>
     apiFetch<{ type: "text" | "binary"; content: string; encoding?: "base64"; mimeType?: string }>(
       `/workspace/content?path=${encodeURIComponent(path)}`,
+    ),
+  workspaceHtml: (path: string) =>
+    apiFetch<WorkspaceHtml>(`/workspace/html?path=${encodeURIComponent(path)}`, undefined, 30_000),
+  saveWorkspaceHtml: (path: string, html: string, revision: string) =>
+    apiFetch<WorkspaceHtmlArtifact>(
+      `/workspace/html?path=${encodeURIComponent(path)}`,
+      { method: "PUT", body: JSON.stringify({ html, revision }) },
+      180_000,
     ),
   uploadWorkspaceFiles: (sessionID: string, files: File[]) => {
     const form = new FormData()

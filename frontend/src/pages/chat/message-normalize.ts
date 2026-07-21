@@ -68,6 +68,16 @@ export function latestEducationJobID(messages: DisplayMessage[]): string | undef
   return undefined
 }
 
+export function educationJobIDs(messages: DisplayMessage[]): string[] {
+  const result = new Set<string>()
+  for (const message of messages) {
+    for (const block of message.blocks) {
+      if (block.type === "tool" && block.tool.educationJobID) result.add(block.tool.educationJobID)
+    }
+  }
+  return [...result]
+}
+
 function toolFromPart(part: ToolPart): DisplayTool {
   const state = part.state
   const base: DisplayTool = {

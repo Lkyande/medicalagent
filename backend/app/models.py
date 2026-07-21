@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Column, String, DateTime, ForeignKey, Boolean, Text, UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 import uuid
@@ -12,7 +12,8 @@ def _gen_id() -> str:
 class User(Base):
     __tablename__ = "users"
     id = Column(String(64), primary_key=True, default=_gen_id)
-    email = Column(String(255), unique=True, nullable=False, index=True)
+    email = Column(String(255), unique=True, nullable=True, index=True)
+    phone = Column(String(32), unique=True, nullable=True, index=True)
     password_hash = Column(String(255), nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     sandbox_id = Column(String(64), nullable=True)
@@ -51,3 +52,22 @@ class UserSession(Base):
     workspace_id = Column(String(64), ForeignKey("user_workspaces.id"), nullable=False, index=True)
     sandbox_id = Column(String(64), nullable=False, index=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+
+class EducationWechatPublication(Base):
+    __tablename__ = "education_wechat_publications"
+    __table_args__ = (UniqueConstraint("user_id", "job_id", name="uq_education_wechat_user_job"),)
+
+    id = Column(String(64), primary_key=True, default=_gen_id)
+    user_id = Column(String(64), ForeignKey("users.id"), nullable=False, index=True)
+    session_id = Column(String(128), nullable=False, index=True)
+    job_id = Column(String(128), nullable=False, index=True)
+    authorizer_appid = Column(String(64), nullable=True)
+    media_id = Column(String(255), nullable=True)
+    content_revision = Column(String(64), nullable=False)
+    publish_id = Column(String(255), nullable=True)
+    status = Column(String(32), nullable=False, default="draft")
+    last_error = Column(Text, nullable=True)
+    operation_id = Column(String(64), nullable=True)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)

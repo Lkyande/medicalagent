@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import type { Message, Part } from "@opencode-ai/sdk/v2"
-import { appendPartDelta, filterRevertedMessages, latestEducationJobID, mergeMessageSnapshot, normalizeMessages, upsertMessage, upsertPart, type RawMessage } from "./message-normalize"
+import { appendPartDelta, educationJobIDs, filterRevertedMessages, latestEducationJobID, mergeMessageSnapshot, normalizeMessages, upsertMessage, upsertPart, type RawMessage } from "./message-normalize"
 import { serializeWorkspaceAttachment } from "./workspace-attachment"
 
 const user = (id: string, created: number): RawMessage => ({
@@ -202,6 +202,7 @@ describe("normalizeMessages", () => {
     ])
 
     expect(latestEducationJobID(result)).toBe("job_new")
+    expect(educationJobIDs(result)).toEqual(["job_old", "job_new"])
   })
 
   test("renders a persisted workspace attachment once and hides its marker", () => {

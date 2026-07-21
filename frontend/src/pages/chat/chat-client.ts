@@ -1,4 +1,5 @@
 import { createOpencodeClient } from "@opencode-ai/sdk/v2/client"
+import { resolveBrowserUrl } from "@/utils/browser-url"
 
 let _client: any = null
 let _token: string | null = null
@@ -30,7 +31,7 @@ export function isLoggedIn(): boolean {
 
 export function getChatClient() {
   if (!_client) {
-    const baseUrl = import.meta.env.VITE_OPENCODE_PROXY_BASE ?? "/opencode"
+    const baseUrl = resolveBrowserUrl(import.meta.env.VITE_OPENCODE_PROXY_BASE ?? "/opencode")
     const token = getToken()
     const headers: Record<string, string> = {}
     if (token) headers["Authorization"] = `Bearer ${token}`

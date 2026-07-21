@@ -31,7 +31,7 @@ FastAPI 业务错误通常返回：
 
 | 状态码 | 含义 |
 |------|------|
-| `400` | 请求参数非法，例如路径不安全或邮箱已注册 |
+| `400` | 请求参数非法，例如路径不安全或账号已注册 |
 | `401` | 未登录、Token 无效或登录密码错误 |
 | `404` | 资源不存在，或访问了不属于当前用户的会话 |
 | `409` | 状态冲突，例如目录非空或会话归属冲突 |
@@ -59,13 +59,13 @@ FastAPI 业务错误通常返回：
 
 ### `POST /api/auth/register`
 
-注册用户并返回 JWT。
+使用邮箱或手机号注册用户并返回 JWT。
 
 请求体：
 
 ```json
 {
-  "email": "user@example.com",
+  "account": "user@example.com",
   "password": "your-password"
 }
 ```
@@ -78,6 +78,7 @@ FastAPI 业务错误通常返回：
   "user": {
     "id": "9f8e7d...",
     "email": "user@example.com",
+    "phone": null,
     "sandbox_id": null
   }
 }
@@ -87,18 +88,18 @@ FastAPI 业务错误通常返回：
 
 | 状态码 | 场景 |
 |------|------|
-| `400` | 邮箱已注册 |
-| `422` | 邮箱格式或请求体非法 |
+| `400` | 邮箱或手机号已注册 |
+| `422` | 邮箱/手机号格式或请求体非法 |
 
 ### `POST /api/auth/login`
 
-使用邮箱和密码登录。
+使用邮箱或手机号和密码登录。
 
 请求体：
 
 ```json
 {
-  "email": "user@example.com",
+  "account": "user@example.com",
   "password": "your-password"
 }
 ```
@@ -111,6 +112,7 @@ FastAPI 业务错误通常返回：
   "user": {
     "id": "9f8e7d...",
     "email": "user@example.com",
+    "phone": null,
     "sandbox_id": "a"
   }
 }
@@ -120,7 +122,7 @@ FastAPI 业务错误通常返回：
 
 | 状态码 | 场景 |
 |------|------|
-| `401` | 邮箱不存在或密码错误 |
+| `401` | 账号不存在或密码错误 |
 
 ### `GET /api/auth/me`
 
@@ -132,6 +134,7 @@ FastAPI 业务错误通常返回：
 {
   "id": "9f8e7d...",
   "email": "user@example.com",
+  "phone": null,
   "sandbox_id": "a"
 }
 ```
@@ -343,6 +346,33 @@ Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.m
 ```
 
 文件在读取后被其他页面或 Agent 修改时返回 `409`，不会静默覆盖。HTML 最大 `10 MiB`。图片使用 multipart 字段 `file`，仅接受经文件头确认的 PNG、JPEG、GIF 和 WebP，单张最大 `10 MiB`。
+
+### 微信公众号授权与发布
+
+当前 FastAPI 直接实现微信开放平台第三方平台授权。`component_verify_ticket` 可由当前回调接收，也可从既有 PHP 的 MySQL ticket 表只读获取。除微信回调外，以下接口均需要当前平台 JWT：
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `POST` | `/api/wechat/component/callback` | 可选的微信开放平台加密 ticket 和取消授权事件回调；使用 PHP ticket 数据库时无需切换到此地址 |
+| `GET` | `/api/wechat/authorization/callback` | 公众号管理员授权完成后的公开回调 |
+| `GET` | `/api/wechat/authorization` | 查询当前用户公众号授权状态 |
+| `POST` | `/api/wechat/authorization` | 创建十分钟有效的公众号授权页面 URL |
+| `GET` | `/api/wechat/previews/{job_id}/release?session_id=...` | 查询当前排版草稿和发布记录 |
+| `POST` | `/api/wechat/previews/{job_id}/draft?session_id=...` | 同步已保存的工作区 HTML 到公众号草稿箱 |
+| `POST` | `/api/wechat/previews/{job_id}/publish?session_id=...` | 二次确认后提交正式发布 |
+| `POST` | `/api/wechat/previews/{job_id}/resolve?session_id=...` | 人工核对微信后台后确认不确定的发布结果 |
+
+草稿同步请求：
+
+```json
+{
+  "revision": "64位SHA-256"
+}
+```
+
+服务端重新读取工作区 HTML 并校验 revision，浏览器不能直接覆盖正文。同步成功后保存 `mediaId` 和 `contentRevision`；发布前再次校验文件未变化且当前授权公众号与草稿一致。发布提交状态为 `submitted`，表示微信已接收发布任务，不等同于最终审核成功。如果网络中断导致无法确定微信是否已经接收请求，状态为 `unknown` 并禁止自动重试，必须先到微信后台人工核对，再通过 `resolve` 接口提交 `{ "published": true }` 或 `{ "published": false }`，避免重复发布。
+
+微信 `component_access_token`、`authorizer_refresh_token` 和 `authorizer_access_token` 都使用 Fernet 加密后保存。外部 MySQL 只提供最新 `component_verify_ticket`，不读取 PHP refresh token。开放平台配置、外部数据库凭据和加密密钥只能放在 FastAPI `.env` 中，禁止加入前端配置。
 
 ### `GET /api/workspace/archive`
 

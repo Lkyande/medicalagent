@@ -12,6 +12,11 @@ class Settings(BaseSettings):
     jwt_expire_days: int = 7
     database_url: str = "sqlite+aiosqlite:///./dev.db"
     cors_origins: str = "http://localhost:4444,http://localhost:5173"
+    cors_origin_regex: str = (
+        r"^https?://(?:localhost|127\.0\.0\.1|10(?:\.\d{1,3}){3}|"
+        r"192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2})"
+        r":(?:4444|5173)$"
+    )
     sandbox_workspace_root: str = ""
     murtagh_mcp_url: str = ""
     murtagh_knowledge_root: str = ""
@@ -27,9 +32,15 @@ class Settings(BaseSettings):
     wechat_agent_timeout_seconds: float = 30.0
     wechat_agent_preview_wait_seconds: int = 60
     wechat_agent_preview_poll_seconds: float = 5.0
+    wechat_agent_api_key: str = ""
+    wechat_agent_allow_insecure_http: bool = False
     image_upload_url: str = ""
     image_upload_field_name: str = "file"
     image_upload_timeout_seconds: float = 120.0
+    wechat_broker_base_url: str = ""
+    wechat_broker_api_key: str = ""
+    wechat_broker_timeout_seconds: float = 30.0
+    wechat_broker_allow_insecure_http: bool = False
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 

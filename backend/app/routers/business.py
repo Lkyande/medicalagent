@@ -6,4 +6,4 @@ router = APIRouter(prefix="/business", tags=["business"])
 
 @router.get("/hello")
 async def hello(user: User = Depends(get_current_user)):
-    return {"message": f"Hello {user.email}", "userId": user.id}
+    return {"message": f"Hello {user.email or user.phone}", "userId": user.id}

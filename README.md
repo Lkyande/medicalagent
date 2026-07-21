@@ -205,8 +205,8 @@ make down           # Docker 停止
 
 | 路径 | 方法 | 认证 | 说明 |
 |------|------|------|------|
-| `POST /api/auth/register` | POST | 无 | 用户注册，返回 JWT |
-| `POST /api/auth/login` | POST | 无 | 用户登录，返回 JWT |
+| `POST /api/auth/register` | POST | 无 | 邮箱或手机号注册，返回 JWT |
+| `POST /api/auth/login` | POST | 无 | 邮箱或手机号登录，返回 JWT |
 | `GET /api/auth/me` | GET | JWT | 当前用户信息 |
 
 **注册示例：**
@@ -214,7 +214,7 @@ make down           # Docker 停止
 ```bash
 curl -X POST http://localhost:8000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"your-password"}'
+  -d '{"account":"user@example.com","password":"your-password"}'
 ```
 
 **响应：**
@@ -222,7 +222,7 @@ curl -X POST http://localhost:8000/api/auth/register \
 ```json
 {
   "token": "eyJ...",
-  "user": { "id": "...", "email": "user@example.com", "sandbox_id": null }
+  "user": { "id": "...", "email": "user@example.com", "phone": null, "sandbox_id": null }
 }
 ```
 
@@ -320,6 +320,20 @@ VITE_BACKEND_API_URL=/api
 | `IMAGE_UPLOAD_URL` | - | 平台后端代理上传公众号排版图片的服务地址 |
 | `IMAGE_UPLOAD_FIELD_NAME` | `file` | 上游 multipart 图片字段名 |
 | `IMAGE_UPLOAD_TIMEOUT_SECONDS` | `120` | 上游图片上传超时，单位秒 |
+| `WECHAT_AGENT_API_KEY` | - | `wechat_agent` 写接口服务鉴权密钥 |
+| `WECHAT_AGENT_ALLOW_INSECURE_HTTP` | `false` | 仅可信私网临时允许通过 HTTP 传递公众号 token |
+| `WECHAT_COMPONENT_APPID` | - | 微信开放平台第三方平台 AppID |
+| `WECHAT_COMPONENT_APPSECRET` | - | 微信开放平台第三方平台 AppSecret |
+| `WECHAT_COMPONENT_TOKEN` | - | 微信开放平台消息校验 Token |
+| `WECHAT_COMPONENT_ENCODING_AES_KEY` | - | 微信开放平台消息加解密 Key |
+| `WECHAT_COMPONENT_AUTHORIZATION_CALLBACK_URL` | - | 当前平台公众号授权回调 HTTPS URL |
+| `WECHAT_TOKEN_ENCRYPTION_KEY` | - | 当前数据库微信 token 的 Fernet 加密密钥 |
+| `WECHAT_API_TIMEOUT_SECONDS` | `30` | 当前 FastAPI 调用微信 API 的超时秒数 |
+| `WECHAT_REQUIRED_FUNCTION_IDS` | - | 可选，逗号分隔的必需微信授权集 ID |
+| `WECHAT_TICKET_DATABASE_URL` | - | 既有 PHP MySQL 的只读 ticket 数据源，禁止使用业务全权限账号 |
+| `WECHAT_TICKET_DATABASE_TABLE` | `fa_weixin_component_verify_ticket` | PHP 保存最新 component ticket 的表名 |
+| `WECHAT_TICKET_DATABASE_SSL` | `true` | ticket 数据库连接是否强制 TLS |
+| `WECHAT_TICKET_DATABASE_SSL_VERIFY` | `true` | 是否校验 ticket 数据库 TLS 证书和主机身份 |
 
 **多沙盒配置示例：**
 
@@ -377,19 +391,39 @@ HOT_TOPICS_MCP_TIMEOUT_MS=60000
 SMART_MARKET_BASE_URL=https://mkt.kangqiao.vip/api/v1
 SMART_MARKET_TIMEOUT_SECONDS=30
 # 平台后端访问独立 wechat_agent 的内网地址。
-WECHAT_AGENT_BASE_URL=http://wechat-agent:8330
+WECHAT_AGENT_BASE_URL=https://wechat-agent.internal:8330
 WECHAT_AGENT_TIMEOUT_SECONDS=30
 WECHAT_AGENT_PREVIEW_WAIT_SECONDS=60
 WECHAT_AGENT_PREVIEW_POLL_SECONDS=5
+WECHAT_AGENT_API_KEY=replace-with-service-api-key
+WECHAT_AGENT_ALLOW_INSECURE_HTTP=false
 # 编辑器替换图片时由平台后端代理调用，不暴露给浏览器。
 IMAGE_UPLOAD_URL=https://saas.aitool.backend.kangqiao.vip/api/common/upload
 IMAGE_UPLOAD_FIELD_NAME=file
 IMAGE_UPLOAD_TIMEOUT_SECONDS=120
+# 微信开放平台第三方平台配置。
+WECHAT_COMPONENT_APPID=wx...
+WECHAT_COMPONENT_APPSECRET=...
+WECHAT_COMPONENT_TOKEN=...
+WECHAT_COMPONENT_ENCODING_AES_KEY=...
+WECHAT_COMPONENT_AUTHORIZATION_CALLBACK_URL=https://你的平台域名/api/wechat/authorization/callback
+WECHAT_TOKEN_ENCRYPTION_KEY=Fernet生成的固定密钥
+WECHAT_API_TIMEOUT_SECONDS=30
+WECHAT_REQUIRED_FUNCTION_IDS=
+# 复用既有 PHP 接收的 component_verify_ticket；账号只授予目标表 SELECT。
+WECHAT_TICKET_DATABASE_URL=mysql+aiomysql://wechat_ticket_reader:密码@mysql.example:3306/数据库名
+WECHAT_TICKET_DATABASE_TABLE=fa_weixin_component_verify_ticket
+WECHAT_TICKET_DATABASE_SSL=true
+WECHAT_TICKET_DATABASE_SSL_VERIFY=true
 ```
 
 宣教 MCP 提供 `education_create_preview`、`education_wait_for_preview`、`education_get_preview` 和 `education_list_templates`。热点 MCP 挂载在 `/mcp/hot-topics`，提供 `hot_topics_search` 和 `hot_topics_list_tracks`，内部调用 `POST /api/v1/track/hot_topics/search` 与 `GET /api/v1/track/tracks`。用户只给出“医院科普宣传”等宽泛意图、受众或图片风格而没有具体医学主题时，Agent 会先询问是否需要结合当前热点素材，不会立即搜索或创建预览；用户确认需要后才搜索。用户已给出明确医学主题且未要求热点时，直接按主题生成。热点只能作为传播背景，不能替代医学证据。
 
 Agent 提交宣教任务并取得 `job_id` 后，使用该编号分段等待后台任务；每段最多 60 秒并明显短于 MCP 超时，未完成时正常返回 `running`，再按同一 `job_id` 续查，不将等待超时视为任务失败。前端按任务编号持续查询，完成后将 `result.html` 幂等保存到 `education-previews/<job_id>.html`，并提供可视化排版编辑、revision 冲突保护、HTML 下载和图片替换。图片替换通过平台后端代理上传，成功地址优先读取 `data.fullurl`，兼容顶层 `fullurl`。热点搜索默认不返回完整正文和图片，以控制模型上下文和上游开销。
+
+微信公众号授权、token 刷新、草稿和发布由当前 FastAPI 管理。已有 PHP 继续接收微信开放平台加密推送并将最新 `component_verify_ticket` 保存到 MySQL；配置 `WECHAT_TICKET_DATABASE_URL` 后，FastAPI 仅在 component token 即将过期时读取该 ticket 表，不读取 PHP 用户和 refresh token 表。未配置外部 ticket 数据库时，也可让微信直接调用 `POST /api/wechat/component/callback`。用户完成授权后，`authorizer_refresh_token` 使用 `WECHAT_TOKEN_ENCRYPTION_KEY` 加密并绑定当前用户 UUID。短期 authorizer access token 同样加密缓存，排版 HTML 仍交给现有 `wechat_agent` 完成微信草稿转换和发布提交。生产环境必须让该写接口使用 HTTPS并校验 `WECHAT_AGENT_API_KEY`；只有隔离的可信容器私网才可显式启用 `WECHAT_AGENT_ALLOW_INSECURE_HTTP`。该发布能力只存在于人工操作的编辑器，不暴露给 Agent 或 MCP。
+
+复用 PHP ticket 数据库时，微信开放平台现有“授权事件接收 URL”保持不变。数据库账号必须限制来源 IP，并且只授予 ticket 表的 `SELECT (name, ticket_value)`；不要把 PHP 的业务全权限账号部署到当前服务。当前项目的 `WECHAT_COMPONENT_AUTHORIZATION_CALLBACK_URL` 仍必须是微信允许访问的公网 HTTPS 地址，并属于第三方平台允许的授权发起域名。`WECHAT_TOKEN_ENCRYPTION_KEY` 必须备份且长期固定，更换后数据库中的 refresh token 将无法解密，需要用户重新授权。
 
 `SMART_MARKET_BASE_URL` 是平台后端访问 Smart Market 的 HTTPS API 基地址，已包含 `/api/v1`，与沙盒访问的 `HOT_TOPICS_MCP_URL` 方向不同。线上必须部署 `POST /track/hot_topics/search` 增强接口；如果后续启用 API Key，可通过 `SMART_MARKET_API_KEY` 注入 `X-API-Key` 请求头。
 
