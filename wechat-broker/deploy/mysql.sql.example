@@ -1,0 +1,16 @@
+CREATE DATABASE IF NOT EXISTS wechat_broker
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+CREATE USER 'wechat_broker_app'@'127.0.0.1'
+  IDENTIFIED BY 'REPLACE_WITH_A_RANDOM_PASSWORD';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, INDEX, REFERENCES
+  ON wechat_broker.* TO 'wechat_broker_app'@'127.0.0.1';
+
+CREATE USER 'wechat_ticket_reader'@'127.0.0.1'
+  IDENTIFIED BY 'REPLACE_WITH_ANOTHER_RANDOM_PASSWORD';
+GRANT SELECT (name, ticket_value)
+  ON saasscience.fa_weixin_component_verify_ticket
+  TO 'wechat_ticket_reader'@'127.0.0.1';
+
+FLUSH PRIVILEGES;

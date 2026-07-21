@@ -1,0 +1,6 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+wechat_broker.db
+/deploy/mysql.sql
