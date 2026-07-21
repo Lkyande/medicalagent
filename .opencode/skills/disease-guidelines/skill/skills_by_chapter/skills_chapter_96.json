@@ -1,0 +1,39 @@
+{
+    "chapter_number":  96,
+    "chapter_title":  "经前综合征",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH96_PMS_003",
+                       "skill_name":  "PMDD药物治疗起始",
+                       "objective":  "为中重度 PMS/PMDD 病人启动有证据支持的药物治疗。",
+                       "scope":  "经前症状已明显影响工作、学习、人际或家庭功能的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第96章 经前综合征",
+                       "source_page":  "第96章‘中度至重度症状’‘口服避孕药’‘临床要领’相关段落",
+                       "source_file":  "莫塔全科医学---第96章.md",
+                       "file_path":  "PMDD药物治疗起始.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH96_PMS_002",
+                       "skill_name":  "经前综合征生活方式干预",
+                       "objective":  "用教育和生活方式措施减轻 PMS 症状并降低对药物依赖。",
+                       "scope":  "轻度到中度经前综合征女性",
+                       "source_title":  "莫塔全科医学（第8版） 第96章 经前综合征",
+                       "source_page":  "第96章‘管理’‘饮食建议’‘运动’‘放松’相关段落",
+                       "source_file":  "莫塔全科医学---第96章.md",
+                       "file_path":  "经前综合征生活方式干预.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH96_PMS_001",
+                       "skill_name":  "经前综合征症状日记",
+                       "objective":  "通过周期性症状记录提高 PMS/PMDD 诊断准确性和管理针对性。",
+                       "scope":  "怀疑经前综合征或经前烦躁障碍的育龄女性",
+                       "source_title":  "莫塔全科医学（第8版） 第96章 经前综合征",
+                       "source_page":  "第96章‘诊断’‘症状日记’相关段落",
+                       "source_file":  "莫塔全科医学---第96章.md",
+                       "file_path":  "经前综合征症状日记.md"
+                   }
+               ]
+}

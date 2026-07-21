@@ -1,0 +1,49 @@
+{
+    "chapter_number":  79,
+    "chapter_title":  "慢性肾脏病",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH79_CKD_003",
+                       "skill_name":  "AKI早期识别与住院",
+                       "objective":  "尽早识别急性肾损伤并及时安排住院治疗,减少不可逆肾损害。",
+                       "scope":  "出现少尿、无尿、肌酐快速上升或水电解质紊乱的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第79章 慢性肾脏病",
+                       "source_page":  "第79章‘急性肾损伤’相关段落",
+                       "source_file":  "莫塔全科医学---第79章.md",
+                       "file_path":  "AKI早期识别与住院.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH79_CKD_002",
+                       "skill_name":  "CKD分期与监测",
+                       "objective":  "根据 eGFR 和肾损伤证据完成 CKD 分期并建立监测频率。",
+                       "scope":  "已发现 eGFR 下降、蛋白尿、血尿或结构性肾损伤的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第79章 慢性肾脏病",
+                       "source_page":  "第79章‘表79.2 慢性肾脏疾病分期’‘监测慢性肾脏病’相关段落",
+                       "source_file":  "莫塔全科医学---第79章.md",
+                       "file_path":  "CKD分期与监测.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH79_CKD_004",
+                       "skill_name":  "CKD肾毒性药物回避",
+                       "objective":  "在 CKD 病人中识别并避免加重肾损伤的药物暴露。",
+                       "scope":  "已知 CKD、老年人或近期肾功能恶化的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第79章 慢性肾脏病",
+                       "source_page":  "第79章‘慢性肾脏病的药物处方’‘谨防三重打击’相关段落",
+                       "source_file":  "莫塔全科医学---第79章.md",
+                       "file_path":  "CKD肾毒性药物回避.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH79_CKD_001",
+                       "skill_name":  "慢性肾脏病高危筛查",
+                       "objective":  "在无明显症状阶段识别慢性肾脏病高风险人群并启动检测。",
+                       "scope":  "糖尿病、高血压、心血管病、严重痛风、既往尿路异常或肾损伤史病人",
+                       "source_title":  "莫塔全科医学（第8版） 第79章 慢性肾脏病",
+                       "source_page":  "第79章‘重要的临床相关问题’‘慢性肾脏病的危险因素’相关段落",
+                       "source_file":  "莫塔全科医学---第79章.md",
+                       "file_path":  "慢性肾脏病高危筛查.md"
+                   }
+               ]
+}

@@ -1,0 +1,39 @@
+{
+    "chapter_number":  129,
+    "chapter_title":  "旅行者健康和热带医学",
+    "part_name":  "特定人群的健康",
+    "part_number":  12,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH129_TRAVEL_001",
+                       "skill_name":  "旅行前健康评估",
+                       "objective":  "在出发前系统评估旅行者的健康风险并制定个体化预防计划。",
+                       "scope":  "即将前往国内外尤其热带和发展中国家的旅行者",
+                       "source_title":  "莫塔全科医学（第8版） 第129章 旅行者健康和热带医学",
+                       "source_page":  "第129章‘提供旅行前健康服务的原则’相关段落",
+                       "source_file":  "莫塔全科医学---第129章.md",
+                       "file_path":  "旅行前健康评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH129_TRAVEL_002",
+                       "skill_name":  "旅行者腹泻处理",
+                       "objective":  "对轻中重度旅行者腹泻进行分层处理并加强补液与预防教育。",
+                       "scope":  "旅行中或归国后出现急性腹泻的成人和部分儿童旅行者",
+                       "source_title":  "莫塔全科医学（第8版） 第129章 旅行者健康和热带医学",
+                       "source_page":  "第129章‘旅行者腹泻’‘治疗’‘预防建议’相关段落",
+                       "source_file":  "莫塔全科医学---第129章.md",
+                       "file_path":  "旅行者腹泻处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH129_TRAVEL_003",
+                       "skill_name":  "疟疾风险评估与预防",
+                       "objective":  "评估旅行者疟疾风险并制定蚊虫防护与药物预防方案。",
+                       "scope":  "前往疟疾流行地区旅行的成人、儿童和高风险特殊人群",
+                       "source_title":  "莫塔全科医学（第8版） 第129章 旅行者健康和热带医学",
+                       "source_page":  "第129章‘疟疾’‘疟疾的风险评估’‘疟疾的预防’‘药物预防’相关段落",
+                       "source_file":  "莫塔全科医学---第129章.md",
+                       "file_path":  "疟疾风险评估与预防.md"
+                   }
+               ]
+}

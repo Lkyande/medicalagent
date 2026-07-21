@@ -1,0 +1,39 @@
+{
+    "chapter_number":  118,
+    "chapter_title":  "毛发疾病",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH118_HAIR_003",
+                       "skill_name":  "斑秃识别与分层",
+                       "objective":  "识别斑秃并区分局限型、全秃和普秃以指导预后和管理。",
+                       "scope":  "突发秃斑、眉睫毛脱落或弥漫性斑秃样脱发病人",
+                       "source_title":  "莫塔全科医学（第8版） 第118章 毛发疾病",
+                       "source_page":  "第118章‘斑秃、全秃和普秃’‘临床特点’‘局限性秃块’‘广泛性区域’相关段落",
+                       "source_file":  "莫塔全科医学---第118章.md",
+                       "file_path":  "斑秃识别与分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH118_HAIR_002",
+                       "skill_name":  "头发牵拉试验",
+                       "objective":  "通过简单床旁试验判断是否存在异常活动性脱发。",
+                       "scope":  "弥漫性脱发、休止期脱发或活动性斑秃评估时",
+                       "source_title":  "莫塔全科医学（第8版） 第118章 毛发疾病",
+                       "source_page":  "第118章‘头发牵拉试验’相关段落",
+                       "source_file":  "莫塔全科医学---第118章.md",
+                       "file_path":  "头发牵拉试验.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH118_HAIR_001",
+                       "skill_name":  "脱发分型评估",
+                       "objective":  "快速区分局灶性、弥漫性、瘢痕性和非瘢痕性脱发并决定下一步检查。",
+                       "scope":  "男性或女性主诉脱发、毛发稀疏或局部秃斑时",
+                       "source_title":  "莫塔全科医学（第8版） 第118章 毛发疾病",
+                       "source_page":  "第118章‘脱发诊断策略模型’‘重要病史’‘重要的身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第118章.md",
+                       "file_path":  "脱发分型评估.md"
+                   }
+               ]
+}

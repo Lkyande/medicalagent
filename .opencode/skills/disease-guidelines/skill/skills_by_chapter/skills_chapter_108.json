@@ -1,0 +1,39 @@
+{
+    "chapter_number":  108,
+    "chapter_title":  "性健康",
+    "part_name":  "性健康",
+    "part_number":  9,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH108_SEXUAL_003",
+                       "skill_name":  "基础性咨询实施",
+                       "objective":  "在全科场景中提供基础性咨询,改善性健康沟通和初步干预效果。",
+                       "scope":  "性关系困扰、性功能障碍或对性行为感到焦虑的病人或伴侣",
+                       "source_title":  "莫塔全科医学（第8版） 第108章 性健康",
+                       "source_page":  "第108章‘基本的性咨询’相关段落",
+                       "source_file":  "莫塔全科医学---第108章.md",
+                       "file_path":  "基础性咨询实施.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH108_SEXUAL_002",
+                       "skill_name":  "性功能障碍共病排查",
+                       "objective":  "识别导致性功能障碍的躯体疾病和药物因素。",
+                       "scope":  "男性或女性出现性欲低下、勃起障碍、性交痛、高潮障碍等问题时",
+                       "source_title":  "莫塔全科医学（第8版） 第108章 性健康",
+                       "source_page":  "第108章‘疾病对性功能的影响’‘影响性兴奋和性功能的药物’相关段落",
+                       "source_file":  "莫塔全科医学---第108章.md",
+                       "file_path":  "性功能障碍共病排查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH108_SEXUAL_001",
+                       "skill_name":  "性生活史采集",
+                       "objective":  "以尊重和非评判方式采集完整性生活史,支持性健康和功能障碍评估。",
+                       "scope":  "性功能问题、关系困扰、STI 风险或相关躯体主诉就诊者",
+                       "source_title":  "莫塔全科医学（第8版） 第108章 性健康",
+                       "source_page":  "第108章‘采集性生活史’‘针对可疑的性问题作出的提问’‘性关系史’相关段落",
+                       "source_file":  "莫塔全科医学---第108章.md",
+                       "file_path":  "性生活史采集.md"
+                   }
+               ]
+}

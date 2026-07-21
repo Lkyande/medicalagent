@@ -1,0 +1,39 @@
+{
+    "chapter_number":  93,
+    "chapter_title":  "乳房疾病",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH93_BREAST_003",
+                       "skill_name":  "哺乳期乳腺炎识别与处理",
+                       "objective":  "尽早识别哺乳期乳腺炎并防止快速进展为乳房脓肿。",
+                       "scope":  "哺乳期乳房红、热、痛、发热或乳头疼痛的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第93章 乳房疾病",
+                       "source_page":  "第93章‘乳腺炎’‘临床特点’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第93章.md",
+                       "file_path":  "哺乳期乳腺炎识别与处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH93_BREAST_001",
+                       "skill_name":  "乳腺痛初始评估",
+                       "objective":  "区分周期性与非周期性乳腺痛,并排查癌症、感染和胸壁来源疼痛。",
+                       "scope":  "主诉乳房疼痛、不适或乳头周围痛的女性病人",
+                       "source_title":  "莫塔全科医学（第8版） 第93章 乳房疾病",
+                       "source_page":  "第93章‘乳房疼痛’‘临床方法’‘病史’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第93章.md",
+                       "file_path":  "乳腺痛初始评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH93_BREAST_002",
+                       "skill_name":  "周期性乳腺痛处理",
+                       "objective":  "为周期性乳腺痛提供以释疑和保守措施为主的一线管理。",
+                       "scope":  "30 至 40 岁常见的经前加重、经后缓解型乳房疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第93章 乳房疾病",
+                       "source_page":  "第93章‘周期性乳腺痛’‘治疗方法’相关段落",
+                       "source_file":  "莫塔全科医学---第93章.md",
+                       "file_path":  "周期性乳腺痛处理.md"
+                   }
+               ]
+}

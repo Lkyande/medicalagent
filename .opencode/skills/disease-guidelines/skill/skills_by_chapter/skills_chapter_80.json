@@ -1,0 +1,49 @@
+{
+    "chapter_number":  80,
+    "chapter_title":  "肥胖",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH80_OBESITY_002",
+                       "skill_name":  "肥胖5As管理",
+                       "objective":  "用 5As 框架开展敏感、系统且可持续的肥胖管理对话。",
+                       "scope":  "超重或肥胖且愿意讨论体重、或体重与主诉相关的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第80章 肥胖",
+                       "source_page":  "第80章‘表80.3 肥胖管理的 5As 模型’‘在看诊过程中向病人提出肥胖问题’相关段落",
+                       "source_file":  "莫塔全科医学---第80章.md",
+                       "file_path":  "肥胖5As管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH80_OBESITY_001",
+                       "skill_name":  "肥胖BMI与腰围评估",
+                       "objective":  "用 BMI 和腰围对肥胖程度及相关心血管风险进行标准化评估。",
+                       "scope":  "成人体重管理、慢病随访或健康体检场景",
+                       "source_title":  "莫塔全科医学（第8版） 第80章 肥胖",
+                       "source_page":  "第80章‘对肥胖的测量’‘表80.2 成人肥胖分类’相关段落",
+                       "source_file":  "莫塔全科医学---第80章.md",
+                       "file_path":  "肥胖BMI与腰围评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH80_OBESITY_003",
+                       "skill_name":  "肥胖行为改变动机访谈",
+                       "objective":  "通过动机访谈提升病人的内在减重动机和长期坚持度。",
+                       "scope":  "对减重犹豫、反复失败或处于不同改变阶段的肥胖病人",
+                       "source_title":  "莫塔全科医学（第8版） 第80章 肥胖",
+                       "source_page":  "第80章‘鼓励行为改变’‘行为改变的阶段’相关段落",
+                       "source_file":  "莫塔全科医学---第80章.md",
+                       "file_path":  "肥胖行为改变动机访谈.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH80_OBESITY_004",
+                       "skill_name":  "肥胖运动处方制定",
+                       "objective":  "制定兼顾减重与健康获益的个体化身体活动计划。",
+                       "scope":  "需要减重或改善肥胖相关健康风险的成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第80章 肥胖",
+                       "source_page":  "第80章‘锻炼’相关段落",
+                       "source_file":  "莫塔全科医学---第80章.md",
+                       "file_path":  "肥胖运动处方制定.md"
+                   }
+               ]
+}

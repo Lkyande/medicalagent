@@ -1,0 +1,59 @@
+{
+    "chapter_number":  8,
+    "chapter_title":  "临床的察看技能",
+    "part_name":  "全科医学基础",
+    "part_number":  1,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH8_CLUBBING_001",
+                       "skill_name":  "杵状指识别",
+                       "objective":  "识别杵状指并据此启动对肺部、心脏、肝脏和胃肠疾病的针对性评估。",
+                       "scope":  "慢性咳嗽、呼吸困难、发绀、消瘦或系统性慢病病人",
+                       "source_title":  "莫塔全科医学（第8版） 第8章 临床的察看技能",
+                       "source_page":  "第8章‘杵状指’相关段落",
+                       "source_file":  "莫塔全科医学---第8章.md",
+                       "file_path":  "杵状指识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH8_CYANOSIS_001",
+                       "skill_name":  "发绀分型观察",
+                       "objective":  "根据分布和皮肤温度区分中心性与周围性发绀,缩小严重病因范围。",
+                       "scope":  "呼吸困难、循环异常、紫绀或低氧相关病人评估",
+                       "source_title":  "莫塔全科医学（第8版） 第8章 临床的察看技能",
+                       "source_page":  "第8章‘发绀’‘中心性发绀’‘周围性发绀’相关段落",
+                       "source_file":  "莫塔全科医学---第8章.md",
+                       "file_path":  "发绀分型观察.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH8_FACELESION_001",
+                       "skill_name":  "面部皮肤异常鉴别观察",
+                       "objective":  "通过面部皮肤分布和形态观察区分常见系统性或局部性皮肤异常线索。",
+                       "scope":  "面部红斑、色素沉着、毛细血管扩张和黄褐斑相关就诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第8章 临床的察看技能",
+                       "source_page":  "第8章‘特殊的面部特征’相关段落",
+                       "source_file":  "莫塔全科医学---第8章.md",
+                       "file_path":  "面部皮肤异常鉴别观察.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH8_FACIES_001",
+                       "skill_name":  "面容特征识别",
+                       "objective":  "通过识别具有诊断价值的面容特征,为内分泌、神经、遗传和系统性疾病提供早期线索。",
+                       "scope":  "门诊首诊、慢病复诊和疑难病初步评估",
+                       "source_title":  "莫塔全科医学（第8版） 第8章 临床的察看技能",
+                       "source_page":  "第8章‘脸是疾病的镜子’‘具有诊断意义的面容’相关段落",
+                       "source_file":  "莫塔全科医学---第8章.md",
+                       "file_path":  "面容特征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH8_GENERALOBS_001",
+                       "skill_name":  "一般外观观察评估",
+                       "objective":  "在接触病人早期通过一般外观和行为观察快速建立初步临床判断框架。",
+                       "scope":  "所有面对面全科咨询和体格检查前的临床评估",
+                       "source_title":  "莫塔全科医学（第8版） 第8章 临床的察看技能",
+                       "source_page":  "第8章‘第一印象’相关段落",
+                       "source_file":  "莫塔全科医学---第8章.md",
+                       "file_path":  "一般外观观察评估.md"
+                   }
+               ]
+}

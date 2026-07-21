@@ -1,0 +1,39 @@
+{
+    "chapter_number":  114,
+    "chapter_title":  "急性皮疹暴发",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH114_RASH_001",
+                       "skill_name":  "急性皮疹暴发病史评估",
+                       "objective":  "在急性出疹病中快速抓住决定性病史线索以缩小病因范围。",
+                       "scope":  "儿童或成人出现新发全身性皮疹、出疹伴发热或疑似药疹时",
+                       "source_title":  "莫塔全科医学（第8版） 第114章 急性皮疹暴发",
+                       "source_page":  "第114章‘诊断方法’‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第114章.md",
+                       "file_path":  "急性皮疹暴发病史评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH114_RASH_003",
+                       "skill_name":  "急性皮疹重症红旗筛查",
+                       "objective":  "在暴发性皮疹中快速识别需要紧急处理的败血症、血管炎和重症药疹。",
+                       "scope":  "合并发热、黏膜受累、瘀点紫癜或全身症状的急性皮疹病人",
+                       "source_title":  "莫塔全科医学（第8版） 第114章 急性皮疹暴发",
+                       "source_page":  "第114章‘不能遗漏的严重疾病’相关段落",
+                       "source_file":  "莫塔全科医学---第114章.md",
+                       "file_path":  "急性皮疹重症红旗筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH114_RASH_002",
+                       "skill_name":  "玫瑰糠疹识别与释疑",
+                       "objective":  "识别典型玫瑰糠疹并给予自限性疾病的解释与瘙痒处理。",
+                       "scope":  "年龄较大的儿童、青少年和年轻成人出现躯干急性鳞屑性皮疹时",
+                       "source_title":  "莫塔全科医学（第8版） 第114章 急性皮疹暴发",
+                       "source_page":  "第114章‘玫瑰糠疹’‘临床特点’‘预后’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第114章.md",
+                       "file_path":  "玫瑰糠疹识别与释疑.md"
+                   }
+               ]
+}

@@ -1,0 +1,39 @@
+{
+    "chapter_number":  126,
+    "chapter_title":  "临终关怀与宁养疗护",
+    "part_name":  "特定人群的健康",
+    "part_number":  12,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH126_PALLIATIVE_002",
+                       "skill_name":  "癌痛三阶梯镇痛",
+                       "objective":  "根据 WHO 三阶梯原则为癌痛病人建立规律、可升级的镇痛方案。",
+                       "scope":  "需要宁养疗护的癌痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第126章 临终关怀与宁养疗护",
+                       "source_page":  "第126章‘癌症的疼痛控制’‘使用镇痛药’‘第1步至第3步’相关段落",
+                       "source_file":  "莫塔全科医学---第126章.md",
+                       "file_path":  "癌痛三阶梯镇痛.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH126_PALLIATIVE_001",
+                       "skill_name":  "宁养疗护六问沟通",
+                       "objective":  "用关键六问框架与病人及家属开展诚实、支持性的宁养疗护沟通。",
+                       "scope":  "癌症、终末器官衰竭或退行性疾病进入宁养疗护阶段的病人及家属",
+                       "source_title":  "莫塔全科医学（第8版） 第126章 临终关怀与宁养疗护",
+                       "source_page":  "第126章‘全科医生的特殊作用’相关段落",
+                       "source_file":  "莫塔全科医学---第126章.md",
+                       "file_path":  "宁养疗护六问沟通.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH126_PALLIATIVE_003",
+                       "skill_name":  "突破痛阿片滴定",
+                       "objective":  "在基础镇痛方案上为突破痛设定安全、有效的阿片滴定策略。",
+                       "scope":  "已使用阿片类药物但仍有突破痛的宁养疗护病人",
+                       "source_title":  "莫塔全科医学（第8版） 第126章 临终关怀与宁养疗护",
+                       "source_page":  "第126章‘使用镇痛药’‘指菌’‘表126.3 常见的关于吗啡的误解’相关段落",
+                       "source_file":  "莫塔全科医学---第126章.md",
+                       "file_path":  "突破痛阿片滴定.md"
+                   }
+               ]
+}

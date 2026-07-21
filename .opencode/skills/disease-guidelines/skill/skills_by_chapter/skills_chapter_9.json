@@ -1,0 +1,89 @@
+{
+    "chapter_number":  9,
+    "chapter_title":  "安全的诊断策略",
+    "part_name":  "全科医学的诊断方法",
+    "part_number":  2,
+    "skill_count":  8,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH9_PROMPT_001",
+                       "skill_name":  "PROMPT安全诊断模型",
+                       "objective":  "用结构化五问模型处理未分化症状,降低漏诊严重疾病和常见陷阱的风险。",
+                       "scope":  "全科门诊未分化主诉、复杂症状和诊断不确定场景",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘基本模型’相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "PROMPT安全诊断模型.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH9_MASQCOMMON_001",
+                       "skill_name":  "常见戴面具问题核查",
+                       "objective":  "在症状清单复杂或诊断不明时系统排查常见伪装性疾病,避免长期误诊。",
+                       "scope":  "疲劳、躯体化、症状多样或反复就诊而查体不典型的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘面具’及表9.4相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "常见戴面具问题核查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH9_TRAP_001",
+                       "skill_name":  "常见陷阱问题核查",
+                       "objective":  "在常见主诉中主动回顾易被忽略的常见问题,减少‘简单病被漏掉’的情况。",
+                       "scope":  "腹痛、发热、头痛、皮区疼痛、疲劳和其他日常门诊主诉",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘常会遗漏哪些问题’相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "常见陷阱问题核查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH9_PROBABILITY_001",
+                       "skill_name":  "概率诊断建立",
+                       "objective":  "结合患病率、自然病史和社区经验快速建立最可能的初步诊断方向。",
+                       "scope":  "全科首诊、常见病评估和门诊初步决策",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘概率诊断’相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "概率诊断建立.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH9_REDFLAG_001",
+                       "skill_name":  "红旗征筛查",
+                       "objective":  "通过快速识别红旗征发现潜在严重损害,决定是否需要紧急检查或升级处置。",
+                       "scope":  "所有未分化症状和全科初诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "红旗征筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH9_THREESTRIKES_001",
+                       "skill_name":  "三振出局转诊规则",
+                       "objective":  "在延迟或蹊跷诊断场景中通过设定诊断止损点,减少反复试探带来的漏诊风险。",
+                       "scope":  "反复就诊仍未明确诊断的全科病人",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘临床要领’相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "三振出局转诊规则.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH9_RULEOUT_001",
+                       "skill_name":  "严重疾病排除清单",
+                       "objective":  "在全科首诊中系统排查潜在危及生命或高诉讼风险的严重疾病。",
+                       "scope":  "胸痛、头痛、发热、呼吸困难、晕厥、腹痛和其他未分化急性症状",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘不能遗漏哪些严重疾病’相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "严重疾病排除清单.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH9_HIDDEN_001",
+                       "skill_name":  "隐藏议题与黄旗征探索",
+                       "objective":  "识别症状背后的隐藏诉求、心理压力和阻碍康复的黄旗征,完善整体诊断与管理。",
+                       "scope":  "未分化症状、慢性疼痛、反复就诊和明显压力相关病人",
+                       "source_title":  "莫塔全科医学（第8版） 第9章 安全的诊断策略",
+                       "source_page":  "第9章‘病人是否试图告诉我什么’‘黄旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第9章.md",
+                       "file_path":  "隐藏议题与黄旗征探索.md"
+                   }
+               ]
+}

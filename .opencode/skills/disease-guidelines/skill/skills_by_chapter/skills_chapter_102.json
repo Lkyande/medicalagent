@@ -1,0 +1,39 @@
+{
+    "chapter_number":  102,
+    "chapter_title":  "男性健康概述",
+    "part_name":  "男性健康",
+    "part_number":  8,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH102_MEN_003",
+                       "skill_name":  "男性骨质疏松筛查",
+                       "objective":  "提升男性骨质疏松识别率并减少低创伤骨折漏诊。",
+                       "scope":  "老年男性、低冲击骨折者或存在骨质疏松危险因素的男性",
+                       "source_title":  "莫塔全科医学（第8版） 第102章 男人的健康概述",
+                       "source_page":  "第102章‘男性的骨质疏松’相关段落",
+                       "source_file":  "莫塔全科医学---第102章.md",
+                       "file_path":  "男性骨质疏松筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH102_MEN_001",
+                       "skill_name":  "男性健康机会性筛查",
+                       "objective":  "利用男性就诊机会主动筛查高负担的慢病和高风险行为问题。",
+                       "scope":  "青少年至老年男性全科就诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第102章 男人的健康概述",
+                       "source_page":  "第102章‘男性健康速览’‘小结’相关段落",
+                       "source_file":  "莫塔全科医学---第102章.md",
+                       "file_path":  "男性健康机会性筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH102_MEN_002",
+                       "skill_name":  "雄激素缺乏评估",
+                       "objective":  "识别不同年龄阶段提示雄激素缺乏的体征症状并进行规范检测。",
+                       "scope":  "青春期发育迟缓、性欲下降、ED、男性乳房发育或骨质疏松的男性",
+                       "source_title":  "莫塔全科医学（第8版） 第102章 男人的健康概述",
+                       "source_page":  "第102章‘雄激素缺乏’相关段落",
+                       "source_file":  "莫塔全科医学---第102章.md",
+                       "file_path":  "雄激素缺乏评估.md"
+                   }
+               ]
+}

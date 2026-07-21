@@ -1,0 +1,99 @@
+{
+    "chapter_number":  32,
+    "chapter_title":  "咳嗽",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  9,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH32_PED_009",
+                       "skill_name":  "儿童肺炎住院分层",
+                       "objective":  "识别需要住院治疗的儿童肺炎,尽早处理低氧和喂养失败风险。",
+                       "scope":  "怀疑儿童肺炎的婴幼儿和年长儿童",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘儿童的肺炎’‘儿童肺炎的住院指南’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "儿童肺炎住院分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_HEMO_004",
+                       "skill_name":  "咯血初始分层评估",
+                       "objective":  "在发现咯血时快速区分感染、肿瘤、肺栓塞和假性咯血等主要路径。",
+                       "scope":  "痰中带血或大量咯血的成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘咯血’‘咯血诊断策略模型’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "咯血初始分层评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_COUGH_002",
+                       "skill_name":  "咳嗽病史结构化采集",
+                       "objective":  "通过结构化病史明确咳嗽病因线索并初步分层为感染性、气道性、肿瘤性或暴露相关疾病。",
+                       "scope":  "所有主诉咳嗽的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "咳嗽病史结构化采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_COUGH_001",
+                       "skill_name":  "咳嗽红旗征筛查",
+                       "objective":  "在咳嗽初诊时识别需要紧急进一步检查的严重呼吸系统疾病。",
+                       "scope":  "急性或慢性咳嗽病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘咳嗽的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "咳嗽红旗征筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_BRON_007",
+                       "skill_name":  "急性支气管炎抗生素决策",
+                       "objective":  "在急性支气管炎中合理区分仅需对症处理和需要抗生素的少数病人。",
+                       "scope":  "咳嗽咳痰、散在哮鸣音且疑似急性支气管炎病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘急性支气管炎’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "急性支气管炎抗生素决策.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_FLU_006",
+                       "skill_name":  "流感临床识别与抗病毒启动",
+                       "objective":  "在流感流行期识别真正流感并在高风险病人中及时启动抗病毒药物。",
+                       "scope":  "流感季节出现急性发热、肌痛和呼吸道症状的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘流行性感冒’‘临床诊断标准’‘抗病毒药物’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "流感临床识别与抗病毒启动.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_URI_005",
+                       "skill_name":  "普通感冒支持治疗",
+                       "objective":  "对普通感冒提供以休息、补液和对症用药为核心的管理,减少不必要抗生素使用。",
+                       "scope":  "轻度上呼吸道感染、明显鼻部症状且无严重并发症病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘普通感冒’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "普通感冒支持治疗.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_CAP_008",
+                       "skill_name":  "社区获得性肺炎识别",
+                       "objective":  "识别社区获得性肺炎的典型和非典型表现,避免将其误判为单纯上呼吸道感染。",
+                       "scope":  "发热、咳嗽、脓痰、胸膜痛或全身症状明显的呼吸道病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘社区获得性肺炎’‘典型肺炎’‘临床特征’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "社区获得性肺炎识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH32_SPUTUM_003",
+                       "skill_name":  "痰液特征判读",
+                       "objective":  "根据痰液颜色、气味和黏稠度缩小咳嗽病因范围。",
+                       "scope":  "咳痰性咳嗽病人",
+                       "source_title":  "莫塔全科医学（第8版） 第32章 咳嗽",
+                       "source_page":  "第32章‘痰液特点’相关段落",
+                       "source_file":  "莫塔全科医学---第32章.md",
+                       "file_path":  "痰液特征判读.md"
+                   }
+               ]
+}

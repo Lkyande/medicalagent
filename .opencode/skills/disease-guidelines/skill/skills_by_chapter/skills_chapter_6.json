@@ -1,0 +1,179 @@
+{
+    "chapter_number":  6,
+    "chapter_title":  "全科医学中的预防",
+    "part_name":  "全科医学基础",
+    "part_number":  1,
+    "skill_count":  17,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH6_ADULTIMM_001",
+                       "skill_name":  "成人免疫接种核查",
+                       "objective":  "系统核查成人免疫状态并按年龄、妊娠和风险暴露补足必要疫苗。",
+                       "scope":  "成人预防门诊、慢病管理、妊娠管理和职业暴露评估",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘免疫接种’‘疫苗情况’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "成人免疫接种核查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_ADULTSCREEN_001",
+                       "skill_name":  "成人周期性筛查",
+                       "objective":  "按年龄和风险因素实施成人周期性筛查,早期发现可干预疾病和危险状态。",
+                       "scope":  "成人体检、慢病风险管理和预防门诊",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘成年人的筛查’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "成人周期性筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_CHILDSCREEN_001",
+                       "skill_name":  "儿童健康筛查",
+                       "objective":  "通过分年龄儿童筛查早期识别生长、感觉、运动和发育异常,实现及时干预和转诊。",
+                       "scope":  "婴幼儿、学龄前儿童和学龄儿童的常规预防保健",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘儿童健康筛查’‘总体发育’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "儿童健康筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_CHILDIMM_001",
+                       "skill_name":  "儿童免疫接种计划执行",
+                       "objective":  "按儿童免疫程序表执行和追踪接种,保障连续预防和补种完整性。",
+                       "scope":  "新生儿、婴幼儿、学龄儿童和学校接种项目",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘免疫接种’‘NHMRC 推荐的免疫接种计划’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "儿童免疫接种计划执行.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_TIMING_001",
+                       "skill_name":  "高价值预防时机识别",
+                       "objective":  "在高收益临床节点主动启动预防服务,提升预防干预命中率和实际效果。",
+                       "scope":  "产前、产后、计划生育、婴儿就诊、旅行咨询、危机事件和慢病场景",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘预防的最佳时机’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "高价值预防时机识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_CERVIX_001",
+                       "skill_name":  "宫颈癌筛查安排",
+                       "objective":  "按年龄和结果安排宫颈癌筛查与随访,提高癌前病变早发现率。",
+                       "scope":  "有过性生活的适龄女性",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘成年人的筛查’中宫颈癌相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "宫颈癌筛查安排.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_OPPPREVENT_001",
+                       "skill_name":  "机会性预防实施",
+                       "objective":  "在每次全科看诊中主动识别可预防因素并嵌入预防措施,把预防态度落实到临床服务。",
+                       "scope":  "所有全科门诊咨询,尤其慢病管理、复诊和健康行为问题场景",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘定义’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "机会性预防实施.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_CRC_001",
+                       "skill_name":  "结直肠癌筛查安排",
+                       "objective":  "根据风险分层安排 FOBT 和结肠镜筛查,提高结直肠癌和癌前病变早期发现率。",
+                       "scope":  "50 到 74 岁平均风险人群及有家族史或炎症性肠病的高风险人群",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘成年人的筛查’中结直肠癌相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "结直肠癌筛查安排.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_CVRISK_001",
+                       "skill_name":  "绝对心血管风险评估",
+                       "objective":  "结合多项风险因素评估病人 5 年心血管事件绝对风险,用于指导预防干预强度。",
+                       "scope":  "需要进行心血管一级或二级预防评估的成年人",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘血管疾病’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "绝对心血管风险评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_BREAST_001",
+                       "skill_name":  "乳腺癌筛查安排",
+                       "objective":  "根据年龄和风险合理安排乳腺癌筛查,同时避免把阴性影像误作排除依据。",
+                       "scope":  "中年及老年女性,尤其 50 到 74 岁人群",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘成年人的筛查’中乳腺癌相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "乳腺癌筛查安排.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_SCREENLEVEL_001",
+                       "skill_name":  "筛查目标分层",
+                       "objective":  "明确筛查对象属于风险个体、无症状早期疾病个体还是已出现可控影响的有症状个体,提高筛查针对性。",
+                       "scope":  "全科体检、预防性门诊和人群健康管理",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘筛查的目的’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "筛查目标分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_ASTHMA_001",
+                       "skill_name":  "哮喘预防管理六步法",
+                       "objective":  "通过结构化评估、监测、用药和教育,最大程度控制哮喘并减少可预防的发病和死亡。",
+                       "scope":  "已确诊或疑似哮喘的儿童和成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘哮喘和其他呼吸系统疾病’‘六步哮喘管理计划’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "哮喘预防管理六步法.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_NEONATAL_001",
+                       "skill_name":  "新生儿足跟血筛查",
+                       "objective":  "在出生后规定时间完成新生儿足跟血筛查,及早识别可治疗的先天代谢和内分泌异常。",
+                       "scope":  "出生后 48 到 72 小时的新生儿",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘新生儿的筛查’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "新生儿足跟血筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_BEHAVIOR_001",
+                       "skill_name":  "行为改变支持",
+                       "objective":  "运用指导式、动机式和行为式策略支持病人完成困难的生活方式改变。",
+                       "scope":  "吸烟、饮酒、运动不足、肥胖和其他长期行为风险因素管理",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘行为改善’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "行为改变支持.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_VAXOBS_001",
+                       "skill_name":  "疫苗接种后观察与不良反应处理",
+                       "objective":  "规范疫苗接种后观察和常见不良反应处置,提高接种安全性与家属信心。",
+                       "scope":  "所有门诊免疫接种场景",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘疫苗接种的不良反应’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "疫苗接种后观察与不良反应处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_LEVEL_001",
+                       "skill_name":  "预防层级判定",
+                       "objective":  "根据疾病所处阶段准确判定一级、二级或三级预防策略,提高预防措施匹配度。",
+                       "scope":  "全科预防决策、慢病管理、筛查和康复衔接场景",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘一级预防’‘二级预防’‘三级预防’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "预防层级判定.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH6_PREVHISTORY_001",
+                       "skill_name":  "预防性病史更新",
+                       "objective":  "通过结构化预防性病史更新识别危险因素、家庭倾向和可干预问题。",
+                       "scope":  "周期性健康检查、慢病随访和新病人建档",
+                       "source_title":  "莫塔全科医学（第8版） 第6章 全科医学中的预防",
+                       "source_page":  "第6章‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第6章.md",
+                       "file_path":  "预防性病史更新.md"
+                   }
+               ]
+}

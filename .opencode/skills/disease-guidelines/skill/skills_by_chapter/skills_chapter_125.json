@@ -1,0 +1,39 @@
+{
+    "chapter_number":  125,
+    "chapter_title":  "老年病人",
+    "part_name":  "特定人群的健康",
+    "part_number":  12,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH125_GERIATRIC_002",
+                       "skill_name":  "老年七条规则评估",
+                       "objective":  "对不能自理或状态恶化的老年病人进行快速问题清单式排查。",
+                       "scope":  "意识混乱、不能完成日常活动或不明原因健康恶化的老年病人",
+                       "source_title":  "莫塔全科医学（第8版） 第125章 老年病人",
+                       "source_page":  "第125章‘评估不能自理老年病人的 7 条规则’‘表125.1’相关段落",
+                       "source_file":  "莫塔全科医学---第125章.md",
+                       "file_path":  "老年七条规则评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH125_GERIATRIC_003",
+                       "skill_name":  "老年认知筛查MMSE与钟表测试",
+                       "objective":  "在全科环境中快速筛查老年人的认知障碍和痴呆风险。",
+                       "scope":  "记忆下降、行为改变、跌倒或功能退化的老年病人",
+                       "source_title":  "莫塔全科医学（第8版） 第125章 老年病人",
+                       "source_page":  "第125章‘简易精神状态检查’‘认知障碍10步快速测验’‘钟面绘图测试’相关段落",
+                       "source_file":  "莫塔全科医学---第125章.md",
+                       "file_path":  "老年认知筛查MMSE与钟表测试.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH125_GERIATRIC_001",
+                       "skill_name":  "老年综合评估",
+                       "objective":  "从功能、认知、情绪和多病共存角度完成老年病人的综合健康评估。",
+                       "scope":  "65 岁及以上初诊或健康状况恶化的老年病人",
+                       "source_title":  "莫塔全科医学（第8版） 第125章 老年病人",
+                       "source_page":  "第125章‘老年病人健康评估’‘病史’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第125章.md",
+                       "file_path":  "老年综合评估.md"
+                   }
+               ]
+}

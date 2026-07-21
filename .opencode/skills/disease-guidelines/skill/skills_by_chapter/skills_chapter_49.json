@@ -1,0 +1,59 @@
+{
+    "chapter_number":  49,
+    "chapter_title":  "恶心和呕吐",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH49_HX_002",
+                       "skill_name":  "恶心呕吐基础病史与查体",
+                       "objective":  "用系统化问诊和查体快速定位恶心呕吐的胃肠、全身或神经系统病因。",
+                       "scope":  "门急诊恶心、干呕或呕吐病人",
+                       "source_title":  "莫塔全科医学（第8版） 第49章 恶心和呕吐",
+                       "source_page":  "第49章‘病史’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第49章.md",
+                       "file_path":  "恶心呕吐基础病史与查体.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH49_RED_001",
+                       "skill_name":  "呕吐红旗征识别",
+                       "objective":  "快速识别提示低血容量、腹膜炎或颅内病变的高危呕吐表现。",
+                       "scope":  "所有急性或持续性恶心呕吐病人",
+                       "source_title":  "莫塔全科医学（第8版） 第49章 恶心和呕吐",
+                       "source_page":  "第49章‘呕吐的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第49章.md",
+                       "file_path":  "呕吐红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH49_VOMIT_003",
+                       "skill_name":  "呕吐物性质定位判断",
+                       "objective":  "利用呕吐物性质和伴随特征进行病变部位与病因初步定位。",
+                       "scope":  "已发生实际呕吐且可描述呕吐特征的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第49章 恶心和呕吐",
+                       "source_page":  "第49章‘诊断指南’相关段落",
+                       "source_file":  "莫塔全科医学---第49章.md",
+                       "file_path":  "呕吐物性质定位判断.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH49_PYLORUS_005",
+                       "skill_name":  "先天肥大性幽门狭窄识别",
+                       "objective":  "识别典型婴儿幽门狭窄表现并启动纠正脱水后外科处理路径。",
+                       "scope":  "3 至 6 周婴儿出现喷射性非胆汁性呕吐时",
+                       "source_title":  "莫塔全科医学（第8版） 第49章 恶心和呕吐",
+                       "source_page":  "第49章‘先天肥大性幽门狭窄’相关段落",
+                       "source_file":  "莫塔全科医学---第49章.md",
+                       "file_path":  "先天肥大性幽门狭窄识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH49_INFANT_004",
+                       "skill_name":  "婴儿胆汁性呕吐紧急分流",
+                       "objective":  "将婴儿胆汁性呕吐作为肠梗阻和肠扭转信号进行时间敏感型急诊分流。",
+                       "scope":  "新生儿和婴儿出现绿色或胆汁染色呕吐时",
+                       "source_title":  "莫塔全科医学（第8版） 第49章 恶心和呕吐",
+                       "source_page":  "第49章‘婴儿的呕吐’‘新生儿的重要警示性征象’相关段落",
+                       "source_file":  "莫塔全科医学---第49章.md",
+                       "file_path":  "婴儿胆汁性呕吐紧急分流.md"
+                   }
+               ]
+}

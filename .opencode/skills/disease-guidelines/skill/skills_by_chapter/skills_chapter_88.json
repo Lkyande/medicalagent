@@ -1,0 +1,49 @@
+{
+    "chapter_number":  88,
+    "chapter_title":  "儿童虐待",
+    "part_name":  "儿童和青少年健康",
+    "part_number":  6,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH88_ABUSE_001",
+                       "skill_name":  "儿童虐待警讯识别",
+                       "objective":  "在临床接触中及早识别可能提示儿童虐待或忽视的伤情和行为线索。",
+                       "scope":  "所有儿童门诊、急诊、慢病随访和家庭就诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第88章 儿童虐待",
+                       "source_page":  "第88章‘定义’‘身体虐待指征’‘行为指标’相关段落",
+                       "source_file":  "莫塔全科医学---第88章.md",
+                       "file_path":  "儿童虐待警讯识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH88_ABUSE_004",
+                       "skill_name":  "儿童虐待强制报告启动",
+                       "objective":  "在怀疑儿童受虐时及时启动法定报告和多学科保护流程。",
+                       "scope":  "怀疑儿童正处于身体、情感、性虐待或忽视风险中的病例",
+                       "source_title":  "莫塔全科医学（第8版） 第88章 儿童虐待",
+                       "source_page":  "第88章‘争取基本帮助’‘强制性报告’相关段落",
+                       "source_file":  "莫塔全科医学---第88章.md",
+                       "file_path":  "儿童虐待强制报告启动.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH88_ABUSE_002",
+                       "skill_name":  "可疑虐待伤情记录",
+                       "objective":  "对可疑虐待病例进行可支持后续保护和法律流程的规范化记录。",
+                       "scope":  "临床上怀疑存在身体虐待、忽视或其他非意外伤害的儿童",
+                       "source_title":  "莫塔全科医学（第8版） 第88章 儿童虐待",
+                       "source_page":  "第88章‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第88章.md",
+                       "file_path":  "可疑虐待伤情记录.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH88_ABUSE_003",
+                       "skill_name":  "与照护者讨论可疑虐待",
+                       "objective":  "在保障儿童利益前提下,以专业且不升级冲突的方式与照护者沟通可疑虐待问题。",
+                       "scope":  "已怀疑受虐且需要与父母或监护人进行临床沟通的场景",
+                       "source_title":  "莫塔全科医学（第8版） 第88章 儿童虐待",
+                       "source_page":  "第88章‘与父母或监护人的交谈’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第88章.md",
+                       "file_path":  "与照护者讨论可疑虐待.md"
+                   }
+               ]
+}

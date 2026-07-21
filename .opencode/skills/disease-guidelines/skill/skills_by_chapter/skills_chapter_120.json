@@ -1,0 +1,39 @@
+{
+    "chapter_number":  120,
+    "chapter_title":  "急诊服务",
+    "part_name":  "意外事故和急救医学",
+    "part_number":  11,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH120_EMERGENCY_001",
+                       "skill_name":  "急救DRSABCD初始处理",
+                       "objective":  "在院前或基层急症场景中按统一框架迅速完成初始生命支持。",
+                       "scope":  "胸痛、意识丧失、大出血、呼吸窘迫或其他时间危急性急症",
+                       "source_title":  "莫塔全科医学（第8版） 第120章 急诊服务",
+                       "source_page":  "第120章‘管理原则’‘重要的基本技能’相关段落",
+                       "source_file":  "莫塔全科医学---第120章.md",
+                       "file_path":  "急救DRSABCD初始处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH120_EMERGENCY_003",
+                       "skill_name":  "急性肺水肿LMNOP处理",
+                       "objective":  "对急性心源性肺水肿实施 LMNOP 核心处理并尽快稳定通气和循环。",
+                       "scope":  "急性呼吸困难、端坐呼吸、湿啰音或已知心衰恶化病人",
+                       "source_title":  "莫塔全科医学（第8版） 第120章 急诊服务",
+                       "source_page":  "第120章‘急性心源性肺水肿’相关段落",
+                       "source_file":  "莫塔全科医学---第120章.md",
+                       "file_path":  "急性肺水肿LMNOP处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH120_EMERGENCY_002",
+                       "skill_name":  "急性过敏反应肾上腺素处理",
+                       "objective":  "在急性过敏反应中尽早使用肾上腺素和液体复苏挽救生命。",
+                       "scope":  "蜇伤、药物、食物或其他暴露后出现荨麻疹、喘息、低血压或血管性水肿的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第120章 急诊服务",
+                       "source_page":  "第120章‘急性过敏和过敏反应’‘一线治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第120章.md",
+                       "file_path":  "急性过敏反应肾上腺素处理.md"
+                   }
+               ]
+}

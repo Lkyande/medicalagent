@@ -1,0 +1,59 @@
+{
+    "chapter_number":  56,
+    "chapter_title":  "膝痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH56_PFPS_005",
+                       "skill_name":  "髌股关节疼痛综合征初始管理",
+                       "objective":  "对最常见的膝前痛实施保守治疗并纠正加重因素。",
+                       "scope":  "以髌骨后方或膝前部过度使用性疼痛为主的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第56章 膝痛",
+                       "source_page":  "第56章‘髌股关节疼痛综合征’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第56章.md",
+                       "file_path":  "髌股关节疼痛综合征初始管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH56_ACL_004",
+                       "skill_name":  "前交叉韧带断裂Lachman筛查",
+                       "objective":  "尽早识别前交叉韧带断裂并区分其与其他急性膝损伤。",
+                       "scope":  "运动损伤后急性膝痛、快速积血或打软腿病人",
+                       "source_title":  "莫塔全科医学（第8版） 第56章 膝痛",
+                       "source_page":  "第56章‘前交叉韧带断裂’‘Lachman试验’相关段落",
+                       "source_file":  "莫塔全科医学---第56章.md",
+                       "file_path":  "前交叉韧带断裂Lachman筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH56_OTTAWA_003",
+                       "skill_name":  "渥太华膝关节X线分流",
+                       "objective":  "用渥太华膝关节规则识别需要急诊 X 线检查的损伤膝。",
+                       "scope":  "急性膝关节损伤后评估是否需要拍片的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第56章 膝痛",
+                       "source_page":  "第56章‘渥太华膝部定律’相关段落",
+                       "source_file":  "莫塔全科医学---第56章.md",
+                       "file_path":  "渥太华膝关节X线分流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH56_HX_002",
+                       "skill_name":  "膝损伤病史与肿胀时序判断",
+                       "objective":  "通过损伤机制和肿胀发生时序快速判断关节积血、渗出或滑囊炎来源。",
+                       "scope":  "急性膝部损伤或损伤后肿胀的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第56章 膝痛",
+                       "source_page":  "第56章‘病史’‘受伤后肿胀’相关段落",
+                       "source_file":  "莫塔全科医学---第56章.md",
+                       "file_path":  "膝损伤病史与肿胀时序判断.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH56_RED_001",
+                       "skill_name":  "膝痛红旗征识别",
+                       "objective":  "及时识别提示感染、关节积血、肿瘤或严重内部损伤的高危膝痛表现。",
+                       "scope":  "所有急性或持续性膝痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第56章 膝痛",
+                       "source_page":  "第56章‘膝部疼痛的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第56章.md",
+                       "file_path":  "膝痛红旗征识别.md"
+                   }
+               ]
+}

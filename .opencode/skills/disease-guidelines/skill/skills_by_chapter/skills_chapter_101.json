@@ -1,0 +1,59 @@
+{
+    "chapter_number":  101,
+    "chapter_title":  "产后服务",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH101_POSTPARTUM_001",
+                       "skill_name":  "产后两周母婴复查",
+                       "objective":  "在产后早期同时评估母亲恢复情况和新生儿基本健康状态。",
+                       "scope":  "分娩后约 2 周的产妇和新生儿",
+                       "source_title":  "莫塔全科医学（第8版） 第101章 产后服务",
+                       "source_page":  "第101章‘产后两周的看诊’相关段落",
+                       "source_file":  "莫塔全科医学---第101章.md",
+                       "file_path":  "产后两周母婴复查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH101_POSTPARTUM_002",
+                       "skill_name":  "产后六周检查清单执行",
+                       "objective":  "在产后 4 至 6 周系统完成母婴恢复、哺乳、避孕和心理健康评估。",
+                       "scope":  "产后 4 至 6 周复诊的女性及婴儿",
+                       "source_title":  "莫塔全科医学（第8版） 第101章 产后服务",
+                       "source_page":  "第101章‘产后六周的看诊’‘表101.1’相关段落",
+                       "source_file":  "莫塔全科医学---第101章.md",
+                       "file_path":  "产后六周检查清单执行.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH101_POSTPARTUM_004",
+                       "skill_name":  "产后乳房肿胀处理",
+                       "objective":  "缓解产后乳房肿胀并防止衔乳失败和继发乳腺炎。",
+                       "scope":  "产后乳房充盈、坚硬、压痛或婴儿难以衔乳的哺乳母亲",
+                       "source_title":  "莫塔全科医学（第8版） 第101章 产后服务",
+                       "source_page":  "第101章‘乳房肿胀’‘给母亲的建议’相关段落",
+                       "source_file":  "莫塔全科医学---第101章.md",
+                       "file_path":  "产后乳房肿胀处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH101_POSTPARTUM_005",
+                       "skill_name":  "产后抑郁筛查与分层",
+                       "objective":  "在产后服务中区分常见短暂情绪波动与需要干预的抑郁障碍。",
+                       "scope":  "产后数周至数月出现情绪低落、焦虑、哭泣或适应困难的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第101章 产后服务",
+                       "source_page":  "第101章‘产后抑郁障碍’‘产后忧郁’‘产后适应障碍’‘产后抑郁’相关段落",
+                       "source_file":  "莫塔全科医学---第101章.md",
+                       "file_path":  "产后抑郁筛查与分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH101_POSTPARTUM_003",
+                       "skill_name":  "乳汁分泌不足评估",
+                       "objective":  "识别真正的乳汁供应不足并优先纠正哺乳技术和供需问题。",
+                       "scope":  "产后哺乳期担心奶量不足或婴儿体重增长不佳的母婴对",
+                       "source_title":  "莫塔全科医学（第8版） 第101章 产后服务",
+                       "source_page":  "第101章‘乳汁分泌不足’‘管理’‘泌乳刺激’相关段落",
+                       "source_file":  "莫塔全科医学---第101章.md",
+                       "file_path":  "乳汁分泌不足评估.md"
+                   }
+               ]
+}

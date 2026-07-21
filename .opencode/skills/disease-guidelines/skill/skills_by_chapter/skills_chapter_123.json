@@ -1,0 +1,39 @@
+{
+    "chapter_number":  123,
+    "chapter_title":  "常见皮肤损伤及异物",
+    "part_name":  "意外事故和急救医学",
+    "part_number":  11,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH123_WOUND_002",
+                       "skill_name":  "擦伤清创与敷料处理",
+                       "objective":  "对污染性擦伤进行充分清创和保护性敷料处理,减少感染和纹身样残留。",
+                       "scope":  "自行车、摩托车、滑板等事故导致的擦伤病人",
+                       "source_title":  "莫塔全科医学（第8版） 第123章 常见皮肤损伤及异物",
+                       "source_page":  "第123章‘擦伤’‘管理原则’相关段落",
+                       "source_file":  "莫塔全科医学---第123章.md",
+                       "file_path":  "擦伤清创与敷料处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH123_WOUND_001",
+                       "skill_name":  "挫伤血肿RICE处理",
+                       "objective":  "对挫伤和血肿进行早期保守处理,减轻疼痛和组织损伤范围。",
+                       "scope":  "四肢、躯干或局部软组织挫伤、青紫和血肿病人",
+                       "source_title":  "莫塔全科医学（第8版） 第123章 常见皮肤损伤及异物",
+                       "source_page":  "第123章‘挫伤和血肿’‘管理原则’相关段落",
+                       "source_file":  "莫塔全科医学---第123章.md",
+                       "file_path":  "挫伤血肿RICE处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH123_WOUND_003",
+                       "skill_name":  "撕裂伤修复前评估",
+                       "objective":  "在缝合前识别污染、异物及重要结构损伤,避免漏诊和修复失败。",
+                       "scope":  "需考虑缝合或进一步外科处理的皮肤撕裂伤病人",
+                       "source_title":  "莫塔全科医学（第8版） 第123章 常见皮肤损伤及异物",
+                       "source_page":  "第123章‘撕裂伤’‘修复原则’相关段落",
+                       "source_file":  "莫塔全科医学---第123章.md",
+                       "file_path":  "撕裂伤修复前评估.md"
+                   }
+               ]
+}

@@ -1,0 +1,49 @@
+{
+    "chapter_number":  99,
+    "chapter_title":  "外阴疾病",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH99_VULVA_001",
+                       "skill_name":  "外阴刺激初始评估",
+                       "objective":  "系统评估外阴瘙痒、灼热和刺激,区分皮肤病、感染和恶性病变信号。",
+                       "scope":  "主诉外阴瘙痒、灼痛、糜烂、白斑或性交不适的女性和女童",
+                       "source_title":  "莫塔全科医学（第8版） 第99章 外阴疾病",
+                       "source_page":  "第99章‘表99.1 外阴不适/刺激:诊断策略模型’‘皮炎管理原则’相关段落",
+                       "source_file":  "莫塔全科医学---第99章.md",
+                       "file_path":  "外阴刺激初始评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH99_VULVA_002",
+                       "skill_name":  "外阴皮炎刺激物回避",
+                       "objective":  "通过识别和去除刺激因素控制外阴皮炎症状并减少复发。",
+                       "scope":  "过敏性皮炎、刺激性接触性皮炎或疑似外阴皮炎女性",
+                       "source_title":  "莫塔全科医学（第8版） 第99章 外阴疾病",
+                       "source_page":  "第99章‘皮炎’‘管理原则’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第99章.md",
+                       "file_path":  "外阴皮炎刺激物回避.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH99_VULVA_003",
+                       "skill_name":  "硬化性苔藓识别与随访",
+                       "objective":  "尽早识别硬化性苔藓并通过长期随访降低瘢痕和鳞癌风险。",
+                       "scope":  "青春期前女童、围绝经期或绝经后女性出现外阴瘙痒、白斑和性交痛时",
+                       "source_title":  "莫塔全科医学（第8版） 第99章 外阴疾病",
+                       "source_page":  "第99章‘硬化性苔藓’‘临床特征’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第99章.md",
+                       "file_path":  "硬化性苔藓识别与随访.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH99_VULVA_004",
+                       "skill_name":  "诱发性阴道前庭痛评估",
+                       "objective":  "识别诱发性阴道前庭痛并与感染、皮肤病和结构性病变区分。",
+                       "scope":  "浅表性交痛、轻触即痛或插入性疼痛的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第99章 外阴疾病",
+                       "source_page":  "第99章‘诱发性阴道前庭痛’‘诊断’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第99章.md",
+                       "file_path":  "诱发性阴道前庭痛评估.md"
+                   }
+               ]
+}

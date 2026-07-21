@@ -1,0 +1,1034 @@
+[
+    {
+        "chapter_number":  61,
+        "chapter_title":  "口舌痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_61.json"
+    },
+    {
+        "chapter_number":  60,
+        "chapter_title":  "睡眠障碍",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_60.json"
+    },
+    {
+        "chapter_number":  63,
+        "chapter_title":  "劳累/疲劳",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_63.json"
+    },
+    {
+        "chapter_number":  62,
+        "chapter_title":  "咽喉痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  6,
+        "file_name":  "skills_chapter_62.json"
+    },
+    {
+        "chapter_number":  58,
+        "chapter_title":  "行走困难和腿部肿胀",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_58.json"
+    },
+    {
+        "chapter_number":  57,
+        "chapter_title":  "足踝痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_57.json"
+    },
+    {
+        "chapter_number":  5,
+        "chapter_title":  "健康促进与病人教育",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  12,
+        "file_name":  "skills_chapter_5.json"
+    },
+    {
+        "chapter_number":  59,
+        "chapter_title":  "心悸",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_59.json"
+    },
+    {
+        "chapter_number":  69,
+        "chapter_title":  "紊乱的病人",
+        "part_number":  4,
+        "part_name":  "心理健康",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_69.json"
+    },
+    {
+        "chapter_number":  68,
+        "chapter_title":  "抑郁和其他心境障碍",
+        "part_number":  4,
+        "part_name":  "心理健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_68.json"
+    },
+    {
+        "chapter_number":  70,
+        "chapter_title":  "焦虑障碍",
+        "part_number":  4,
+        "part_name":  "心理健康",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_70.json"
+    },
+    {
+        "chapter_number":  6,
+        "chapter_title":  "全科医学中的预防",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  17,
+        "file_name":  "skills_chapter_6.json"
+    },
+    {
+        "chapter_number":  65,
+        "chapter_title":  "泌尿系统疾病",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_65.json"
+    },
+    {
+        "chapter_number":  64,
+        "chapter_title":  "失去意识的病人",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_64.json"
+    },
+    {
+        "chapter_number":  67,
+        "chapter_title":  "体重改变",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_67.json"
+    },
+    {
+        "chapter_number":  66,
+        "chapter_title":  "视力受损",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_66.json"
+    },
+    {
+        "chapter_number":  47,
+        "chapter_title":  "黄疸",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_47.json"
+    },
+    {
+        "chapter_number":  46,
+        "chapter_title":  "声音嘶哑",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_46.json"
+    },
+    {
+        "chapter_number":  49,
+        "chapter_title":  "恶心和呕吐",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_49.json"
+    },
+    {
+        "chapter_number":  48,
+        "chapter_title":  "鼻疾病",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_48.json"
+    },
+    {
+        "chapter_number":  43,
+        "chapter_title":  "昏厥和抽搐",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_43.json"
+    },
+    {
+        "chapter_number":  42,
+        "chapter_title":  "发热和畏寒",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  6,
+        "file_name":  "skills_chapter_42.json"
+    },
+    {
+        "chapter_number":  45,
+        "chapter_title":  "头痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_45.json"
+    },
+    {
+        "chapter_number":  44,
+        "chapter_title":  "呕血和黑便",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_44.json"
+    },
+    {
+        "chapter_number":  54,
+        "chapter_title":  "髋部、臀部和腹股沟区疼痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_54.json"
+    },
+    {
+        "chapter_number":  53,
+        "chapter_title":  "手臂和手部的疼痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_53.json"
+    },
+    {
+        "chapter_number":  56,
+        "chapter_title":  "膝痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_56.json"
+    },
+    {
+        "chapter_number":  55,
+        "chapter_title":  "腿部疼痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_55.json"
+    },
+    {
+        "chapter_number":  50,
+        "chapter_title":  "颈部肿块",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_50.json"
+    },
+    {
+        "chapter_number":  4,
+        "chapter_title":  "咨询技能",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  17,
+        "file_name":  "skills_chapter_4.json"
+    },
+    {
+        "chapter_number":  52,
+        "chapter_title":  "肩部疼痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_52.json"
+    },
+    {
+        "chapter_number":  51,
+        "chapter_title":  "颈部疼痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_51.json"
+    },
+    {
+        "chapter_number":  90,
+        "chapter_title":  "青少年健康",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_90.json"
+    },
+    {
+        "chapter_number":  8,
+        "chapter_title":  "临床的察看技能",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_8.json"
+    },
+    {
+        "chapter_number":  92,
+        "chapter_title":  "家庭计划(避孕)",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_92.json"
+    },
+    {
+        "chapter_number":  91,
+        "chapter_title":  "宫颈癌筛查",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_91.json"
+    },
+    {
+        "chapter_number":  87,
+        "chapter_title":  "儿童行为发育问题和障碍",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_87.json"
+    },
+    {
+        "chapter_number":  86,
+        "chapter_title":  "常见的儿童期感染性疾病",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_86.json"
+    },
+    {
+        "chapter_number":  89,
+        "chapter_title":  "儿童急诊",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_89.json"
+    },
+    {
+        "chapter_number":  88,
+        "chapter_title":  "儿童虐待",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_88.json"
+    },
+    {
+        "chapter_number":  98,
+        "chapter_title":  "阴道分泌物",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_98.json"
+    },
+    {
+        "chapter_number":  97,
+        "chapter_title":  "绝经",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_97.json"
+    },
+    {
+        "chapter_number":  9,
+        "chapter_title":  "安全的诊断策略",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_9.json"
+    },
+    {
+        "chapter_number":  99,
+        "chapter_title":  "外阴疾病",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_99.json"
+    },
+    {
+        "chapter_number":  94,
+        "chapter_title":  "异常子宫出血",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_94.json"
+    },
+    {
+        "chapter_number":  93,
+        "chapter_title":  "乳房疾病",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_93.json"
+    },
+    {
+        "chapter_number":  96,
+        "chapter_title":  "经前综合征",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_96.json"
+    },
+    {
+        "chapter_number":  95,
+        "chapter_title":  "女性的下腹和盆腔痛",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_95.json"
+    },
+    {
+        "chapter_number":  76,
+        "chapter_title":  "慢性心力衰竭",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_76.json"
+    },
+    {
+        "chapter_number":  75,
+        "chapter_title":  "心血管疾病",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  2,
+        "file_name":  "skills_chapter_75.json"
+    },
+    {
+        "chapter_number":  78,
+        "chapter_title":  "血脂异常",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_78.json"
+    },
+    {
+        "chapter_number":  77,
+        "chapter_title":  "高血压",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  6,
+        "file_name":  "skills_chapter_77.json"
+    },
+    {
+        "chapter_number":  72,
+        "chapter_title":  "过敏性疾病(包括花粉症)",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_72.json"
+    },
+    {
+        "chapter_number":  71,
+        "chapter_title":  "难应对的、苛刻的和气愤的病人",
+        "part_number":  4,
+        "part_name":  "心理健康",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_71.json"
+    },
+    {
+        "chapter_number":  74,
+        "chapter_title":  "慢性阻塞性肺疾病",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_74.json"
+    },
+    {
+        "chapter_number":  73,
+        "chapter_title":  "哮喘",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_73.json"
+    },
+    {
+        "chapter_number":  83,
+        "chapter_title":  "给儿童看病的方法",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  2,
+        "file_name":  "skills_chapter_83.json"
+    },
+    {
+        "chapter_number":  82,
+        "chapter_title":  "慢性疼痛",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_82.json"
+    },
+    {
+        "chapter_number":  85,
+        "chapter_title":  "儿童的外科问题",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_85.json"
+    },
+    {
+        "chapter_number":  84,
+        "chapter_title":  "儿童的特定问题",
+        "part_number":  6,
+        "part_name":  "儿童和青少年健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_84.json"
+    },
+    {
+        "chapter_number":  7,
+        "chapter_title":  "研究与循证医学",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_7.json"
+    },
+    {
+        "chapter_number":  79,
+        "chapter_title":  "慢性肾脏病",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_79.json"
+    },
+    {
+        "chapter_number":  81,
+        "chapter_title":  "骨质疏松",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_81.json"
+    },
+    {
+        "chapter_number":  80,
+        "chapter_title":  "肥胖",
+        "part_number":  5,
+        "part_name":  "慢性疾病管理",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_80.json"
+    },
+    {
+        "chapter_number":  41,
+        "chapter_title":  "面部疼痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  7,
+        "file_name":  "skills_chapter_41.json"
+    },
+    {
+        "chapter_number":  11,
+        "chapter_title":  "糖尿病",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  10,
+        "file_name":  "skills_chapter_11.json"
+    },
+    {
+        "chapter_number":  119,
+        "chapter_title":  "指/趾甲病",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_119.json"
+    },
+    {
+        "chapter_number":  121,
+        "chapter_title":  "卒中和短暂性脑缺血发作",
+        "part_number":  11,
+        "part_name":  "意外事故和急救医学",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_121.json"
+    },
+    {
+        "chapter_number":  120,
+        "chapter_title":  "急诊服务",
+        "part_number":  11,
+        "part_name":  "意外事故和急救医学",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_120.json"
+    },
+    {
+        "chapter_number":  116,
+        "chapter_title":  "常见肿块",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_116.json"
+    },
+    {
+        "chapter_number":  115,
+        "chapter_title":  "皮肤溃疡",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_115.json"
+    },
+    {
+        "chapter_number":  118,
+        "chapter_title":  "毛发疾病",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_118.json"
+    },
+    {
+        "chapter_number":  117,
+        "chapter_title":  "色素沉着的皮肤病变",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_117.json"
+    },
+    {
+        "chapter_number":  127,
+        "chapter_title":  "原住民和托雷斯海峡岛民的健康",
+        "part_number":  12,
+        "part_name":  "特定人群的健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_127.json"
+    },
+    {
+        "chapter_number":  126,
+        "chapter_title":  "临终关怀与宁养疗护",
+        "part_number":  12,
+        "part_name":  "特定人群的健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_126.json"
+    },
+    {
+        "chapter_number":  129,
+        "chapter_title":  "旅行者健康和热带医学",
+        "part_number":  12,
+        "part_name":  "特定人群的健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_129.json"
+    },
+    {
+        "chapter_number":  128,
+        "chapter_title":  "难民的健康",
+        "part_number":  12,
+        "part_name":  "特定人群的健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_128.json"
+    },
+    {
+        "chapter_number":  123,
+        "chapter_title":  "常见皮肤损伤及异物",
+        "part_number":  11,
+        "part_name":  "意外事故和急救医学",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_123.json"
+    },
+    {
+        "chapter_number":  122,
+        "chapter_title":  "血栓形成和血栓栓塞",
+        "part_number":  11,
+        "part_name":  "意外事故和急救医学",
+        "skill_count":  2,
+        "file_name":  "skills_chapter_122.json"
+    },
+    {
+        "chapter_number":  125,
+        "chapter_title":  "老年病人",
+        "part_number":  12,
+        "part_name":  "特定人群的健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_125.json"
+    },
+    {
+        "chapter_number":  124,
+        "chapter_title":  "常见的骨折和脱位",
+        "part_number":  11,
+        "part_name":  "意外事故和急救医学",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_124.json"
+    },
+    {
+        "chapter_number":  105,
+        "chapter_title":  "阴茎疾病",
+        "part_number":  8,
+        "part_name":  "男性健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_105.json"
+    },
+    {
+        "chapter_number":  104,
+        "chapter_title":  "腹股沟阴囊肿块",
+        "part_number":  8,
+        "part_name":  "男性健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_104.json"
+    },
+    {
+        "chapter_number":  107,
+        "chapter_title":  "生育力低下的夫妇",
+        "part_number":  9,
+        "part_name":  "性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_107.json"
+    },
+    {
+        "chapter_number":  106,
+        "chapter_title":  "前列腺疾病",
+        "part_number":  8,
+        "part_name":  "男性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_106.json"
+    },
+    {
+        "chapter_number":  101,
+        "chapter_title":  "产后服务",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_101.json"
+    },
+    {
+        "chapter_number":  100,
+        "chapter_title":  "基本的产前服务",
+        "part_number":  7,
+        "part_name":  "女性健康",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_100.json"
+    },
+    {
+        "chapter_number":  103,
+        "chapter_title":  "阴囊痛",
+        "part_number":  8,
+        "part_name":  "男性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_103.json"
+    },
+    {
+        "chapter_number":  102,
+        "chapter_title":  "男性健康概述",
+        "part_number":  8,
+        "part_name":  "男性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_102.json"
+    },
+    {
+        "chapter_number":  112,
+        "chapter_title":  "瘙痒",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_112.json"
+    },
+    {
+        "chapter_number":  111,
+        "chapter_title":  "皮肤问题的诊断和管理方法",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_111.json"
+    },
+    {
+        "chapter_number":  114,
+        "chapter_title":  "急性皮疹暴发",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_114.json"
+    },
+    {
+        "chapter_number":  113,
+        "chapter_title":  "常见的皮肤疾病",
+        "part_number":  10,
+        "part_name":  "皮肤问题",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_113.json"
+    },
+    {
+        "chapter_number":  109,
+        "chapter_title":  "性传播感染",
+        "part_number":  9,
+        "part_name":  "性健康",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_109.json"
+    },
+    {
+        "chapter_number":  108,
+        "chapter_title":  "性健康",
+        "part_number":  9,
+        "part_name":  "性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_108.json"
+    },
+    {
+        "chapter_number":  110,
+        "chapter_title":  "亲密伴侣暴力和性骚扰",
+        "part_number":  9,
+        "part_name":  "性健康",
+        "skill_count":  3,
+        "file_name":  "skills_chapter_110.json"
+    },
+    {
+        "chapter_number":  10,
+        "chapter_title":  "抑郁",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  10,
+        "file_name":  "skills_chapter_10.json"
+    },
+    {
+        "chapter_number":  31,
+        "chapter_title":  "便秘",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_31.json"
+    },
+    {
+        "chapter_number":  30,
+        "chapter_title":  "胸痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  11,
+        "file_name":  "skills_chapter_30.json"
+    },
+    {
+        "chapter_number":  33,
+        "chapter_title":  "耳聋与听力损失",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  7,
+        "file_name":  "skills_chapter_33.json"
+    },
+    {
+        "chapter_number":  32,
+        "chapter_title":  "咳嗽",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  9,
+        "file_name":  "skills_chapter_32.json"
+    },
+    {
+        "chapter_number":  28,
+        "chapter_title":  "腰背痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  7,
+        "file_name":  "skills_chapter_28.json"
+    },
+    {
+        "chapter_number":  27,
+        "chapter_title":  "胸背痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_27.json"
+    },
+    {
+        "chapter_number":  2,
+        "chapter_title":  "看病技能",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  10,
+        "file_name":  "skills_chapter_2.json"
+    },
+    {
+        "chapter_number":  29,
+        "chapter_title":  "瘀血与出血",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_29.json"
+    },
+    {
+        "chapter_number":  39,
+        "chapter_title":  "耳痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_39.json"
+    },
+    {
+        "chapter_number":  38,
+        "chapter_title":  "呼吸困难",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  6,
+        "file_name":  "skills_chapter_38.json"
+    },
+    {
+        "chapter_number":  40,
+        "chapter_title":  "红眼和眼痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  6,
+        "file_name":  "skills_chapter_40.json"
+    },
+    {
+        "chapter_number":  3,
+        "chapter_title":  "沟通技能",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  17,
+        "file_name":  "skills_chapter_3.json"
+    },
+    {
+        "chapter_number":  35,
+        "chapter_title":  "头晕/眩晕",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  5,
+        "file_name":  "skills_chapter_35.json"
+    },
+    {
+        "chapter_number":  34,
+        "chapter_title":  "腹泻",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  7,
+        "file_name":  "skills_chapter_34.json"
+    },
+    {
+        "chapter_number":  37,
+        "chapter_title":  "吞咽困难",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  6,
+        "file_name":  "skills_chapter_37.json"
+    },
+    {
+        "chapter_number":  36,
+        "chapter_title":  "消化不良",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  7,
+        "file_name":  "skills_chapter_36.json"
+    },
+    {
+        "chapter_number":  17,
+        "chapter_title":  "恶性疾病",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  9,
+        "file_name":  "skills_chapter_17.json"
+    },
+    {
+        "chapter_number":  16,
+        "chapter_title":  "尿路感染",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  10,
+        "file_name":  "skills_chapter_16.json"
+    },
+    {
+        "chapter_number":  19,
+        "chapter_title":  "令人困惑的细菌感染",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  21,
+        "file_name":  "skills_chapter_19.json"
+    },
+    {
+        "chapter_number":  18,
+        "chapter_title":  "令人困惑的病毒和原虫感染",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  14,
+        "file_name":  "skills_chapter_18.json"
+    },
+    {
+        "chapter_number":  13,
+        "chapter_title":  "贫血",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  9,
+        "file_name":  "skills_chapter_13.json"
+    },
+    {
+        "chapter_number":  12,
+        "chapter_title":  "药物和酒精问题",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_12.json"
+    },
+    {
+        "chapter_number":  15,
+        "chapter_title":  "脊柱功能障碍",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  4,
+        "file_name":  "skills_chapter_15.json"
+    },
+    {
+        "chapter_number":  14,
+        "chapter_title":  "内分泌和代谢障碍",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  15,
+        "file_name":  "skills_chapter_14.json"
+    },
+    {
+        "chapter_number":  24,
+        "chapter_title":  "腹痛",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  10,
+        "file_name":  "skills_chapter_24.json"
+    },
+    {
+        "chapter_number":  23,
+        "chapter_title":  "遗传性疾病",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  8,
+        "file_name":  "skills_chapter_23.json"
+    },
+    {
+        "chapter_number":  26,
+        "chapter_title":  "肛肠疾病",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  6,
+        "file_name":  "skills_chapter_26.json"
+    },
+    {
+        "chapter_number":  25,
+        "chapter_title":  "关节炎",
+        "part_number":  3,
+        "part_name":  "全科医学中的主要症状和问题",
+        "skill_count":  9,
+        "file_name":  "skills_chapter_25.json"
+    },
+    {
+        "chapter_number":  20,
+        "chapter_title":  "中枢神经系统感染",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  10,
+        "file_name":  "skills_chapter_20.json"
+    },
+    {
+        "chapter_number":  1,
+        "chapter_title":  "全科医学的性质、范围和内容",
+        "part_number":  1,
+        "part_name":  "全科医学基础",
+        "skill_count":  7,
+        "file_name":  "skills_chapter_1.json"
+    },
+    {
+        "chapter_number":  22,
+        "chapter_title":  "神经系统的难题",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  18,
+        "file_name":  "skills_chapter_22.json"
+    },
+    {
+        "chapter_number":  21,
+        "chapter_title":  "结缔组织病和全身性血管炎",
+        "part_number":  2,
+        "part_name":  "全科医学的诊断方法",
+        "skill_count":  16,
+        "file_name":  "skills_chapter_21.json"
+    }
+]

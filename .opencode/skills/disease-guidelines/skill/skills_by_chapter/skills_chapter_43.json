@@ -1,0 +1,59 @@
+{
+    "chapter_number":  43,
+    "chapter_title":  "昏厥和抽搐",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH43_HX_002",
+                       "skill_name":  "昏厥发作三阶段病史采集",
+                       "objective":  "通过发作前、中、后的结构化病史提高昏厥与癫痫样事件的鉴别效率。",
+                       "scope":  "病史不清或需要鉴别昏厥、癫痫和心因性事件的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第43章 昏厥和抽搐",
+                       "source_page":  "第43章‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第43章.md",
+                       "file_path":  "昏厥发作三阶段病史采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH43_EXAM_004",
+                       "skill_name":  "昏厥基础体位检查",
+                       "objective":  "在基层通过核心查体快速筛查直立性低血压、心血管和颈椎相关病因。",
+                       "scope":  "昏厥、头重脚轻、断片或发作后恢复期病人",
+                       "source_title":  "莫塔全科医学（第8版） 第43章 昏厥和抽搐",
+                       "source_page":  "第43章‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第43章.md",
+                       "file_path":  "昏厥基础体位检查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH43_TRIGGER_003",
+                       "skill_name":  "昏厥诱因定向分流",
+                       "objective":  "根据触发场景快速缩小昏厥或抽搐样事件的可能病因范围。",
+                       "scope":  "可提供较清楚诱发经过的发作性意识障碍病人",
+                       "source_title":  "莫塔全科医学（第8版） 第43章 昏厥和抽搐",
+                       "source_page":  "第43章‘诱发因素’相关段落",
+                       "source_file":  "莫塔全科医学---第43章.md",
+                       "file_path":  "昏厥诱因定向分流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH43_RED_001",
+                       "skill_name":  "昏厥与抽搐红旗征识别",
+                       "objective":  "快速识别提示严重心血管、神经系统或感染性病因的昏厥与抽搐表现。",
+                       "scope":  "所有以昏厥、抽搐、断片或突然病情恶化感就诊的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第43章 昏厥和抽搐",
+                       "source_page":  "第43章‘昏厥和抽搐的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第43章.md",
+                       "file_path":  "昏厥与抽搐红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH43_FEBRILE_005",
+                       "skill_name":  "热性惊厥急救分流",
+                       "objective":  "对儿童热性惊厥进行时长分层和初始处理,及时识别需要药物终止的发作。",
+                       "scope":  "3 个月至 6 岁伴发热的强直阵挛性发作儿童",
+                       "source_title":  "莫塔全科医学（第8版） 第43章 昏厥和抽搐",
+                       "source_page":  "第43章‘热性惊厥’相关段落",
+                       "source_file":  "莫塔全科医学---第43章.md",
+                       "file_path":  "热性惊厥急救分流.md"
+                   }
+               ]
+}

@@ -1,0 +1,49 @@
+{
+    "chapter_number":  85,
+    "chapter_title":  "儿童的外科问题",
+    "part_name":  "儿童和青少年健康",
+    "part_number":  6,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH85_SURG_003",
+                       "skill_name":  "儿童斜视红旗转诊",
+                       "objective":  "区分真性斜视与假性斜视并及时转诊需早治病例。",
+                       "scope":  "婴幼儿和儿童出现眼位异常、家长怀疑‘斗鸡眼’或眼偏斜时",
+                       "source_title":  "莫塔全科医学（第8版） 第85章 儿童的外科问题",
+                       "source_page":  "第85章‘斜视’相关段落",
+                       "source_file":  "莫塔全科医学---第85章.md",
+                       "file_path":  "儿童斜视红旗转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH85_SURG_002",
+                       "skill_name":  "舌系带过短评估与转诊",
+                       "objective":  "识别影响哺乳或发音的舌系带过短并把握最佳干预时机。",
+                       "scope":  "婴儿母乳喂养困难或儿童伸舌受限、疑似发音受影响时",
+                       "source_title":  "莫塔全科医学（第8版） 第85章 儿童的外科问题",
+                       "source_page":  "第85章‘舌系带过短’相关段落",
+                       "source_file":  "莫塔全科医学---第85章.md",
+                       "file_path":  "舌系带过短评估与转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH85_SURG_001",
+                       "skill_name":  "斜头畸形体位干预",
+                       "objective":  "早期识别姿势性斜头畸形并通过体位调整减少持续变形。",
+                       "scope":  "婴儿头颅不对称、头围正常且怀疑姿势相关扁头时",
+                       "source_title":  "莫塔全科医学（第8版） 第85章 儿童的外科问题",
+                       "source_page":  "第85章‘斜头畸形(扁头综合征)’相关段落",
+                       "source_file":  "莫塔全科医学---第85章.md",
+                       "file_path":  "斜头畸形体位干预.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH85_SURG_004",
+                       "skill_name":  "胸骨乳突肿块处理",
+                       "objective":  "识别胸骨乳突肿块/纤维化并通过早期物理干预减少持续斜颈。",
+                       "scope":  "出生后 20 至 30 日出现颈部无痛肿块或头位偏斜的婴儿",
+                       "source_title":  "莫塔全科医学（第8版） 第85章 儿童的外科问题",
+                       "source_page":  "第85章‘胸骨乳突的肿瘤/纤维化’相关段落",
+                       "source_file":  "莫塔全科医学---第85章.md",
+                       "file_path":  "胸骨乳突肿块处理.md"
+                   }
+               ]
+}

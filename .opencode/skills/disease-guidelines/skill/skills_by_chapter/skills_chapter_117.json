@@ -1,0 +1,39 @@
+{
+    "chapter_number":  117,
+    "chapter_title":  "色素沉着的皮肤病变",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH117_PIGMENT_003",
+                       "skill_name":  "发育不良痣随访",
+                       "objective":  "对发育不良痣及综合征病人建立规律监测和早期切除路径。",
+                       "scope":  "多发不规则痣、发育不良痣综合征或有黑色素瘤家族史的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第117章 色素沉着的皮肤病变",
+                       "source_page":  "第117章‘发育不良黑色素细胞痣’‘发育不良痣综合征’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第117章.md",
+                       "file_path":  "发育不良痣随访.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH117_PIGMENT_002",
+                       "skill_name":  "良性色素病变释疑",
+                       "objective":  "识别常见良性色素病变并给予恰当释疑,减少过度治疗。",
+                       "scope":  "雀斑、雀斑样痣、普通痣、黑脚跟或黑癣等常见色素病变病人",
+                       "source_title":  "莫塔全科医学（第8版） 第117章 色素沉着的皮肤病变",
+                       "source_page":  "第117章‘黑脚跟’‘黑癣’‘雀斑’‘雀斑样痣’‘普通获得性痣’相关段落",
+                       "source_file":  "莫塔全科医学---第117章.md",
+                       "file_path":  "良性色素病变释疑.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH117_PIGMENT_001",
+                       "skill_name":  "色素病变ABCDEF评估",
+                       "objective":  "在门诊中快速评估色素病变恶性风险并决定观察或切除转诊。",
+                       "scope":  "新发、变化或令病人担忧的色素沉着皮肤病变",
+                       "source_title":  "莫塔全科医学（第8版） 第117章 色素沉着的皮肤病变",
+                       "source_page":  "第117章‘关键事实和要点’‘黑色素瘤’相关段落",
+                       "source_file":  "莫塔全科医学---第117章.md",
+                       "file_path":  "色素病变ABCDEF评估.md"
+                   }
+               ]
+}

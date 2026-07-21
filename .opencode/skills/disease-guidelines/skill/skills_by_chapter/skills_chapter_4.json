@@ -1,0 +1,179 @@
+{
+    "chapter_number":  4,
+    "chapter_title":  "咨询技能",
+    "part_name":  "全科医学基础",
+    "part_number":  1,
+    "skill_count":  17,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH4_PLISSIT_001",
+                       "skill_name":  "PLISSIT咨询应用",
+                       "objective":  "在全科咨询中分层给予容许、信息、具体建议和强化治疗,适度匹配病人需求与医生能力。",
+                       "scope":  "以心理感受、敏感问题或有限干预为主的咨询场景",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘PLISSIT模式’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "PLISSIT咨询应用.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_FAMILYTRAP_001",
+                       "skill_name":  "避免家庭咨询陷阱",
+                       "objective":  "在家庭咨询中避免医生陷入救援者角色、偏袒或隐私失守,保持家庭自主和合作治疗。",
+                       "scope":  "家庭咨询、婚姻咨询和涉及多个家庭成员的全科干预",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘全科医生可能落入的陷阱’‘避免陷入困境的可能解决方案’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "避免家庭咨询陷阱.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_NONDIRECTIVE_001",
+                       "skill_name":  "非指令性咨询实施",
+                       "objective":  "以协调员角色帮助病人理解自身处境并形成解决路径,而不是由医生直接替病人作决定。",
+                       "scope":  "适合全科短程心理咨询、情感和社会问题支持性干预的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘以病人为中心的咨询价值’‘咨询和心理治疗的基础’‘咨询策略’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "非指令性咨询实施.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_COUPLE_001",
+                       "skill_name":  "夫妻基本咨询与家庭作业",
+                       "objective":  "通过基础婚姻咨询要点和结构化家庭作业,促进伴侣之间的理解、责任感和沟通改进。",
+                       "scope":  "婚姻不和谐、沟通困难或关系紧张的伴侣咨询",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘对夫妻的基本咨询’‘列出清单’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "夫妻基本咨询与家庭作业.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_SUDDENDEATH_001",
+                       "skill_name":  "告知意外死亡",
+                       "objective":  "在意外死亡场景中以最小额外伤害的方式向亲属传递事实,并提供初步支持与后续联系。",
+                       "scope":  "意外死亡、重大创伤死亡或突发死亡后的亲属沟通",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘意外死亡’‘给医生的指南’‘告知意外死亡坏消息的建议方法’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "告知意外死亡.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_BADNEWSREACT_001",
+                       "skill_name":  "坏消息后的情绪应对支持",
+                       "objective":  "在坏消息告知后即时容纳和支持病人及家属的情绪反应,降低失控和孤立感。",
+                       "scope":  "已完成坏消息告知后的即时支持阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘应对病人的反应’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "坏消息后的情绪应对支持.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_PAIN_001",
+                       "skill_name":  "慢性疼痛心理社会管理",
+                       "objective":  "在慢性疼痛管理中纳入心理社会评估和行为重建,避免仅围绕疼痛本身反复处置。",
+                       "scope":  "长期疼痛、反复治疗失败或伴复杂社会心理问题的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘慢性疼痛’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "慢性疼痛心理社会管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_CBT_001",
+                       "skill_name":  "认知行为疗法基础实施",
+                       "objective":  "用基础 CBT 流程帮助病人识别并改变维持症状的认知和行为模式。",
+                       "scope":  "抑郁、焦虑、失眠、部分慢性症状和行为问题的基层非药物干预",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘认知行为疗法’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "认知行为疗法基础实施.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_BEREAVEMENT_001",
+                       "skill_name":  "丧亲之痛支持与筛查",
+                       "objective":  "识别正常与病态丧亲反应,提供早期支持并在需要时安排持续咨询或转诊。",
+                       "scope":  "亲人去世或重大丧失后的病人及其家属",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘丧亲之痛’‘全科医生作为咨询者’‘长期咨询’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "丧亲之痛支持与筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_CRISIS_001",
+                       "skill_name":  "危机干预短程管理",
+                       "objective":  "在危机早期快速、建设性地干预,帮助病人恢复心理平衡和基本控制感。",
+                       "scope":  "意外死亡、婚姻破裂、突发坏消息等急性危机中的个体或家庭",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘危机管理’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "危机干预短程管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_CRISISRULES_001",
+                       "skill_name":  "危机个体十条指导",
+                       "objective":  "为危机中的个体提供可带走的日常行为指导,帮助其在短期内恢复秩序感和行动能力。",
+                       "scope":  "处于急性压力、危机或重大生活事件后的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘帮助处于困扰中的人的十条规则’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "危机个体十条指导.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_GAMBLING_001",
+                       "skill_name":  "问题赌博识别与初步干预",
+                       "objective":  "在基层识别问题赌博相关风险,开展简短干预并在严重时及时转介专业支持。",
+                       "scope":  "社会史采集、情绪问题、家庭冲突、债务或冲动行为相关病人",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘问题赌博’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "问题赌博识别与初步干预.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_BADNEWS_001",
+                       "skill_name":  "向病人告知坏消息",
+                       "objective":  "以诚实、清晰和支持性的方式向病人告知坏消息,减少额外心理创伤并建立持续支持计划。",
+                       "scope":  "诊断重大疾病、病情恶化、死亡相关信息或其他重大坏消息告知场景",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘告诉坏消息’‘向病人告知坏消息’‘告知坏消息的7个步骤’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "向病人告知坏消息.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_DEPRESSION_001",
+                       "skill_name":  "抑郁支持性咨询",
+                       "objective":  "通过同理心、支持和合理解释帮助抑郁病人理解自身状态并提高治疗依从性。",
+                       "scope":  "全科门诊抑郁或低落情绪病人的初步管理与持续支持",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘抑郁的病人’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "抑郁支持性咨询.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_MINDFULNESS_001",
+                       "skill_name":  "正念练习指导",
+                       "objective":  "通过基础正念训练提升病人对当下的觉察和对压力的应对能力。",
+                       "scope":  "压力、焦虑、情绪波动或注意力容易被负面内容占据的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘正念’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "正念练习指导.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_SELECTION_001",
+                       "skill_name":  "咨询适应证与转诊筛选",
+                       "objective":  "筛选适合基层咨询的病人,识别相对禁忌证并及时转向更合适的专业支持。",
+                       "scope":  "计划开展全科咨询前的病人评估阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘注意事项’‘不太可能从咨询中获益的病人’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "咨询适应证与转诊筛选.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH4_COUNSELFLOW_001",
+                       "skill_name":  "咨询约定与问题解决流程",
+                       "objective":  "以结构化咨询流程帮助病人界定问题、设定目标、完成行动计划并评估进展。",
+                       "scope":  "全科门诊中需要开展短程心理社会咨询的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第4章 咨询技能",
+                       "source_page":  "第4章‘解决问题的方法’相关段落",
+                       "source_file":  "莫塔全科医学---第4章.md",
+                       "file_path":  "咨询约定与问题解决流程.md"
+                   }
+               ]
+}

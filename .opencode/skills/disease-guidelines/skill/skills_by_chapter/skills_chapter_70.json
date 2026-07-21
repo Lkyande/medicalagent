@@ -1,0 +1,59 @@
+{
+    "chapter_number":  70,
+    "chapter_title":  "焦虑障碍",
+    "part_name":  "心理健康",
+    "part_number":  4,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH70_ANXIETY_001",
+                       "skill_name":  "广泛性焦虑障碍识别",
+                       "objective":  "识别持续性、弥散性担忧为主的广泛性焦虑障碍,并与正常压力反应区分。",
+                       "scope":  "长期紧张、担忧过多、伴多系统躯体症状的青少年和成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第70章 焦虑障碍",
+                       "source_page":  "第70章‘广泛性焦虑障碍’‘广泛性焦虑障碍的诊断标准’‘临床特征’相关段落",
+                       "source_file":  "莫塔全科医学---第70章.md",
+                       "file_path":  "广泛性焦虑障碍识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH70_ANXIETY_004",
+                       "skill_name":  "过度通气综合征处理",
+                       "objective":  "识别过度通气综合征并通过呼吸重建缓解症状。",
+                       "scope":  "焦虑状态下出现呼吸急促、胸闷、头晕、四肢麻木或手足搐搦的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第70章 焦虑障碍",
+                       "source_page":  "第70章‘过度通气综合征’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第70章.md",
+                       "file_path":  "过度通气综合征处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH70_ANXIETY_005",
+                       "skill_name":  "焦虑非药物一线干预",
+                       "objective":  "落实焦虑障碍的一线非药物管理,减少对短期药物的过度依赖。",
+                       "scope":  "已排除主要器质性病因的轻中度焦虑障碍病人",
+                       "source_title":  "莫塔全科医学（第8版） 第70章 焦虑障碍",
+                       "source_page":  "第70章‘管理原则’‘药物治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第70章.md",
+                       "file_path":  "焦虑非药物一线干预.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH70_ANXIETY_002",
+                       "skill_name":  "焦虑器质性病因排查",
+                       "objective":  "在焦虑样主诉中系统排除医源性、内分泌、心肺和神经系统病因。",
+                       "scope":  "新发、非典型或伴明显躯体症状的焦虑病人",
+                       "source_title":  "莫塔全科医学（第8版） 第70章 焦虑障碍",
+                       "source_page":  "第70章‘广泛性焦虑障碍的诊断’‘表70.1 焦虑的重要鉴别诊断’‘关注要点’相关段落",
+                       "source_file":  "莫塔全科医学---第70章.md",
+                       "file_path":  "焦虑器质性病因排查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH70_ANXIETY_003",
+                       "skill_name":  "惊恐发作急性处理",
+                       "objective":  "在急性惊恐发作中迅速稳定病人并避免把焦虑体验进一步灾难化。",
+                       "scope":  "突发强烈恐惧、心悸、呼吸困难、濒死感或失控感的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第70章 焦虑障碍",
+                       "source_page":  "第70章‘惊恐发作’‘管理’‘药物治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第70章.md",
+                       "file_path":  "惊恐发作急性处理.md"
+                   }
+               ]
+}

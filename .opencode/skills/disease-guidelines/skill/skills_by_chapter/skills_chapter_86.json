@@ -1,0 +1,49 @@
+{
+    "chapter_number":  86,
+    "chapter_title":  "常见的儿童期感染性疾病",
+    "part_name":  "儿童和青少年健康",
+    "part_number":  6,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH86_INFECTION_003",
+                       "skill_name":  "风疹孕前免疫核查",
+                       "objective":  "在育龄女性中预防先天性风疹综合征。",
+                       "scope":  "育龄女性、备孕女性、产后未完成免疫者",
+                       "source_title":  "莫塔全科医学（第8版） 第86章 常见的儿童期感染性疾病",
+                       "source_page":  "第86章‘风疹’‘育龄女性免疫状况’相关段落",
+                       "source_file":  "莫塔全科医学---第86章.md",
+                       "file_path":  "风疹孕前免疫核查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH86_INFECTION_002",
+                       "skill_name":  "麻疹3C与Koplik斑识别",
+                       "objective":  "通过经典前驱症状和黏膜体征尽早识别麻疹并启动公共卫生措施。",
+                       "scope":  "发热出疹并伴咳嗽、流涕或结膜炎的儿童和成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第86章 常见的儿童期感染性疾病",
+                       "source_page":  "第86章‘麻疹’‘临床特征’‘并发症’相关段落",
+                       "source_file":  "莫塔全科医学---第86章.md",
+                       "file_path":  "麻疹3C与Koplik斑识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH86_INFECTION_001",
+                       "skill_name":  "水痘居家护理与隔离",
+                       "objective":  "为轻症水痘患儿提供规范的居家对症处理和隔离建议。",
+                       "scope":  "免疫功能正常、无并发症的儿童水痘病人",
+                       "source_title":  "莫塔全科医学（第8版） 第86章 常见的儿童期感染性疾病",
+                       "source_page":  "第86章‘水痘’‘治疗’‘给父母的建议’‘休学隔离’相关段落",
+                       "source_file":  "莫塔全科医学---第86章.md",
+                       "file_path":  "水痘居家护理与隔离.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH86_INFECTION_004",
+                       "skill_name":  "细小病毒掌掴脸识别",
+                       "objective":  "识别细小病毒 B19 的典型出疹模式并避免不必要隔离和抗菌药使用。",
+                       "scope":  "学龄儿童出现面颊潮红和轻症发热性皮疹时",
+                       "source_title":  "莫塔全科医学（第8版） 第86章 常见的儿童期感染性疾病",
+                       "source_page":  "第86章‘细小病毒 B19(感染性红斑,第五种疾病)’‘临床特征’相关段落",
+                       "source_file":  "莫塔全科医学---第86章.md",
+                       "file_path":  "细小病毒掌掴脸识别.md"
+                   }
+               ]
+}

@@ -1,0 +1,59 @@
+{
+    "chapter_number":  45,
+    "chapter_title":  "头痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH45_THUNDER_002",
+                       "skill_name":  "急性霹雳性头痛分流",
+                       "objective":  "将突发剧烈头痛快速分流到蛛网膜下腔出血和其他脑血管急症评估路径。",
+                       "scope":  "突然达到高峰、首发或‘最严重一次’的急性头痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第45章 头痛",
+                       "source_page":  "第45章‘急性霹雳性头痛’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第45章.md",
+                       "file_path":  "急性霹雳性头痛分流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH45_RED_001",
+                       "skill_name":  "头痛红旗征识别",
+                       "objective":  "快速识别提示蛛网膜下腔出血、脑膜炎、占位性病变或颅压升高的头痛表现。",
+                       "scope":  "所有急性、亚急性或进行性头痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第45章 头痛",
+                       "source_page":  "第45章‘头痛的红旗征’‘身体检查的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第45章.md",
+                       "file_path":  "头痛红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH45_EXAM_005",
+                       "skill_name":  "头痛基础查体路径",
+                       "objective":  "在基层完成覆盖血压、脑膜刺激征、眼底和颈源因素的系统头痛查体。",
+                       "scope":  "需要进行初始体格评估的头痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第45章 头痛",
+                       "source_page":  "第45章‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第45章.md",
+                       "file_path":  "头痛基础查体路径.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH45_TIME_003",
+                       "skill_name":  "头痛时间轴分层",
+                       "objective":  "依据头痛的起病节奏和病程模式缩小原发性与继发性病因范围。",
+                       "scope":  "初诊或反复就诊但病因未明的头痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第45章 头痛",
+                       "source_page":  "第45章‘头面部疼痛原因的时间轴’相关段落",
+                       "source_file":  "莫塔全科医学---第45章.md",
+                       "file_path":  "头痛时间轴分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH45_DIARY_004",
+                       "skill_name":  "头痛昼夜波动图记录",
+                       "objective":  "利用头痛日内强度变化图帮助区分偏头痛、鼻窦炎、紧张性和混合性头痛。",
+                       "scope":  "慢性、反复发作或模式不清的头痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第45章 头痛",
+                       "source_page":  "第45章‘疼痛的昼夜波动模式’‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第45章.md",
+                       "file_path":  "头痛昼夜波动图记录.md"
+                   }
+               ]
+}

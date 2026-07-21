@@ -1,0 +1,59 @@
+{
+    "chapter_number":  61,
+    "chapter_title":  "口舌痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH61_BIOPSY_005",
+                       "skill_name":  "持续口腔病变活检转诊",
+                       "objective":  "对持续不愈的口腔溃疡、白斑或红斑及时启动活检转诊,排除 SCC 等恶性病变。",
+                       "scope":  "去除明显诱因后仍持续 3 周的口腔溃疡或软组织异常病变",
+                       "source_title":  "莫塔全科医学（第8版） 第61章 口舌痛",
+                       "source_page":  "第61章‘关键事实和要点’‘白斑’相关段落",
+                       "source_file":  "莫塔全科医学---第61章.md",
+                       "file_path":  "持续口腔病变活检转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH61_TRAUMA_003",
+                       "skill_name":  "创伤性口腔溃疡管理",
+                       "objective":  "识别并去除创伤性因素,促进口腔创伤性溃疡在预期时间内愈合。",
+                       "scope":  "与咬伤、锋利牙面、义齿、烫伤或刷牙损伤相关的局灶性口腔溃疡",
+                       "source_title":  "莫塔全科医学（第8版） 第61章 口舌痛",
+                       "source_page":  "第61章‘创伤性溃疡’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第61章.md",
+                       "file_path":  "创伤性口腔溃疡管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH61_APHTHA_002",
+                       "skill_name":  "复发性阿弗他溃疡处理",
+                       "objective":  "对典型复发性阿弗他溃疡进行症状控制、诱因排查和升级分流。",
+                       "scope":  "位于非角化黏膜、直径多为 3 至 5 mm 的典型阿弗他溃疡病人",
+                       "source_title":  "莫塔全科医学（第8版） 第61章 口舌痛",
+                       "source_page":  "第61章‘复发性阿弗他溃疡’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第61章.md",
+                       "file_path":  "复发性阿弗他溃疡处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH61_RED_001",
+                       "skill_name":  "口腔病变红旗征识别",
+                       "objective":  "在基层口腔检查中快速识别需要加速评估或转诊的高危口腔病变。",
+                       "scope":  "主诉口痛、舌痛、口腔溃疡、口腔斑块或软组织病变的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第61章 口舌痛",
+                       "source_page":  "第61章‘口腔疾病的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第61章.md",
+                       "file_path":  "口腔病变红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH61_HSV_004",
+                       "skill_name":  "疱疹性龈口炎识别与初始处理",
+                       "objective":  "早期识别疱疹性龈口炎,避免错误用药并处理疼痛与脱水风险。",
+                       "scope":  "伴明显口腔疼痛、龈口炎、疱疹样病变或儿童拒食拒饮的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第61章 口舌痛",
+                       "source_page":  "第61章‘疱疹感染’相关段落",
+                       "source_file":  "莫塔全科医学---第61章.md",
+                       "file_path":  "疱疹性龈口炎识别与初始处理.md"
+                   }
+               ]
+}

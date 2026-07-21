@@ -1,0 +1,39 @@
+{
+    "chapter_number":  124,
+    "chapter_title":  "常见的骨折和脱位",
+    "part_name":  "意外事故和急救医学",
+    "part_number":  11,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH124_FRACTURE_001",
+                       "skill_name":  "骨折怀疑轴向加压检查",
+                       "objective":  "在门诊快速判断软组织损伤与骨折可能性,辅助决定影像学检查。",
+                       "scope":  "前臂、手部及其他肢体受伤后怀疑骨折但体征不典型的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第124章 常见的骨折和脱位",
+                       "source_page":  "第124章‘骨折检查方法’相关段落",
+                       "source_file":  "莫塔全科医学---第124章.md",
+                       "file_path":  "骨折怀疑轴向加压检查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH124_FRACTURE_002",
+                       "skill_name":  "容易遗漏骨折红旗筛查",
+                       "objective":  "在轻微外伤或初片阴性情况下警惕容易漏诊的骨折和坏死风险。",
+                       "scope":  "受伤后症状与影像不完全匹配,或高风险骨折部位损伤病人",
+                       "source_title":  "莫塔全科医学（第8版） 第124章 常见的骨折和脱位",
+                       "source_page":  "第124章‘容易遗漏的骨折:红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第124章.md",
+                       "file_path":  "容易遗漏骨折红旗筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH124_FRACTURE_003",
+                       "skill_name":  "下颌脱位手法复位",
+                       "objective":  "对颞下颌关节脱位实施标准化手法复位,缓解锁颌和疼痛。",
+                       "scope":  "单侧或双侧下颌脱位,无法闭口或说话的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第124章 常见的骨折和脱位",
+                       "source_page":  "第124章‘颞下颌关节脱位’‘复位方法’相关段落",
+                       "source_file":  "莫塔全科医学---第124章.md",
+                       "file_path":  "下颌脱位手法复位.md"
+                   }
+               ]
+}

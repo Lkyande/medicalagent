@@ -1,0 +1,79 @@
+{
+    "chapter_number":  41,
+    "chapter_title":  "面部疼痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  7,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH41_SINUS_005",
+                       "skill_name":  "鼻窦压痛诊室定位",
+                       "objective":  "通过系统触诊区分窦性与非窦性压痛,定位可能受累的鼻窦。",
+                       "scope":  "怀疑鼻窦炎导致面部疼痛、压痛或牙痛的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第41章 面部疼痛",
+                       "source_page":  "第41章‘一些简单的诊室里的测试’‘诊断窦性压痛’相关段落",
+                       "source_file":  "莫塔全科医学---第41章.md",
+                       "file_path":  "鼻窦压痛诊室定位.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH41_ABX_006",
+                       "skill_name":  "急性细菌性鼻窦炎抗生素门槛",
+                       "objective":  "减少急性鼻窦炎中过早使用抗生素,同时识别更可能属于细菌性感染的病例。",
+                       "scope":  "急性面部痛、鼻塞或脓性鼻涕提示鼻窦炎的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第41章 面部疼痛",
+                       "source_page":  "第41章‘管理(急性细菌性鼻窦炎)’‘抗生素治疗指南’相关段落",
+                       "source_file":  "莫塔全科医学---第41章.md",
+                       "file_path":  "急性细菌性鼻窦炎抗生素门槛.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH41_EXAM_002",
+                       "skill_name":  "面部疼痛定位式查体",
+                       "objective":  "通过系统体检确认面部疼痛的解剖来源,缩小牙源、鼻窦、关节和神经病因范围。",
+                       "scope":  "需要进一步明确病变来源的面部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第41章 面部疼痛",
+                       "source_page":  "第41章‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第41章.md",
+                       "file_path":  "面部疼痛定位式查体.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH41_RED_001",
+                       "skill_name":  "面部疼痛红旗征识别",
+                       "objective":  "识别面部疼痛中提示恶性病变、血管炎或严重神经病因的警示信号。",
+                       "scope":  "急性、慢性或反复发作的面部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第41章 面部疼痛",
+                       "source_page":  "第41章‘面部疼痛的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第41章.md",
+                       "file_path":  "面部疼痛红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH41_LUD_007",
+                       "skill_name":  "脓性颌下炎紧急处置",
+                       "objective":  "及时识别脓性颌下炎的气道威胁并启动经验性抗感染和专科协作。",
+                       "scope":  "牙源性感染后出现舌下或颌下迅速肿胀的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第41章 面部疼痛",
+                       "source_page":  "第41章‘脓性颌下炎’相关段落",
+                       "source_file":  "莫塔全科医学---第41章.md",
+                       "file_path":  "脓性颌下炎紧急处置.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH41_DENT_003",
+                       "skill_name":  "牙痛紧急处理与转诊",
+                       "objective":  "在基层为牙痛病人提供镇痛和感染分层,并尽快衔接牙科治疗。",
+                       "scope":  "疑似龋齿、根尖周感染、智齿炎或牙脓肿引起的牙痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第41章 面部疼痛",
+                       "source_page":  "第41章‘牙痛的治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第41章.md",
+                       "file_path":  "牙痛紧急处理与转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH41_TOOTH_004",
+                       "skill_name":  "撞脱恒牙现场回纳",
+                       "objective":  "在恒牙完全脱出后尽快保护牙周组织并提高再植成功率。",
+                       "scope":  "第二恒牙被撞脱且具备立即处理条件的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第41章 面部疼痛",
+                       "source_page":  "第41章‘撞掉的牙齿’相关段落",
+                       "source_file":  "莫塔全科医学---第41章.md",
+                       "file_path":  "撞脱恒牙现场回纳.md"
+                   }
+               ]
+}

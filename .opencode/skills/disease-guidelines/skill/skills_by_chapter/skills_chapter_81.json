@@ -1,0 +1,39 @@
+{
+    "chapter_number":  81,
+    "chapter_title":  "骨质疏松",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH81_BONE_002",
+                       "skill_name":  "DEXAT分解读",
+                       "objective":  "正确解读 DEXA 的 T 分和 Z 分并据此决定后续处理。",
+                       "scope":  "已接受骨密度检测的绝经后女性、老年男性和年轻高危病人",
+                       "source_title":  "莫塔全科医学（第8版） 第81章 骨质疏松",
+                       "source_page":  "第81章‘DEXA,T分和Z分’‘表81.2 T分的解释说明’相关段落",
+                       "source_file":  "莫塔全科医学---第81章.md",
+                       "file_path":  "DEXAT分解读.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH81_BONE_001",
+                       "skill_name":  "骨质疏松风险筛查",
+                       "objective":  "识别高骨折风险和骨质疏松高危病人并决定进一步评估。",
+                       "scope":  "绝经后女性、老年男性、长期激素使用者及低创伤骨折病人",
+                       "source_title":  "莫塔全科医学（第8版） 第81章 骨质疏松",
+                       "source_page":  "第81章‘表81.1 骨质疏松危险因素和/或病因’相关段落",
+                       "source_file":  "莫塔全科医学---第81章.md",
+                       "file_path":  "骨质疏松风险筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH81_BONE_003",
+                       "skill_name":  "骨质疏松生活方式预防",
+                       "objective":  "通过钙、维生素 D、运动和跌倒预防减少骨量流失和脆性骨折。",
+                       "scope":  "骨量减少、骨质疏松高风险或已治疗中的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第81章 骨质疏松",
+                       "source_page":  "第81章‘预防建议’相关段落",
+                       "source_file":  "莫塔全科医学---第81章.md",
+                       "file_path":  "骨质疏松生活方式预防.md"
+                   }
+               ]
+}

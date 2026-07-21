@@ -1,0 +1,59 @@
+{
+    "chapter_number":  44,
+    "chapter_title":  "呕血和黑便",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH44_MW_005",
+                       "skill_name":  "Mallory-Weiss综合征识别",
+                       "objective":  "在上消化道出血中识别由剧烈呕吐或干呕后造成的食管胃结合部撕裂。",
+                       "scope":  "剧烈呕吐、干呕或咳嗽后出现呕血的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第44章 呕血和黑便",
+                       "source_page":  "第44章‘食管贲门黏膜撕裂综合征(Mallory-Weiss综合征)’相关段落",
+                       "source_file":  "莫塔全科医学---第44章.md",
+                       "file_path":  "Mallory-Weiss综合征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH44_HX_002",
+                       "skill_name":  "呕血与黑便病史核查",
+                       "objective":  "通过关键病史区分真实上消化道出血、食管来源出血和伪黑便。",
+                       "scope":  "所有诉呕血、咖啡样呕吐物或黑便的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第44章 呕血和黑便",
+                       "source_page":  "第44章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第44章.md",
+                       "file_path":  "呕血与黑便病史核查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH44_PPI_004",
+                       "skill_name":  "上消化道出血PPI启动",
+                       "objective":  "在怀疑消化性溃疡相关出血时尽早启动质子泵抑制剂治疗。",
+                       "scope":  "初步评估为上消化道出血且考虑消化性溃疡来源的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第44章 呕血和黑便",
+                       "source_page":  "第44章‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第44章.md",
+                       "file_path":  "上消化道出血PPI启动.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH44_RESCUE_003",
+                       "skill_name":  "上消化道出血初始复苏",
+                       "objective":  "在严重上消化道出血中优先恢复有效循环血容量并衔接专科救治。",
+                       "scope":  "伴大出血、休克或循环不稳定的上消化道出血病人",
+                       "source_title":  "莫塔全科医学（第8版） 第44章 呕血和黑便",
+                       "source_page":  "第44章‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第44章.md",
+                       "file_path":  "上消化道出血初始复苏.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH44_HEMO_001",
+                       "skill_name":  "上消化道出血血流动力学分层",
+                       "objective":  "以血流动力学而非主观估计判断上消化道出血严重度并决定紧急程度。",
+                       "scope":  "呕血、咖啡样呕吐物、黑便或疑似上消化道出血病人",
+                       "source_title":  "莫塔全科医学（第8版） 第44章 呕血和黑便",
+                       "source_page":  "第44章‘关键事实和要点’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第44章.md",
+                       "file_path":  "上消化道出血血流动力学分层.md"
+                   }
+               ]
+}

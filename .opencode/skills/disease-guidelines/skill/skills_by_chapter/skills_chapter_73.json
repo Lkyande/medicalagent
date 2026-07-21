@@ -1,0 +1,59 @@
+{
+    "chapter_number":  73,
+    "chapter_title":  "哮喘",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH73_ASTHMA_004",
+                       "skill_name":  "定量吸入器闭口式指导",
+                       "objective":  "提高病人对 MDI 的正确使用率,增加药物肺部沉积。",
+                       "scope":  "使用定量吸入器的哮喘或其他吸入治疗病人",
+                       "source_title":  "莫塔全科医学（第8版） 第73章 哮喘",
+                       "source_page":  "第73章‘正确使用哮喘定量吸入器’‘闭口式技术’相关段落",
+                       "source_file":  "莫塔全科医学---第73章.md",
+                       "file_path":  "定量吸入器闭口式指导.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH73_ASTHMA_005",
+                       "skill_name":  "危险哮喘早期预警识别",
+                       "objective":  "在严重发作前识别高风险病人和恶化信号,提前升级处理。",
+                       "scope":  "既往严重发作史或近期控制不良的哮喘病人",
+                       "source_title":  "莫塔全科医学（第8版） 第73章 哮喘",
+                       "source_page":  "第73章‘危险的哮喘’‘高危病人’‘早期预警信号’相关段落",
+                       "source_file":  "莫塔全科医学---第73章.md",
+                       "file_path":  "危险哮喘早期预警识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH73_ASTHMA_002",
+                       "skill_name":  "哮喘控制评估",
+                       "objective":  "标准化评估近期哮喘控制情况和未来严重发作风险。",
+                       "scope":  "已确诊或疑似哮喘、需要复诊调整治疗的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第73章 哮喘",
+                       "source_page":  "第73章‘评估哮喘控制时的提问’‘哮喘控制的三步计划’相关段落",
+                       "source_file":  "莫塔全科医学---第73章.md",
+                       "file_path":  "哮喘控制评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH73_ASTHMA_003",
+                       "skill_name":  "哮喘预防性治疗启动",
+                       "objective":  "为需要长期控制的哮喘病人及时启动 ICS 为核心的预防治疗。",
+                       "scope":  "使用 SABA 频繁、夜间症状存在或反复发作的哮喘病人",
+                       "source_title":  "莫塔全科医学（第8版） 第73章 哮喘",
+                       "source_page":  "第73章‘预防性治疗的适应证’‘启动治疗’‘吸入性类固醇皮质激素’相关段落",
+                       "source_file":  "莫塔全科医学---第73章.md",
+                       "file_path":  "哮喘预防性治疗启动.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH73_ASTHMA_001",
+                       "skill_name":  "哮喘诊断初筛",
+                       "objective":  "识别具有可变性气流受限特征的哮喘并启动客观检测。",
+                       "scope":  "出现喘息、咳嗽、胸闷或呼吸困难的儿童和成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第73章 哮喘",
+                       "source_page":  "第73章‘临床特征’‘身体检查’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第73章.md",
+                       "file_path":  "哮喘诊断初筛.md"
+                   }
+               ]
+}

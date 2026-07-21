@@ -1,0 +1,109 @@
+{
+    "chapter_number":  2,
+    "chapter_title":  "看病技能",
+    "part_name":  "全科医学基础",
+    "part_number":  1,
+    "skill_count":  10,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH2_TESTING_001",
+                       "skill_name":  "辅助检查决策",
+                       "objective":  "以临床价值、风险和病人获益为标准,选择性安排辅助检查并避免无效检查。",
+                       "scope":  "全科门诊所有需要考虑实验室、影像或其他诊断检查的情形",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘辅助检查’‘三振出局原则’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "辅助检查决策.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_MANAGEMENTTALK_001",
+                       "skill_name":  "管理阶段交谈",
+                       "objective":  "在诊断后以结构化方式解释病情、协商方案并安排随访,提升理解和依从性。",
+                       "scope":  "已形成初步诊断或管理方向的全科咨询",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘管理阶段的交谈程序’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "管理阶段交谈.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_PRESCRIBE_001",
+                       "skill_name":  "合理处方决策",
+                       "objective":  "基于疾病判断、病人期望和药物风险收益做出审慎处方,必要时合理选择不处方。",
+                       "scope":  "需要开具或评估是否需要药物治疗的全科门诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘处方’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "合理处方决策.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_HISTORY_001",
+                       "skill_name":  "结构化病史采集",
+                       "objective":  "通过系统化病史采集明确就诊原因、补充问题及隐藏诉求,为诊断和管理奠定基础。",
+                       "scope":  "所有全科门诊看病场景,尤其是症状不明确或问题复杂的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘病史采集’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "结构化病史采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_CLOSING_001",
+                       "skill_name":  "结束诊疗评估",
+                       "objective":  "在咨询结束前确认病人问题是否被回应、是否仍有未满足需求,并减少信息遗漏。",
+                       "scope":  "所有完成诊断或管理讨论后的门诊咨询",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘结束诊疗’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "结束诊疗评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_OPENQUESTION_001",
+                       "skill_name":  "开放式提问应用",
+                       "objective":  "用开放式和邀请式提问充分暴露病人的真实诉求、担忧和社会心理背景。",
+                       "scope":  "初诊、复杂主诉、疑似社会心理问题或医患目标尚不清楚的咨询",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘好的提问’‘开放式问题’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "开放式提问应用.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_ANTIBIOTIC_001",
+                       "skill_name":  "抗菌药物处方管理",
+                       "objective":  "优化抗菌药物使用,改善临床结局并减少耐药和不良后果。",
+                       "scope":  "全科门诊需考虑是否使用抗生素的感染性疾病,尤其呼吸道感染",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘抗菌药物管理’‘处方抗生素的一般原则’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "抗菌药物处方管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_EXAMCONSENT_001",
+                       "skill_name":  "身体检查知情与隐私保护",
+                       "objective":  "在体格检查中兼顾医学需要、知情同意、隐私保护和病人舒适度。",
+                       "scope":  "所有需要身体检查的门诊咨询,尤其涉及敏感部位检查时",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘身体检查的医学准则’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "身体检查知情与隐私保护.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_RAPPORT_001",
+                       "skill_name":  "医患关系建立开场",
+                       "objective":  "在诊疗开始阶段快速建立信任、明确角色并为后续病史采集创造开放氛围。",
+                       "scope":  "全科门诊、初诊和复诊看病场景",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘看病的阶段’‘临床要领’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "医患关系建立开场.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH2_REFERRAL_001",
+                       "skill_name":  "转诊决策",
+                       "objective":  "在病人最佳利益基础上把握转诊时机与对象,避免过度转诊或不当滞留。",
+                       "scope":  "需要在基层继续管理与上级或其他专业支持之间做决策的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第2章 看病技能",
+                       "source_page":  "第2章‘转诊’‘全科医生的守门人角色’相关段落",
+                       "source_file":  "莫塔全科医学---第2章.md",
+                       "file_path":  "转诊决策.md"
+                   }
+               ]
+}

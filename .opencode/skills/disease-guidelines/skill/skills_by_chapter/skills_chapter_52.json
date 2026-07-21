@@ -1,0 +1,59 @@
+{
+    "chapter_number":  52,
+    "chapter_title":  "肩部疼痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH52_SUPRA_005",
+                       "skill_name":  "冈上肌肌腱病变初始处理",
+                       "objective":  "对典型冈上肌肌腱病变实施保守治疗并识别注射和手术时机。",
+                       "scope":  "以肩峰下撞击样疼痛为主且无明确完全撕裂证据的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第52章 肩部疼痛",
+                       "source_page":  "第52章‘冈上肌肌腱病变’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第52章.md",
+                       "file_path":  "冈上肌肌腱病变初始处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH52_EXAM_003",
+                       "skill_name":  "肩部基础查体与疼痛弧评估",
+                       "objective":  "通过视、触、动的基础查体区分肌腱性与关节囊性肩痛。",
+                       "scope":  "无明显急性骨折脱位征象的肩痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第52章 肩部疼痛",
+                       "source_page":  "第52章‘身体检查’‘肩部检查’相关段落",
+                       "source_file":  "莫塔全科医学---第52章.md",
+                       "file_path":  "肩部基础查体与疼痛弧评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH52_HX_002",
+                       "skill_name":  "肩痛病史分流问诊",
+                       "objective":  "通过问诊初步区分颈源性、肩袖性、关节囊性和牵涉性肩痛。",
+                       "scope":  "以肩部疼痛、僵硬或无力就诊的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第52章 肩部疼痛",
+                       "source_page":  "第52章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第52章.md",
+                       "file_path":  "肩痛病史分流问诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH52_RED_001",
+                       "skill_name":  "肩痛红旗征识别",
+                       "objective":  "及时识别提示脓毒性感染、骨折脱位、恶性病变或神经损伤的危险肩痛表现。",
+                       "scope":  "所有肩部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第52章 肩部疼痛",
+                       "source_page":  "第52章‘肩痛的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第52章.md",
+                       "file_path":  "肩痛红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH52_CUFF_004",
+                       "skill_name":  "肩袖抗阻试验分层",
+                       "objective":  "利用抗阻动作快速分辨冈上肌、肩胛下肌、冈下肌和肱二头肌长头病变。",
+                       "scope":  "怀疑肩袖或肱二头肌腱病变的肩痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第52章 肩部疼痛",
+                       "source_page":  "第52章‘抗阻运动’‘特殊检查’相关段落",
+                       "source_file":  "莫塔全科医学---第52章.md",
+                       "file_path":  "肩袖抗阻试验分层.md"
+                   }
+               ]
+}

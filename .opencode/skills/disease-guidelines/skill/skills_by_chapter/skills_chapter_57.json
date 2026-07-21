@@ -1,0 +1,59 @@
+{
+    "chapter_number":  57,
+    "chapter_title":  "足踝痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH57_ACHILLES_005",
+                       "skill_name":  "跟腱断裂汤普森试验识别",
+                       "objective":  "及时识别跟腱完全断裂并避免因仍能跖屈而漏诊。",
+                       "scope":  "足跟后方突发剧痛、跌倒或踮脚困难的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第57章 足踝痛",
+                       "source_page":  "第57章‘跟腱完全性断裂’相关段落",
+                       "source_file":  "莫塔全科医学---第57章.md",
+                       "file_path":  "跟腱断裂汤普森试验识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH57_SPRain_004",
+                       "skill_name":  "踝扭伤RICE与早期康复",
+                       "objective":  "对大多数 I 到 II 级踝扭伤实施标准保守治疗并尽早恢复功能。",
+                       "scope":  "已排除明显骨折的 I 至 II 级踝扭伤病人",
+                       "source_title":  "莫塔全科医学（第8版） 第57章 足踝痛",
+                       "source_page":  "第57章‘踝关节扭伤’‘Ⅰ~Ⅱ级扭伤’相关段落",
+                       "source_file":  "莫塔全科医学---第57章.md",
+                       "file_path":  "踝扭伤RICE与早期康复.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH57_OTTAWA_003",
+                       "skill_name":  "踝扭伤渥太华规则分流",
+                       "objective":  "用渥太华规则快速识别踝扭伤后需要拍片排除骨折的病人。",
+                       "scope":  "踝关节或中足急性扭伤病人",
+                       "source_title":  "莫塔全科医学（第8版） 第57章 足踝痛",
+                       "source_page":  "第57章‘足踝损伤进行X线检查的渥太华规则’相关段落",
+                       "source_file":  "莫塔全科医学---第57章.md",
+                       "file_path":  "踝扭伤渥太华规则分流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH57_HX_002",
+                       "skill_name":  "足踝病史与基础查体",
+                       "objective":  "通过疼痛特征、鞋具因素和系统化查体快速缩小足踝疼痛病因范围。",
+                       "scope":  "门急诊所有足部或踝关节疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第57章 足踝痛",
+                       "source_page":  "第57章‘病史采集’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第57章.md",
+                       "file_path":  "足踝病史与基础查体.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH57_RED_001",
+                       "skill_name":  "足痛红旗征识别",
+                       "objective":  "及时识别提示感染、缺血、神经病变或骨性病变的高危足踝疼痛表现。",
+                       "scope":  "所有足部或踝部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第57章 足踝痛",
+                       "source_page":  "第57章‘足痛的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第57章.md",
+                       "file_path":  "足痛红旗征识别.md"
+                   }
+               ]
+}

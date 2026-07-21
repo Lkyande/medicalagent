@@ -1,0 +1,39 @@
+{
+    "chapter_number":  116,
+    "chapter_title":  "常见肿块",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH116_LUMP_003",
+                       "skill_name":  "表皮样囊肿切除路径",
+                       "objective":  "根据囊肿状态选择合适的表皮样囊肿门诊切除策略,减少复发。",
+                       "scope":  "头皮、面颈、躯干或阴囊部位典型表皮样或毛发囊肿病人",
+                       "source_title":  "莫塔全科医学（第8版） 第116章 常见肿块",
+                       "source_page":  "第116章‘表皮样(皮脂腺)囊肿和毛发囊肿’‘手术切除方法’‘感染性囊肿的治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第116章.md",
+                       "file_path":  "表皮样囊肿切除路径.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH116_LUMP_001",
+                       "skill_name":  "常见皮肤肿块系统描述",
+                       "objective":  "用标准化术语描述皮肤和皮下肿块,提高诊断和转诊质量。",
+                       "scope":  "门诊发现的皮肤、皮下、肌肉或与腱关节相关肿块",
+                       "source_title":  "莫塔全科医学（第8版） 第116章 常见肿块",
+                       "source_page":  "第116章‘肿块的诊断方法’‘肿块与解剖结构的关系’相关段落",
+                       "source_file":  "莫塔全科医学---第116章.md",
+                       "file_path":  "常见皮肤肿块系统描述.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH116_LUMP_002",
+                       "skill_name":  "皮赘简易去除",
+                       "objective":  "对有症状或影响美观的皮赘实施安全的门诊简易去除。",
+                       "scope":  "颈部、腋下、躯干或腹股沟良性皮赘病人",
+                       "source_title":  "莫塔全科医学（第8版） 第116章 常见肿块",
+                       "source_page":  "第116章‘纤维上皮息肉’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第116章.md",
+                       "file_path":  "皮赘简易去除.md"
+                   }
+               ]
+}

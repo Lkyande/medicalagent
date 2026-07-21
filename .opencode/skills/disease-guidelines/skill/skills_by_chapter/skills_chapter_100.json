@@ -1,0 +1,59 @@
+{
+    "chapter_number":  100,
+    "chapter_title":  "基本的产前服务",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH100_ANTENATAL_002",
+                       "skill_name":  "初次产检基础评估",
+                       "objective":  "在首次产检时建立完整妊娠基线并规划筛查路径。",
+                       "scope":  "已确认或怀疑妊娠的孕妇首次产前就诊",
+                       "source_title":  "莫塔全科医学（第8版） 第100章 基本的产前服务",
+                       "source_page":  "第100章‘初诊’‘病史要点’‘身体检查’‘产前筛查’相关段落",
+                       "source_file":  "莫塔全科医学---第100章.md",
+                       "file_path":  "初次产检基础评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH100_ANTENATAL_005",
+                       "skill_name":  "妊娠剧吐识别与入院",
+                       "objective":  "识别妊娠剧吐并及时进行补液、电解质和病因评估。",
+                       "scope":  "持续恶心呕吐、脱水或酮体阳性的早孕女性",
+                       "source_title":  "莫塔全科医学（第8版） 第100章 基本的产前服务",
+                       "source_page":  "第100章‘妊娠期恶心和呕吐’‘妊娠剧吐’相关段落",
+                       "source_file":  "莫塔全科医学---第100章.md",
+                       "file_path":  "妊娠剧吐识别与入院.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH100_ANTENATAL_003",
+                       "skill_name":  "妊娠危险暴露预防",
+                       "objective":  "减少妊娠期感染、毒物和生活方式暴露对母胎的危害。",
+                       "scope":  "所有妊娠女性,尤其早孕和首次产检人群",
+                       "source_title":  "莫塔全科医学（第8版） 第100章 基本的产前服务",
+                       "source_page":  "第100章‘健康的环境’‘李斯特菌属’‘弓形虫病’‘吸烟、酒精和其他毒品’相关段落",
+                       "source_file":  "莫塔全科医学---第100章.md",
+                       "file_path":  "妊娠危险暴露预防.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH100_ANTENATAL_004",
+                       "skill_name":  "妊娠早期出血分诊",
+                       "objective":  "对妊娠早期阴道出血进行快速分诊,区分可继续妊娠、流产和异位妊娠风险。",
+                       "scope":  "妊娠前 12 周出现阴道出血的孕妇",
+                       "source_title":  "莫塔全科医学（第8版） 第100章 基本的产前服务",
+                       "source_page":  "第100章‘妊娠早期阴道出血’相关段落",
+                       "source_file":  "莫塔全科医学---第100章.md",
+                       "file_path":  "妊娠早期出血分诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH100_ANTENATAL_001",
+                       "skill_name":  "孕前风险评估",
+                       "objective":  "在受孕前识别可干预风险,改善妊娠结局和母婴健康。",
+                       "scope":  "计划妊娠的女性及其伴侣",
+                       "source_title":  "莫塔全科医学（第8版） 第100章 基本的产前服务",
+                       "source_page":  "第100章‘孕前服务’‘要点归纳’相关段落",
+                       "source_file":  "莫塔全科医学---第100章.md",
+                       "file_path":  "孕前风险评估.md"
+                   }
+               ]
+}

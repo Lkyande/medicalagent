@@ -349,12 +349,10 @@ Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.m
 
 ### 微信公众号授权与发布
 
-当前 FastAPI 直接实现微信开放平台第三方平台授权。`component_verify_ticket` 可由当前回调接收，也可从既有 PHP 的 MySQL ticket 表只读获取。除微信回调外，以下接口均需要当前平台 JWT：
+当前 FastAPI 通过独立 WeChat Broker 完成微信开放平台授权，不保存 AppSecret、component ticket 或 authorizer refresh token。以下接口均需要当前平台 JWT：
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| `POST` | `/api/wechat/component/callback` | 可选的微信开放平台加密 ticket 和取消授权事件回调；使用 PHP ticket 数据库时无需切换到此地址 |
-| `GET` | `/api/wechat/authorization/callback` | 公众号管理员授权完成后的公开回调 |
 | `GET` | `/api/wechat/authorization` | 查询当前用户公众号授权状态 |
 | `POST` | `/api/wechat/authorization` | 创建十分钟有效的公众号授权页面 URL |
 | `GET` | `/api/wechat/previews/{job_id}/release?session_id=...` | 查询当前排版草稿和发布记录 |
@@ -372,7 +370,7 @@ Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.m
 
 服务端重新读取工作区 HTML 并校验 revision，浏览器不能直接覆盖正文。同步成功后保存 `mediaId` 和 `contentRevision`；发布前再次校验文件未变化且当前授权公众号与草稿一致。发布提交状态为 `submitted`，表示微信已接收发布任务，不等同于最终审核成功。如果网络中断导致无法确定微信是否已经接收请求，状态为 `unknown` 并禁止自动重试，必须先到微信后台人工核对，再通过 `resolve` 接口提交 `{ "published": true }` 或 `{ "published": false }`，避免重复发布。
 
-微信 `component_access_token`、`authorizer_refresh_token` 和 `authorizer_access_token` 都使用 Fernet 加密后保存。外部 MySQL 只提供最新 `component_verify_ticket`，不读取 PHP refresh token。开放平台配置、外部数据库凭据和加密密钥只能放在 FastAPI `.env` 中，禁止加入前端配置。
+微信 `component_access_token`、`authorizer_refresh_token` 和 `authorizer_access_token` 都由 broker 使用 Fernet 加密保存。主项目只通过带 API Key 的内部 HTTPS API 查询绑定或获取短期 authorizer access token，相关部署见 `wechat-broker/README.md`。
 
 ### `GET /api/workspace/archive`
 

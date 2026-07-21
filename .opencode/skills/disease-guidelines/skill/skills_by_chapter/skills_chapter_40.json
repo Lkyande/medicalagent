@@ -1,0 +1,69 @@
+{
+    "chapter_number":  40,
+    "chapter_title":  "红眼和眼痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  6,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH40_VIRAL_005",
+                       "skill_name":  "病毒性结膜炎交叉感染控制",
+                       "objective":  "在提供对症治疗的同时降低病毒性结膜炎的交叉传播风险。",
+                       "scope":  "临床诊断为病毒性结膜炎或流行性红眼的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第40章 红眼和眼痛",
+                       "source_page":  "第40章‘病毒性结膜炎’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第40章.md",
+                       "file_path":  "病毒性结膜炎交叉感染控制.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH40_TRIAGE_002",
+                       "skill_name":  "单侧红眼严重病因分流",
+                       "objective":  "避免将单侧红眼误判为普通结膜炎,优先筛出需要急诊处理的病因。",
+                       "scope":  "以单侧红眼为主诉的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第40章 红眼和眼痛",
+                       "source_page":  "第40章‘临床方法’相关段落",
+                       "source_file":  "莫塔全科医学---第40章.md",
+                       "file_path":  "单侧红眼严重病因分流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH40_EXAM_003",
+                       "skill_name":  "红眼基础诊室检查",
+                       "objective":  "用基层可得设备完成红眼的核心检查,提高严重病变识别率。",
+                       "scope":  "初诊红眼、眼痛或眼表刺激症状病人",
+                       "source_title":  "莫塔全科医学（第8版） 第40章 红眼和眼痛",
+                       "source_page":  "第40章‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第40章.md",
+                       "file_path":  "红眼基础诊室检查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH40_RED_001",
+                       "skill_name":  "红眼紧急转诊红旗征",
+                       "objective":  "快速识别需要紧急眼科处理的红眼,避免视觉威胁性疾病延误。",
+                       "scope":  "所有红眼、眼痛或眼眶不适病人",
+                       "source_title":  "莫塔全科医学（第8版） 第40章 红眼和眼痛",
+                       "source_page":  "第40章‘红眼的红旗征(紧急眼科转诊)’相关段落",
+                       "source_file":  "莫塔全科医学---第40章.md",
+                       "file_path":  "红眼紧急转诊红旗征.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH40_CONJ_004",
+                       "skill_name":  "细菌性结膜炎分层处理",
+                       "objective":  "在排除严重病因后,对细菌性结膜炎进行卫生管理和局部抗感染治疗。",
+                       "scope":  "无视力下降和角膜受累征象的细菌性结膜炎病人",
+                       "source_title":  "莫塔全科医学（第8版） 第40章 红眼和眼痛",
+                       "source_page":  "第40章‘细菌性结膜炎’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第40章.md",
+                       "file_path":  "细菌性结膜炎分层处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH40_NEO_006",
+                       "skill_name":  "新生儿结膜炎病原分流",
+                       "objective":  "依据起病时间和分泌物特征快速识别新生儿结膜炎的高危病原体并启动处理。",
+                       "scope":  "1 月龄内出现眼部分泌物或结膜炎表现的新生儿",
+                       "source_title":  "莫塔全科医学（第8版） 第40章 红眼和眼痛",
+                       "source_page":  "第40章‘新生儿结膜炎(新生儿眼炎)’相关段落",
+                       "source_file":  "莫塔全科医学---第40章.md",
+                       "file_path":  "新生儿结膜炎病原分流.md"
+                   }
+               ]
+}

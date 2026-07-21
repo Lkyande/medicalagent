@@ -1,0 +1,79 @@
+{
+    "chapter_number":  34,
+    "chapter_title":  "腹泻",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  7,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH34_DEHY_002",
+                       "skill_name":  "腹泻脱水分层评估",
+                       "objective":  "快速判断腹泻病人的脱水程度并选择口服或静脉补液路径。",
+                       "scope":  "急性腹泻、呕吐或疑似液体丢失的成人和儿童,尤其婴幼儿",
+                       "source_title":  "莫塔全科医学（第8版） 第34章 腹泻",
+                       "source_page":  "第34章‘脱水的评估’相关段落",
+                       "source_file":  "莫塔全科医学---第34章.md",
+                       "file_path":  "腹泻脱水分层评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH34_DIA_001",
+                       "skill_name":  "急性腹泻病史结构化采集",
+                       "objective":  "通过结构化病史区分急性胃肠炎、食物中毒、旅行相关感染和炎症性腹泻。",
+                       "scope":  "急性发作的腹泻、腹痛或伴呕吐病人",
+                       "source_title":  "莫塔全科医学（第8版） 第34章 腹泻",
+                       "source_page":  "第34章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第34章.md",
+                       "file_path":  "急性腹泻病史结构化采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH34_ORS_003",
+                       "skill_name":  "急性腹泻口服补液方案",
+                       "objective":  "用标准化口服补液方案纠正轻中度腹泻脱水并减少静脉补液需求。",
+                       "scope":  "轻度至中度脱水且可耐受口服的成人和儿童腹泻病人",
+                       "source_title":  "莫塔全科医学（第8版） 第34章 腹泻",
+                       "source_page":  "第34章‘治疗原则’‘一般规则’‘第1日’相关段落",
+                       "source_file":  "莫塔全科医学---第34章.md",
+                       "file_path":  "急性腹泻口服补液方案.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH34_DIA_004",
+                       "skill_name":  "急性腹泻止泻药禁忌评估",
+                       "objective":  "避免在不适合的腹泻病人中使用抗动力药和无效吸附剂,降低并发症风险。",
+                       "scope":  "计划使用止泻药的急性腹泻病人",
+                       "source_title":  "莫塔全科医学（第8版） 第34章 腹泻",
+                       "source_page":  "第34章‘治疗原则’相关段落",
+                       "source_file":  "莫塔全科医学---第34章.md",
+                       "file_path":  "急性腹泻止泻药禁忌评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH34_CDIFF_005",
+                       "skill_name":  "抗生素相关腹泻与C.diff识别",
+                       "objective":  "及时识别艰难梭菌相关腹泻并避免误用止泻药或延迟病原学处理。",
+                       "scope":  "近期使用抗生素后出现重度水样腹泻、腹胀或腹部绞痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第34章 腹泻",
+                       "source_page":  "第34章‘假膜性肠炎(抗生素相关性腹泻)’相关段落",
+                       "source_file":  "莫塔全科医学---第34章.md",
+                       "file_path":  "抗生素相关腹泻与C.diff识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH34_TD_006",
+                       "skill_name":  "旅行者腹泻经验性处理",
+                       "objective":  "对中重度旅行者腹泻进行经验性处理,同时识别更严重的肠道感染。",
+                       "scope":  "出国旅行后 14 日内发生水样腹泻的成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第34章 腹泻",
+                       "source_page":  "第34章‘旅行者腹泻’相关段落",
+                       "source_file":  "莫塔全科医学---第34章.md",
+                       "file_path":  "旅行者腹泻经验性处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH34_COEL_007",
+                       "skill_name":  "乳糜泻筛查与确诊路径",
+                       "objective":  "在慢性腹泻、缺铁或体重减轻病人中识别乳糜泻并按规范完成血清学和活检确诊。",
+                       "scope":  "慢性腹泻、腹胀、缺铁/叶酸缺乏、体重减轻或一级亲属阳性病人",
+                       "source_title":  "莫塔全科医学（第8版） 第34章 腹泻",
+                       "source_page":  "第34章‘乳糜泻’‘诊断’相关段落",
+                       "source_file":  "莫塔全科医学---第34章.md",
+                       "file_path":  "乳糜泻筛查与确诊路径.md"
+                   }
+               ]
+}

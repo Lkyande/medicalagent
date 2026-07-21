@@ -1,0 +1,89 @@
+{
+    "chapter_number":  7,
+    "chapter_title":  "研究与循证医学",
+    "part_name":  "全科医学基础",
+    "part_number":  1,
+    "skill_count":  8,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH7_STARTUP_001",
+                       "skill_name":  "临床研究启动流程",
+                       "objective":  "以规范步骤启动临床研究,提高研究可行性、方法质量和最终发表可能性。",
+                       "scope":  "全科个人研究、诊所团队研究和学术合作项目",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘如何开展研究’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "临床研究启动流程.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH7_QUESTION_001",
+                       "skill_name":  "临床研究问题形成",
+                       "objective":  "把临床工作中的疑问转化为可回答、对病人有用的研究问题。",
+                       "scope":  "全科门诊质量改进、小型研究、团队研究和临床观察项目",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘提出研究问题’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "临床研究问题形成.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH7_TESTMETRIC_001",
+                       "skill_name":  "敏感度特异度解读",
+                       "objective":  "正确解读诊断检查的敏感度、特异度和预测值,提升辅助检查选择和结果判断能力。",
+                       "scope":  "全科诊断决策、筛查解读和临床教学",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘灵敏度、特异度及预测值’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "敏感度特异度解读.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH7_EBM_001",
+                       "skill_name":  "循证医学五步实践",
+                       "objective":  "把最佳证据与临床判断和病人处境结合,用于个体化诊疗决策。",
+                       "scope":  "日常全科诊疗、预防决策和慢病管理",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘循证医学’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "循证医学五步实践.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH7_DESIGN_001",
+                       "skill_name":  "研究设计类型选择",
+                       "objective":  "根据研究问题性质选择合适的质性或定量研究设计,提高研究结果解释力。",
+                       "scope":  "全科研究方案设计阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘研究类型’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "研究设计类型选择.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH7_LITREVIEW_001",
+                       "skill_name":  "研究文献检索与回顾",
+                       "objective":  "系统检索并评判现有文献,避免重复研究并为研究设计和临床决策提供依据。",
+                       "scope":  "研究立项前、临床疑问求证和循证决策场景",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘如何开展研究’中‘文献检索’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "研究文献检索与回顾.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH7_SAMPLE_001",
+                       "skill_name":  "样本量与代表性评估",
+                       "objective":  "确定既有统计意义又切实可行的样本量,并尽量保证研究样本的代表性。",
+                       "scope":  "临床研究和服务审计设计阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘选择规模适度并有代表性的样本’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "样本量与代表性评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH7_CRITIQUE_001",
+                       "skill_name":  "已发表研究批判性评价",
+                       "objective":  "快速判断一篇研究论文的方法质量、结果可靠性和临床适用性。",
+                       "scope":  "阅读新研究、制定诊疗策略和团队学术讨论",
+                       "source_title":  "莫塔全科医学（第8版） 第7章 研究与循证医学",
+                       "source_page":  "第7章‘对已发表研究的评判式评价’相关段落",
+                       "source_file":  "莫塔全科医学---第7章.md",
+                       "file_path":  "已发表研究批判性评价.md"
+                   }
+               ]
+}

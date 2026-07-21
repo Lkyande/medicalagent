@@ -1,0 +1,49 @@
+{
+    "chapter_number":  82,
+    "chapter_title":  "慢性疼痛",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH82_PAIN_001",
+                       "skill_name":  "慢性疼痛SOCRATES评估",
+                       "objective":  "用结构化病史全面描述慢性疼痛并支持病因判断。",
+                       "scope":  "持续超过 3 个月或超过预期恢复期的疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第82章 慢性疼痛",
+                       "source_page":  "第82章‘对疼痛的评估和测量’‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第82章.md",
+                       "file_path":  "慢性疼痛SOCRATES评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH82_PAIN_004",
+                       "skill_name":  "慢性疼痛非药物治疗选择",
+                       "objective":  "优先选择证据支持的非药物疗法来管理慢性非癌痛。",
+                       "scope":  "慢性非癌性疼痛病人,尤其不适合长期药物治疗者",
+                       "source_title":  "莫塔全科医学（第8版） 第82章 慢性疼痛",
+                       "source_page":  "第82章‘非药物疗法’‘表82.3 慢性非癌性疼痛的非药物疗法’相关段落",
+                       "source_file":  "莫塔全科医学---第82章.md",
+                       "file_path":  "慢性疼痛非药物治疗选择.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH82_PAIN_002",
+                       "skill_name":  "慢性疼痛生物心理社会教育",
+                       "objective":  "帮助病人理解慢性疼痛机制,重建现实治疗预期并提高参与度。",
+                       "scope":  "慢性非癌痛、反复就诊或对疼痛高度焦虑的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第82章 慢性疼痛",
+                       "source_page":  "第82章‘病人教育’‘全面的慢性疼痛管理方法’相关段落",
+                       "source_file":  "莫塔全科医学---第82章.md",
+                       "file_path":  "慢性疼痛生物心理社会教育.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH82_PAIN_003",
+                       "skill_name":  "慢性疼痛自我管理计划",
+                       "objective":  "以功能改善为核心为慢性疼痛病人建立多维度自我管理计划。",
+                       "scope":  "慢性非癌痛病人,尤其存在活动受限、睡眠差或情绪问题者",
+                       "source_title":  "莫塔全科医学（第8版） 第82章 慢性疼痛",
+                       "source_page":  "第82章‘积极的自我管理’‘多维度的方法’相关段落",
+                       "source_file":  "莫塔全科医学---第82章.md",
+                       "file_path":  "慢性疼痛自我管理计划.md"
+                   }
+               ]
+}

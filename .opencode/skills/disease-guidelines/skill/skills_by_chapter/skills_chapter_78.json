@@ -1,0 +1,59 @@
+{
+    "chapter_number":  78,
+    "chapter_title":  "血脂异常",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH78_LIPID_002",
+                       "skill_name":  "继发性血脂异常筛查",
+                       "objective":  "在血脂异常病人中主动排查可逆的继发性原因。",
+                       "scope":  "新发现血脂异常、混合型高脂血症或治疗效果不理想的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第78章 血脂异常",
+                       "source_page":  "第78章‘表78.2 继发性血脂异常的常见原因’‘非药物措施’相关段落",
+                       "source_file":  "莫塔全科医学---第78章.md",
+                       "file_path":  "继发性血脂异常筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH78_LIPID_004",
+                       "skill_name":  "他汀治疗起始与监测",
+                       "objective":  "为适合的血脂异常病人启动他汀治疗并进行安全监测。",
+                       "scope":  "需药物治疗的高胆固醇血症或高心血管风险病人",
+                       "source_title":  "莫塔全科医学（第8版） 第78章 血脂异常",
+                       "source_page":  "第78章‘药物治疗’‘一线药物’‘表78.4 调脂药物’‘随访要做的辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第78章.md",
+                       "file_path":  "他汀治疗起始与监测.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH78_LIPID_001",
+                       "skill_name":  "血脂筛查与复核",
+                       "objective":  "规范开展血脂筛查并对异常结果进行确认和风险分层。",
+                       "scope":  "45 岁及以上成人,或存在心血管高风险、糖尿病或家族史的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第78章 血脂异常",
+                       "source_page":  "第78章‘辅助检查’‘需要治疗的病人’相关段落",
+                       "source_file":  "莫塔全科医学---第78章.md",
+                       "file_path":  "血脂筛查与复核.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH78_LIPID_003",
+                       "skill_name":  "血脂异常生活方式干预",
+                       "objective":  "通过饮食、运动和体重管理降低血脂并改善整体心血管风险。",
+                       "scope":  "高胆固醇血症、高甘油三酯血症或混合型高脂血症病人",
+                       "source_title":  "莫塔全科医学（第8版） 第78章 血脂异常",
+                       "source_page":  "第78章‘非药物措施’‘核查点’相关段落",
+                       "source_file":  "莫塔全科医学---第78章.md",
+                       "file_path":  "血脂异常生活方式干预.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH78_LIPID_005",
+                       "skill_name":  "重度高甘油三酯血症处理",
+                       "objective":  "降低重度高甘油三酯血症病人的胰腺炎风险并处理相关诱因。",
+                       "scope":  "甘油三酯显著升高,尤其 TG ≥10 mmol/L 的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第78章 血脂异常",
+                       "source_page":  "第78章‘中重度(单独)甘油三酯升高’‘重度高甘油三酯血症’相关段落",
+                       "source_file":  "莫塔全科医学---第78章.md",
+                       "file_path":  "重度高甘油三酯血症处理.md"
+                   }
+               ]
+}

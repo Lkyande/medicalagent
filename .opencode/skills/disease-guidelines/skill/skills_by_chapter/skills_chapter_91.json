@@ -1,0 +1,49 @@
+{
+    "chapter_number":  91,
+    "chapter_title":  "宫颈癌筛查",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH91_CERVIX_002",
+                       "skill_name":  "宫颈筛查前评估",
+                       "objective":  "在宫颈筛查前完成解释、同意和影响采样质量的重要病史评估。",
+                       "scope":  "准备接受宫颈筛查测试或联合检测的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第91章 宫颈癌筛查",
+                       "source_page":  "第91章‘宫颈筛查测试的看诊’‘方法 1.解释和病史’相关段落",
+                       "source_file":  "莫塔全科医学---第91章.md",
+                       "file_path":  "宫颈筛查前评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH91_CERVIX_001",
+                       "skill_name":  "宫颈筛查适应证判断",
+                       "objective":  "判断女性是否属于常规宫颈筛查、联合检测或特殊筛查人群。",
+                       "scope":  "有或无症状的适龄女性、特殊高危女性及妇科门诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第91章 宫颈癌筛查",
+                       "source_page":  "第91章‘筛查建议’‘谁应该接受筛查?’‘特定人群筛查’相关段落",
+                       "source_file":  "莫塔全科医学---第91章.md",
+                       "file_path":  "宫颈筛查适应证判断.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH91_CERVIX_004",
+                       "skill_name":  "宫颈筛查阳性结果随访",
+                       "objective":  "确保 HPV 阳性或细胞学异常结果的女性获得及时解释和后续处理。",
+                       "scope":  "宫颈筛查测试结果阳性、可疑或不满意的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第91章 宫颈癌筛查",
+                       "source_page":  "第91章‘随访’‘宫颈筛查测试结果的管理’‘表91.2’相关段落",
+                       "source_file":  "莫塔全科医学---第91章.md",
+                       "file_path":  "宫颈筛查阳性结果随访.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH91_CERVIX_003",
+                       "skill_name":  "宫颈筛查样本采集",
+                       "objective":  "规范采集宫颈筛查样本,提高转化区取样充分性和检测质量。",
+                       "scope":  "由临床医生实施宫颈筛查测试的门诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第91章 宫颈癌筛查",
+                       "source_page":  "第91章‘由临床医生采集样本’‘方法 2-8’相关段落",
+                       "source_file":  "莫塔全科医学---第91章.md",
+                       "file_path":  "宫颈筛查样本采集.md"
+                   }
+               ]
+}

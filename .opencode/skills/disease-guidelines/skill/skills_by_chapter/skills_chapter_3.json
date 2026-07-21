@@ -1,0 +1,179 @@
+{
+    "chapter_number":  3,
+    "chapter_title":  "沟通技能",
+    "part_name":  "全科医学基础",
+    "part_number":  1,
+    "skill_count":  17,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH3_BARRIER_001",
+                       "skill_name":  "避免沟通路障",
+                       "objective":  "识别并避免会破坏信任、抑制表达或中断合作的典型沟通行为。",
+                       "scope":  "所有医患沟通场景,尤其处理敏感问题和行为改变时",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘妨碍良好沟通的路障’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "避免沟通路障.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_JARGONVISUAL_001",
+                       "skill_name":  "避免行话并使用可视工具",
+                       "objective":  "用病人能理解的语言和可视化材料解释医疗信息,提升理解、参与和后续执行。",
+                       "scope":  "病情解释、健康教育、治疗决策与操作说明场景",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘避免使用行话’‘使用可视的和实物的沟通方法’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "避免行话并使用可视工具.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_ICE_001",
+                       "skill_name":  "病人想法信念期望探索",
+                       "objective":  "探索病人对疾病、看诊和治疗的想法、信念与期望,实现真正的以病人为中心沟通。",
+                       "scope":  "诊断不明、治疗依从性差、情绪成分明显或需共同决策的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘病人的看法’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "病人想法信念期望探索.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_NONVERBAL_001",
+                       "skill_name":  "非语言线索识别",
+                       "objective":  "识别姿势、语气、距离和动作中的非语言信息,辅助理解病人的真实感受和沟通状态。",
+                       "scope":  "所有面对面看诊场景,尤其情绪和心理社会问题明显时",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘非语言交流’‘对肢体语言的解读’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "非语言线索识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_SHAREDDECISION_001",
+                       "skill_name":  "共同决策与同理桥",
+                       "objective":  "通过共同决策和同理桥技术把对话锚定在病人经历上,再回到可执行的诊疗计划。",
+                       "scope":  "需协商诊疗计划、处理沟通中断或病人顾虑强烈的看诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘医患协商并制订一致的诊疗计划’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "共同决策与同理桥.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_OPENING_001",
+                       "skill_name":  "沟通开场实施",
+                       "objective":  "在咨询开场阶段快速建立舒适感、集中注意力并促使病人自然表达就诊目的。",
+                       "scope":  "全科看诊开场阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘开场’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "沟通开场实施.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_SUMMARY_001",
+                       "skill_name":  "归纳反馈核对理解",
+                       "objective":  "通过明确口头总结向病人反馈当前理解,同时校正误解并提高病人被理解感。",
+                       "scope":  "病史采集、问题整理和管理讨论中的关键节点",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘归纳能力’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "归纳反馈核对理解.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_OBSERVE_001",
+                       "skill_name":  "候诊区观察取线索",
+                       "objective":  "在病人进入诊室前通过自然观察获取有助于沟通和诊断的背景线索。",
+                       "scope":  "医生从候诊区接病人入诊室的看诊流程",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘准备’中‘见病人和领病人’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "候诊区观察取线索.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_EXAMCOMM_001",
+                       "skill_name":  "检查与操作中的沟通",
+                       "objective":  "在体检或操作全过程持续告知、解释和倾听,降低病人不安并提升配合度。",
+                       "scope":  "需要身体接触、体格检查或门诊操作的看诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘身体检查或操作过程中的沟通’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "检查与操作中的沟通.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_CONE_001",
+                       "skill_name":  "开放到封闭提问收束",
+                       "objective":  "先开放探索病人问题,再逐步收窄提问,兼顾信息完整性与诊断效率。",
+                       "scope":  "需要在病人自由表达和结构化诊断之间切换的看诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘开放-封闭型圆锥体模式’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "开放到封闭提问收束.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_PREPARE_001",
+                       "skill_name":  "看诊前沟通准备",
+                       "objective":  "在正式看诊前完成环境、病历和自我状态准备,为高质量沟通创造条件。",
+                       "scope":  "全科门诊所有首次或复诊看诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘准备’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "看诊前沟通准备.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_SIGNPOST_001",
+                       "skill_name":  "路标法说明流程",
+                       "objective":  "通过明确说明当前阶段和下一步安排,帮助病人理解看诊流程并集中注意关键信息。",
+                       "scope":  "看诊转换节点,如从病史转向体检、从检查转向解释或讨论计划时",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘路标法’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "路标法说明流程.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_CHUNKCHECK_001",
+                       "skill_name":  "切块与核对传递信息",
+                       "objective":  "把复杂医学信息分成小块传递,每次即时核对病人理解程度,减少信息过载。",
+                       "scope":  "解释诊断、治疗方案、检查结果或慢病教育时",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘切块与核对’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "切块与核对传递信息.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_FACILITATION_001",
+                       "skill_name":  "协调沟通促进表达",
+                       "objective":  "通过最小干预式反馈鼓励病人继续讲话,提高担忧和背景信息暴露程度。",
+                       "scope":  "病人初始叙述和问题展开阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘倾听并收集信息’中‘协调’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "协调沟通促进表达.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_DOORKNOB_001",
+                       "skill_name":  "预防门把手问题的结束沟通",
+                       "objective":  "在结束看诊前提前预告、再次清点担忧并总结计划,降低‘门把手问题’发生率。",
+                       "scope":  "所有接近结束阶段的门诊看诊",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘结束诊疗’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "预防门把手问题的结束沟通.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_TIMEMANAGE_001",
+                       "skill_name":  "诊疗流程时间管理",
+                       "objective":  "在不破坏医患关系的前提下控制看诊节奏和时间,保证当前与后续病人的服务质量。",
+                       "scope":  "多问题、心理社会问题或容易超时的门诊看诊",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘管理诊疗流程’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "诊疗流程时间管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH3_LISTEN_001",
+                       "skill_name":  "主动倾听与信息收集",
+                       "objective":  "通过主动倾听充分获取事实、感受和隐含信息,减少过早打断导致的信息丢失。",
+                       "scope":  "全科门诊病史采集和心理社会问题探索阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第3章 沟通技能",
+                       "source_page":  "第3章‘倾听并收集信息’相关段落",
+                       "source_file":  "莫塔全科医学---第3章.md",
+                       "file_path":  "主动倾听与信息收集.md"
+                   }
+               ]
+}

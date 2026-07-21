@@ -1,0 +1,59 @@
+{
+    "chapter_number":  50,
+    "chapter_title":  "颈部肿块",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH50_META_004",
+                       "skill_name":  "颈部淋巴结转移灶原发搜索",
+                       "objective":  "依据淋巴结部位系统搜索颈部转移灶的潜在原发肿瘤来源。",
+                       "scope":  "怀疑转移性颈部淋巴结病的成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第50章 颈部肿块",
+                       "source_page":  "第50章‘转移癌’相关段落",
+                       "source_file":  "莫塔全科医学---第50章.md",
+                       "file_path":  "颈部淋巴结转移灶原发搜索.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH50_HX_002",
+                       "skill_name":  "颈部肿块病史与查体路径",
+                       "objective":  "通过标准化病史和区域性查体缩小颈部肿块的来源范围。",
+                       "scope":  "门急诊所有颈部肿块病人",
+                       "source_title":  "莫塔全科医学（第8版） 第50章 颈部肿块",
+                       "source_page":  "第50章‘病史’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第50章.md",
+                       "file_path":  "颈部肿块病史与查体路径.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH50_RED_001",
+                       "skill_name":  "颈部肿块红旗征识别",
+                       "objective":  "及时识别提示恶性、结核或复杂感染的高危颈部肿块表现。",
+                       "scope":  "所有新发、持续或逐渐增大的颈部肿块病人",
+                       "source_title":  "莫塔全科医学（第8版） 第50章 颈部肿块",
+                       "source_page":  "第50章‘颈部肿块的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第50章.md",
+                       "file_path":  "颈部肿块红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH50_AGE_003",
+                       "skill_name":  "颈部肿块年龄分层判断",
+                       "objective":  "利用年龄法则快速提高颈部肿块病因判断和恶性警觉度。",
+                       "scope":  "初诊尚未明确病因的颈部肿块病人",
+                       "source_title":  "莫塔全科医学（第8版） 第50章 颈部肿块",
+                       "source_page":  "第50章‘20∶40 和 80∶20 法则’相关段落",
+                       "source_file":  "莫塔全科医学---第50章.md",
+                       "file_path":  "颈部肿块年龄分层判断.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH50_BIOPSY_005",
+                       "skill_name":  "细针穿刺与活检分层",
+                       "objective":  "合理选择 FNAB 与整块淋巴结活检,提高颈部肿块病因诊断效率。",
+                       "scope":  "原因未明、可疑恶性或对抗生素不敏感的颈部肿块病人",
+                       "source_title":  "莫塔全科医学（第8版） 第50章 颈部肿块",
+                       "source_page":  "第50章‘关键事实和要点’‘辅助检查’‘转诊时机’相关段落",
+                       "source_file":  "莫塔全科医学---第50章.md",
+                       "file_path":  "细针穿刺与活检分层.md"
+                   }
+               ]
+}

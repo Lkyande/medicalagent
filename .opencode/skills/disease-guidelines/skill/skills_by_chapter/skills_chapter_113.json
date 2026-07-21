@@ -1,0 +1,39 @@
+{
+    "chapter_number":  113,
+    "chapter_title":  "常见的皮肤疾病",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH113_SKIN_003",
+                       "skill_name":  "特应性皮炎局部激素分区用药",
+                       "objective":  "按部位和严重度合理选择局部糖皮质激素强度治疗特应性皮炎。",
+                       "scope":  "需要局部抗炎治疗的特应性皮炎病人",
+                       "source_title":  "莫塔全科医学（第8版） 第113章 常见的皮肤疾病",
+                       "source_page":  "第113章‘药物’‘外用类固醇皮质治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第113章.md",
+                       "file_path":  "特应性皮炎局部激素分区用药.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH113_SKIN_002",
+                       "skill_name":  "特应性皮炎润肤与避刺激",
+                       "objective":  "通过润肤和避免刺激物恢复皮肤屏障并减少特应性皮炎复发。",
+                       "scope":  "轻中度特应性皮炎病人及其照护者",
+                       "source_title":  "莫塔全科医学（第8版） 第113章 常见的皮肤疾病",
+                       "source_page":  "第113章‘避免刺激物’‘改善皮肤状况’相关段落",
+                       "source_file":  "莫塔全科医学---第113章.md",
+                       "file_path":  "特应性皮炎润肤与避刺激.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH113_SKIN_001",
+                       "skill_name":  "特应性皮炎识别",
+                       "objective":  "根据瘙痒、分布和病史识别特应性皮炎并与其他皮炎区分。",
+                       "scope":  "婴儿、儿童和成人出现慢性复发性瘙痒性皮炎时",
+                       "source_title":  "莫塔全科医学（第8版） 第113章 常见的皮肤疾病",
+                       "source_page":  "第113章‘特应性皮炎’‘诊断标准’‘分布’相关段落",
+                       "source_file":  "莫塔全科医学---第113章.md",
+                       "file_path":  "特应性皮炎识别.md"
+                   }
+               ]
+}

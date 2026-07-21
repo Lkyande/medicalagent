@@ -1,0 +1,89 @@
+{
+    "chapter_number":  12,
+    "chapter_title":  "药物和酒精问题",
+    "part_name":  "全科医学的诊断方法",
+    "part_number":  2,
+    "skill_count":  8,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH12_ALCOHOL_002",
+                       "skill_name":  "简短戒酒干预",
+                       "objective":  "对有害饮酒者实施门诊简短干预,促进其减少饮酒或进入戒酒治疗。",
+                       "scope":  "问题饮酒者、早期依赖者或希望减少饮酒的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘管理方法’‘简单实用的管理计划’‘最低限度干预计划’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "简短戒酒干预.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH12_SMOKE_001",
+                       "skill_name":  "戒烟5A干预",
+                       "objective":  "通过结构化5A流程提升吸烟者戒烟意愿、制定戒烟计划并安排持续随访。",
+                       "scope":  "所有当前吸烟者,尤其高危重度吸烟者",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘帮助病人戒烟’‘干预:5A策略’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "戒烟5A干预.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH12_ALCOHOL_003",
+                       "skill_name":  "酒精戒断处理",
+                       "objective":  "识别并处理长期饮酒者的急性戒断症状,预防震颤性谵妄和营养并发症。",
+                       "scope":  "停止或显著减少长期饮酒后出现戒断表现的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘戒断症状’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "酒精戒断处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH12_ALCOHOL_001",
+                       "skill_name":  "酒精使用CAGE筛查",
+                       "objective":  "在全科就诊中快速识别可能存在问题饮酒或酒精依赖的病人。",
+                       "scope":  "饮酒史不清、怀疑过量饮酒、反复躯体或社会问题相关就诊者",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘采集饮酒史’‘有用的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "酒精使用CAGE筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH12_SMOKE_003",
+                       "skill_name":  "尼古丁替代治疗选择",
+                       "objective":  "根据尼古丁依赖程度为戒烟者选择合适的尼古丁替代治疗方案。",
+                       "scope":  "中度到高度尼古丁依赖且有明确戒烟动机的吸烟者",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘药物治疗’‘尼古丁嚼剂’‘尼古丁透皮贴剂’‘联合治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "尼古丁替代治疗选择.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH12_SMOKE_002",
+                       "skill_name":  "尼古丁依赖评估",
+                       "objective":  "识别吸烟者的尼古丁依赖程度和戒断风险,为药物与行为干预分层。",
+                       "scope":  "拟戒烟、戒烟失败或怀疑高尼古丁依赖的吸烟者",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘干预:5A策略’‘戒断反应’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "尼古丁依赖评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH12_ADR_001",
+                       "skill_name":  "药物不良反应评估",
+                       "objective":  "在出现新症状或用药变更后,系统识别可能的药物不良反应并降低再次暴露风险。",
+                       "scope":  "使用处方药、非处方药或多药并用后出现新症状的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘药物不良反应’‘预防药物不良反应的黄金法则’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "药物不良反应评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH12_ALCOHOL_004",
+                       "skill_name":  "震颤性谵妄识别与住院",
+                       "objective":  "及早识别危及生命的酒精戒断谵妄,启动住院和强化支持治疗。",
+                       "scope":  "酒精戒断后1到5日内出现意识和自主神经症状的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第12章 药物和酒精问题",
+                       "source_page":  "第12章‘酒精戒断谵妄(震颤性谵妄)’相关段落",
+                       "source_file":  "莫塔全科医学---第12章.md",
+                       "file_path":  "震颤性谵妄识别与住院.md"
+                   }
+               ]
+}

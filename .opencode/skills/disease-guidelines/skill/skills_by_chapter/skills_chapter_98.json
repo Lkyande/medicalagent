@@ -1,0 +1,39 @@
+{
+    "chapter_number":  98,
+    "chapter_title":  "阴道分泌物",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH98_DISCHARGE_002",
+                       "skill_name":  "复发性阴道念珠菌病管理",
+                       "objective":  "规范识别和长期管理复发性外阴阴道念珠菌病。",
+                       "scope":  "反复瘙痒、豆渣样分泌物或多次发作的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第98章 阴道分泌物",
+                       "source_page":  "第98章‘复发性外阴阴道念珠菌病’‘治疗’‘对阴道念珠菌病人的建议’相关段落",
+                       "source_file":  "莫塔全科医学---第98章.md",
+                       "file_path":  "复发性阴道念珠菌病管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH98_DISCHARGE_003",
+                       "skill_name":  "细菌性阴道病识别与治疗",
+                       "objective":  "识别细菌性阴道病并给予针对性治疗,减少异味和复发困扰。",
+                       "scope":  "分泌物有鱼腥味、灰白稀薄或复发性阴道不适的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第98章 阴道分泌物",
+                       "source_page":  "第98章‘细菌性阴道病’‘临床特点’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第98章.md",
+                       "file_path":  "细菌性阴道病识别与治疗.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH98_DISCHARGE_001",
+                       "skill_name":  "阴道分泌物初始评估",
+                       "objective":  "对阴道分泌物进行系统评估,区分生理性、感染性和恶性病变信号。",
+                       "scope":  "主诉阴道分泌物增多、异味、瘙痒、灼热或相关不适的女性和女童",
+                       "source_title":  "莫塔全科医学（第8版） 第98章 阴道分泌物",
+                       "source_page":  "第98章‘临床方法’‘病史’‘身体检查’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第98章.md",
+                       "file_path":  "阴道分泌物初始评估.md"
+                   }
+               ]
+}

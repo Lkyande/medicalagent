@@ -1,0 +1,49 @@
+{
+    "chapter_number":  105,
+    "chapter_title":  "阴茎疾病",
+    "part_name":  "男性健康",
+    "part_number":  8,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH105_PENIS_004",
+                       "skill_name":  "包皮卫生指导",
+                       "objective":  "指导男童和男性进行安全、温和的包皮清洁,减少炎症和误操作并发症。",
+                       "scope":  "包皮已可自然回缩的男童、青少年和成人",
+                       "source_title":  "莫塔全科医学（第8版） 第105章 阴茎疾病",
+                       "source_page":  "第105章‘包皮的清洁卫生’‘给病人的指导’相关段落",
+                       "source_file":  "莫塔全科医学---第105章.md",
+                       "file_path":  "包皮卫生指导.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH105_PENIS_002",
+                       "skill_name":  "嵌顿包茎紧急复位",
+                       "objective":  "对嵌顿包茎进行及时减压和复位,防止持续缺血和坏死。",
+                       "scope":  "包皮回缩后卡在冠状沟远端、阴茎头及远端包皮肿胀疼痛的男童和男性",
+                       "source_title":  "莫塔全科医学（第8版） 第105章 阴茎疾病",
+                       "source_page":  "第105章‘嵌顿包茎’‘管理’‘方法1-4’相关段落",
+                       "source_file":  "莫塔全科医学---第105章.md",
+                       "file_path":  "嵌顿包茎紧急复位.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH105_PENIS_003",
+                       "skill_name":  "阴茎头炎病因分层",
+                       "objective":  "根据临床表现和风险因素区分感染性、炎症性和癌前性阴茎头炎。",
+                       "scope":  "阴茎头红斑、疼痛、瘙痒、分泌物或包皮炎的男性",
+                       "source_title":  "莫塔全科医学（第8版） 第105章 阴茎疾病",
+                       "source_page":  "第105章‘阴茎头炎’‘治疗’‘干燥闭塞性阴茎头炎’相关段落",
+                       "source_file":  "莫塔全科医学---第105章.md",
+                       "file_path":  "阴茎头炎病因分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH105_PENIS_001",
+                       "skill_name":  "真正包茎识别",
+                       "objective":  "区分正常年龄相关包皮不可回缩与需要治疗的真正包茎。",
+                       "scope":  "婴幼儿、男童、青少年及成人因包皮问题就诊时",
+                       "source_title":  "莫塔全科医学（第8版） 第105章 阴茎疾病",
+                       "source_page":  "第105章‘包茎’相关段落",
+                       "source_file":  "莫塔全科医学---第105章.md",
+                       "file_path":  "真正包茎识别.md"
+                   }
+               ]
+}

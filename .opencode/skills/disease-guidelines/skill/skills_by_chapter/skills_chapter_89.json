@@ -1,0 +1,49 @@
+{
+    "chapter_number":  89,
+    "chapter_title":  "儿童急诊",
+    "part_name":  "儿童和青少年健康",
+    "part_number":  6,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH89_EMERG_004",
+                       "skill_name":  "儿童基础生命支持",
+                       "objective":  "在儿童心跳呼吸骤停时实施符合年龄特点的基础生命支持。",
+                       "scope":  "院前、门诊或基层场景中的儿童心跳呼吸骤停或严重心动过缓",
+                       "source_title":  "莫塔全科医学（第8版） 第89章 儿童急诊",
+                       "source_page":  "第89章‘心肺复苏’‘指南’相关段落",
+                       "source_file":  "莫塔全科医学---第89章.md",
+                       "file_path":  "儿童基础生命支持.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH89_EMERG_002",
+                       "skill_name":  "儿童气道呼吸ABCDE评估",
+                       "objective":  "系统评估儿童气道与呼吸功能,尽早发现低氧和阻塞恶化。",
+                       "scope":  "呼吸困难、喘鸣、哮鸣、发绀或不明状态恶化的儿童",
+                       "source_title":  "莫塔全科医学（第8版） 第89章 儿童急诊",
+                       "source_page":  "第89章‘气道和呼吸’‘观察的重要症状和指标’相关段落",
+                       "source_file":  "莫塔全科医学---第89章.md",
+                       "file_path":  "儿童气道呼吸ABCDE评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH89_EMERG_001",
+                       "skill_name":  "儿童危重征象快速识别",
+                       "objective":  "在初诊数分钟内识别需要优先处置或住院的危重儿童。",
+                       "scope":  "发热、呼吸困难、晕厥、抽搐或状态异常来诊的婴幼儿和儿童",
+                       "source_title":  "莫塔全科医学（第8版） 第89章 儿童急诊",
+                       "source_page":  "第89章‘严重疾病的征象和症状’‘病情危重婴儿的临床特征’‘诊治策略’相关段落",
+                       "source_file":  "莫塔全科医学---第89章.md",
+                       "file_path":  "儿童危重征象快速识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH89_EMERG_003",
+                       "skill_name":  "儿童晕厥初步处理",
+                       "objective":  "在儿童晕厥场景中快速恢复基本生命支持并寻找可逆原因。",
+                       "scope":  "晕倒、无反应或明显虚脱的儿童和婴儿",
+                       "source_title":  "莫塔全科医学（第8版） 第89章 儿童急诊",
+                       "source_page":  "第89章‘儿童晕厥’‘最初基本管理’相关段落",
+                       "source_file":  "莫塔全科医学---第89章.md",
+                       "file_path":  "儿童晕厥初步处理.md"
+                   }
+               ]
+}

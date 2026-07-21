@@ -1,0 +1,59 @@
+{
+    "chapter_number":  47,
+    "chapter_title":  "黄疸",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH47_GILBERT_005",
+                       "skill_name":  "Gilbert综合征识别与释疑",
+                       "objective":  "识别 Gilbert 综合征这一常见良性非结合性高胆红素血症并避免过度治疗。",
+                       "scope":  "反复轻度黄疸或孤立性胆红素升高且整体状态稳定的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第47章 黄疸",
+                       "source_page":  "第47章‘陷阱’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第47章.md",
+                       "file_path":  "Gilbert综合征识别与释疑.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH47_HX_002",
+                       "skill_name":  "黄疸病史要点采集",
+                       "objective":  "通过系统病史采集快速区分感染性、梗阻性、药物性和溶血性黄疸线索。",
+                       "scope":  "门急诊所有黄疸或疑似高胆红素血症病人",
+                       "source_title":  "莫塔全科医学（第8版） 第47章 黄疸",
+                       "source_page":  "第47章‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第47章.md",
+                       "file_path":  "黄疸病史要点采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH47_RED_001",
+                       "skill_name":  "黄疸红旗征识别",
+                       "objective":  "快速识别提示恶性梗阻、肝衰竭或严重系统病的黄疸表现。",
+                       "scope":  "所有新发或进行性黄疸病人",
+                       "source_title":  "莫塔全科医学（第8版） 第47章 黄疸",
+                       "source_page":  "第47章‘黄疸的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第47章.md",
+                       "file_path":  "黄疸红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH47_EXAM_003",
+                       "skill_name":  "黄疸体格检查与初筛化验",
+                       "objective":  "通过聚焦体格检查和首轮检查快速完成黄疸病因初步分层。",
+                       "scope":  "已确认或高度怀疑黄疸的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第47章 黄疸",
+                       "source_page":  "第47章‘身体检查’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第47章.md",
+                       "file_path":  "黄疸体格检查与初筛化验.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH47_CHOLANGITIS_004",
+                       "skill_name":  "急性胆管炎临床识别与紧急转诊",
+                       "objective":  "尽早识别急性胆管炎并启动紧急转诊,降低败血症和循环衰竭风险。",
+                       "scope":  "黄疸伴感染或上腹痛的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第47章 黄疸",
+                       "source_page":  "第47章‘急性胆管炎’相关段落",
+                       "source_file":  "莫塔全科医学---第47章.md",
+                       "file_path":  "急性胆管炎临床识别与紧急转诊.md"
+                   }
+               ]
+}

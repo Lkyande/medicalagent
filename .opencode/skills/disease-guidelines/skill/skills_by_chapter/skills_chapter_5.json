@@ -1,0 +1,129 @@
+{
+    "chapter_number":  5,
+    "chapter_title":  "健康促进与病人教育",
+    "part_name":  "全科医学基础",
+    "part_number":  1,
+    "skill_count":  12,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH5_5AS_001",
+                       "skill_name":  "5As生活方式咨询",
+                       "objective":  "用 5As 模型系统推进生活方式改变咨询,从识别风险到安排后续支持形成闭环。",
+                       "scope":  "吸烟、营养、饮酒和身体活动等行为改变咨询",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘5As式咨询’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "5As生活方式咨询.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_NEAT_001",
+                       "skill_name":  "NEAT生活方式指导",
+                       "objective":  "用 NEAT 框架开展简明生活方式指导,把营养、运动、有害物质回避和减压整合到一次咨询中。",
+                       "scope":  "需要简洁生活方式教育的门诊病人,尤其压力负荷高或多重行为风险者",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘NEAT 指南’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "NEAT生活方式指导.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_SNAP_001",
+                       "skill_name":  "SNAP危险因素评估",
+                       "objective":  "通过 SNAP 框架系统识别病人的生活方式危险因素,为后续行为干预提供结构化入口。",
+                       "scope":  "成人和青少年门诊、慢病管理、体检和机会性健康促进场景",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘SNAP 指南’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "SNAP危险因素评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_ALCOHOL_001",
+                       "skill_name":  "安全饮酒建议",
+                       "objective":  "根据安全饮酒指南为病人提供清晰限量建议,降低酒精相关健康风险。",
+                       "scope":  "成人饮酒者、孕哺期女性、青少年和慢病风险人群",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘酒精摄入安全指南’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "安全饮酒建议.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_HANDOUT_001",
+                       "skill_name":  "病人教育资料使用",
+                       "objective":  "把书面教育资料作为口头解释的补充,增强病人对健康行为改变和疾病管理的理解与执行。",
+                       "scope":  "需要强化口头宣教的门诊咨询、慢病管理和行为改变干预",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘病人教育资源’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "病人教育资料使用.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_LOWGI_001",
+                       "skill_name":  "低GI饮食教育",
+                       "objective":  "帮助病人理解升糖指数概念并优先选择低 GI 食物以改善血糖控制。",
+                       "scope":  "糖尿病、糖耐量异常、代谢综合征和需要血糖管理的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘升糖指数’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "低GI饮食教育.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_OPPORTUNISTIC_001",
+                       "skill_name":  "机会性健康促进实施",
+                       "objective":  "在常规看诊中主动识别并利用预防和健康教育机会,而不仅限于处理当前主诉。",
+                       "scope":  "全科门诊所有就诊场景,尤其慢病复诊、家庭随访和多次接触病人时",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘机会性的健康促进’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "机会性健康促进实施.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_SYSTEM_001",
+                       "skill_name":  "健康促进系统建设",
+                       "objective":  "建立支持全科持续开展健康促进的诊所级工作系统,提高预防服务覆盖率和连续性。",
+                       "scope":  "全科诊所、基层医疗团队和长期病人管理场景",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘方法’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "健康促进系统建设.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_DIET_001",
+                       "skill_name":  "健康饮食指导",
+                       "objective":  "基于通用营养原则为病人提供简明、可执行的健康饮食建议,降低慢病风险。",
+                       "scope":  "一般成人健康管理、心血管代谢风险人群和长期生活方式管理",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘最佳营养的通用原则’‘健康饮食的归纳’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "健康饮食指导.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_PSYCHPROMOTE_001",
+                       "skill_name":  "社会心理健康促进咨询",
+                       "objective":  "在全科接诊中主动识别和干预心理社会风险,把健康促进延伸到情绪与关系领域。",
+                       "scope":  "压力、焦虑、丧亲、人际关系紧张、自杀风险或复杂社会心理问题病人",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘促进社会心理健康’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "社会心理健康促进咨询.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_NUTRISK_001",
+                       "skill_name":  "营养高危筛查",
+                       "objective":  "尽早识别营养不足或营养相关问题的高危病人,触发进一步营养评估和干预。",
+                       "scope":  "肥胖、慢性病、老年人、创伤、长期住院、饮食失调和术后病人",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘营养评估’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "营养高危筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH5_DEFICIENCY_001",
+                       "skill_name":  "营养缺乏体征检查",
+                       "objective":  "通过查体和线索识别常见营养素缺乏表现,提高营养相关疾病的临床发现率。",
+                       "scope":  "营养不良、酒精使用障碍、慢病、老年人和生长发育异常病人",
+                       "source_title":  "莫塔全科医学（第8版） 第5章 健康促进与病人教育",
+                       "source_page":  "第5章‘营养评估’‘维生素缺乏’相关段落",
+                       "source_file":  "莫塔全科医学---第5章.md",
+                       "file_path":  "营养缺乏体征检查.md"
+                   }
+               ]
+}

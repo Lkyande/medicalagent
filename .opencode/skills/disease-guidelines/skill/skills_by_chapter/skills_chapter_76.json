@@ -1,0 +1,59 @@
+{
+    "chapter_number":  76,
+    "chapter_title":  "慢性心力衰竭",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH76_HF_003",
+                       "skill_name":  "慢性心衰ACEI起始",
+                       "objective":  "为适合的慢性心衰病人安全启动 ACEI 并逐步达到耐受治疗量。",
+                       "scope":  "收缩期心力衰竭且无 ACEI 禁忌证的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第76章 慢性心力衰竭",
+                       "source_page":  "第76章‘心力衰竭的初始治疗’‘ACEI’相关段落",
+                       "source_file":  "莫塔全科医学---第76章.md",
+                       "file_path":  "慢性心衰ACEI起始.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH76_HF_002",
+                       "skill_name":  "慢性心衰超声与BNP评估",
+                       "objective":  "用超声心动图和关键实验室指标确认心衰类型并指导治疗。",
+                       "scope":  "已临床怀疑心力衰竭、需进一步分类为 HFrEF 或 HFpEF 的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第76章 慢性心力衰竭",
+                       "source_page":  "第76章‘辅助检查’‘外周标记物’相关段落",
+                       "source_file":  "莫塔全科医学---第76章.md",
+                       "file_path":  "慢性心衰超声与BNP评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH76_HF_004",
+                       "skill_name":  "慢性心衰利尿与体重监测",
+                       "objective":  "在液体超负荷心衰病人中合理使用利尿剂并防止过度脱水和电解质紊乱。",
+                       "scope":  "存在踝水肿、肺充血、体重增加或其他液体潴留表现的心衰病人",
+                       "source_title":  "莫塔全科医学（第8版） 第76章 慢性心力衰竭",
+                       "source_page":  "第76章‘心力衰竭的初始治疗’‘常见的非药物管理’‘慢性心力衰竭管理的误区’相关段落",
+                       "source_file":  "莫塔全科医学---第76章.md",
+                       "file_path":  "慢性心衰利尿与体重监测.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH76_HF_001",
+                       "skill_name":  "慢性心衰临床识别",
+                       "objective":  "根据典型症状和体征尽早识别慢性心力衰竭并区分左、右心衰表现。",
+                       "scope":  "出现劳力性呼吸困难、端坐呼吸、水肿、疲劳或体重改变的中老年病人",
+                       "source_title":  "莫塔全科医学（第8版） 第76章 慢性心力衰竭",
+                       "source_page":  "第76章‘诊断’‘主要症状’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第76章.md",
+                       "file_path":  "慢性心衰临床识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH76_HF_005",
+                       "skill_name":  "慢性心衰诱因排查",
+                       "objective":  "识别导致慢性心衰失代偿或反复恶化的可逆诱因并及时纠正。",
+                       "scope":  "心衰新发恶化、液体潴留反复或疗效不佳的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第76章 慢性心力衰竭",
+                       "source_page":  "第76章‘治疗病因和诱发因素’‘表76.2 可加重 CHF 的药物’相关段落",
+                       "source_file":  "莫塔全科医学---第76章.md",
+                       "file_path":  "慢性心衰诱因排查.md"
+                   }
+               ]
+}

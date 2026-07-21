@@ -1,0 +1,69 @@
+{
+    "chapter_number":  26,
+    "chapter_title":  "肛肠疾病",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  6,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH26_FIS_001",
+                       "skill_name":  "肛裂保守治疗路径",
+                       "objective":  "通过减轻括约肌痉挛和软化大便促进肛裂愈合,减少复发和不必要手术。",
+                       "scope":  "急性或慢性单发肛裂病人",
+                       "source_title":  "莫塔全科医学（第8版） 第26章 肛肠疾病",
+                       "source_page":  "第26章‘肛裂’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第26章.md",
+                       "file_path":  "肛裂保守治疗路径.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH26_ABS_004",
+                       "skill_name":  "肛周脓肿切开引流",
+                       "objective":  "及时引流肛周脓肿并识别需要加用抗生素或进一步寻找基础病因的病人。",
+                       "scope":  "肛门周围严重持续跳痛、红肿热和发热病人",
+                       "source_title":  "莫塔全科医学（第8版） 第26章 肛肠疾病",
+                       "source_page":  "第26章‘肛周脓肿’‘治疗’‘抗生素’相关段落",
+                       "source_file":  "莫塔全科医学---第26章.md",
+                       "file_path":  "肛周脓肿切开引流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH26_HEM_003",
+                       "skill_name":  "肛周血肿时序处理",
+                       "objective":  "根据发病时间选择肛周血肿最合适的处理方式,减轻疼痛并减少皮赘形成。",
+                       "scope":  "疑似血栓性外痔或肛周血肿病人",
+                       "source_title":  "莫塔全科医学（第8版） 第26章 肛肠疾病",
+                       "source_page":  "第26章‘肛周血肿’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第26章.md",
+                       "file_path":  "肛周血肿时序处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH26_HEM_005",
+                       "skill_name":  "内痔分期与初始处理",
+                       "objective":  "按内痔分期判断病情严重度并选择保守或介入治疗方向。",
+                       "scope":  "便后出血、脱垂或肛门黏液分泌病人",
+                       "source_title":  "莫塔全科医学（第8版） 第26章 肛肠疾病",
+                       "source_page":  "第26章‘内痔’‘临床分期和病理’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第26章.md",
+                       "file_path":  "内痔分期与初始处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH26_PROCT_002",
+                       "skill_name":  "提肛痉挛发作处理",
+                       "objective":  "帮助病人识别提肛痉挛的良性短暂发作并采取即时缓解措施。",
+                       "scope":  "短暂发作性直肠疼痛、夜间痛醒而无明显局部器质性病变者",
+                       "source_title":  "莫塔全科医学（第8版） 第26章 肛肠疾病",
+                       "source_page":  "第26章‘痉挛性肛门疼痛(提肛痉挛)’相关段落",
+                       "source_file":  "莫塔全科医学---第26章.md",
+                       "file_path":  "提肛痉挛发作处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH26_BLEED_006",
+                       "skill_name":  "直肠出血红旗征排查",
+                       "objective":  "在肛门出血就诊时识别提示结直肠癌或重大肠道病变的警报信号。",
+                       "scope":  "所有主诉直肠出血或便血病人",
+                       "source_title":  "莫塔全科医学（第8版） 第26章 肛肠疾病",
+                       "source_page":  "第26章‘直肠出血’‘直肠出血的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第26章.md",
+                       "file_path":  "直肠出血红旗征排查.md"
+                   }
+               ]
+}

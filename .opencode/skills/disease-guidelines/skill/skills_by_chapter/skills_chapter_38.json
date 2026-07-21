@@ -1,0 +1,69 @@
+{
+    "chapter_number":  38,
+    "chapter_title":  "呼吸困难",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  6,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH38_PEFR_004",
+                       "skill_name":  "PEFR床旁评估",
+                       "objective":  "用峰流速快速量化气道阻塞程度,辅助识别哮喘或慢性支气管炎相关呼吸困难。",
+                       "scope":  "怀疑哮喘或慢性气流受限的呼吸困难病人",
+                       "source_title":  "莫塔全科医学（第8版） 第38章 呼吸困难",
+                       "source_page":  "第38章‘呼气峰流速’相关段落",
+                       "source_file":  "莫塔全科医学---第38章.md",
+                       "file_path":  "PEFR床旁评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH38_DYSP_001",
+                       "skill_name":  "呼吸困难红旗征筛查",
+                       "objective":  "在呼吸困难首诊时快速识别需紧急处理的心肺和血栓性病因。",
+                       "scope":  "所有急性或进行性呼吸困难病人",
+                       "source_title":  "莫塔全科医学（第8版） 第38章 呼吸困难",
+                       "source_page":  "第38章‘呼吸困难红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第38章.md",
+                       "file_path":  "呼吸困难红旗征筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH38_DYSP_002",
+                       "skill_name":  "呼吸困难起病速度分层",
+                       "objective":  "依据起病速度快速缩小呼吸困难病因范围并指导急缓分诊。",
+                       "scope":  "新发呼吸困难的门诊、急诊或电话分诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第38章 呼吸困难",
+                       "source_page":  "第38章‘病史’‘发病时间相关性呼吸困难的典型原因’相关段落",
+                       "source_file":  "莫塔全科医学---第38章.md",
+                       "file_path":  "呼吸困难起病速度分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH38_DYSP_003",
+                       "skill_name":  "呼吸困难体格检查重点执行",
+                       "objective":  "通过系统胸部和全身查体快速判断呼吸困难是局灶肺病、弥漫肺病还是心源性病变。",
+                       "scope":  "需要体格评估的呼吸困难病人",
+                       "source_title":  "莫塔全科医学（第8版） 第38章 呼吸困难",
+                       "source_page":  "第38章‘身体检查’‘肺部湿啰音的原因’相关段落",
+                       "source_file":  "莫塔全科医学---第38章.md",
+                       "file_path":  "呼吸困难体格检查重点执行.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH38_OX_005",
+                       "skill_name":  "脉搏血氧饱和度判读",
+                       "objective":  "利用经皮血氧快速判断低氧严重度并辅助分流呼吸困难病人。",
+                       "scope":  "所有急性或亚急性呼吸困难病人",
+                       "source_title":  "莫塔全科医学（第8版） 第38章 呼吸困难",
+                       "source_page":  "第38章‘脉搏血氧测定’相关段落",
+                       "source_file":  "莫塔全科医学---第38章.md",
+                       "file_path":  "脉搏血氧饱和度判读.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH38_PLEUR_006",
+                       "skill_name":  "胸腔积液漏出液渗出液分层",
+                       "objective":  "依据胸腔积液特征快速区分漏出液与渗出液,缩小病因范围并指导后续处理。",
+                       "scope":  "胸片或查体提示胸腔积液并伴呼吸困难的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第38章 呼吸困难",
+                       "source_page":  "第38章‘胸腔积液’‘漏出液’‘渗出液’相关段落",
+                       "source_file":  "莫塔全科医学---第38章.md",
+                       "file_path":  "胸腔积液漏出液渗出液分层.md"
+                   }
+               ]
+}

@@ -1,0 +1,49 @@
+{
+    "chapter_number":  92,
+    "chapter_title":  "家庭计划(避孕)",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH92_CONTRACEPTION_003",
+                       "skill_name":  "COC禁忌筛查",
+                       "objective":  "在开具复方激素避孕药前识别静脉血栓和其他重要禁忌风险。",
+                       "scope":  "准备开始 COC 或阴道环等复方激素避孕法的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第92章 家庭计划(避孕)",
+                       "source_page":  "第92章‘安全处方’‘复方口服避孕药’‘表92.3 使用复方口服避孕药的禁忌’相关段落",
+                       "source_file":  "莫塔全科医学---第92章.md",
+                       "file_path":  "COC禁忌筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH92_CONTRACEPTION_004",
+                       "skill_name":  "IUD并发症随访",
+                       "objective":  "在 IUD 放置后早期识别感染、穿孔、脱落和异位妊娠风险。",
+                       "scope":  "放置含铜或左炔诺孕酮 IUD 的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第92章 家庭计划(避孕)",
+                       "source_page":  "第92章‘IUD 的副作用和并发症’‘脱落、子宫穿孔和异位’相关段落",
+                       "source_file":  "莫塔全科医学---第92章.md",
+                       "file_path":  "IUD并发症随访.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH92_CONTRACEPTION_002",
+                       "skill_name":  "LARC优先介绍",
+                       "objective":  "在避孕咨询中主动介绍长效可逆避孕方法,减少意外妊娠。",
+                       "scope":  "希望高效、低维护、可逆避孕的女性,包括年轻和未育女性",
+                       "source_title":  "莫塔全科医学（第8版） 第92章 家庭计划(避孕)",
+                       "source_page":  "第92章‘生育控制’‘LARC’相关段落",
+                       "source_file":  "莫塔全科医学---第92章.md",
+                       "file_path":  "LARC优先介绍.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH92_CONTRACEPTION_001",
+                       "skill_name":  "避孕咨询与双重保护",
+                       "objective":  "帮助病人根据有效性、偏好和 STI 风险选择合适的避孕方式。",
+                       "scope":  "前来咨询避孕、性健康或生育计划的育龄女性和青少年",
+                       "source_title":  "莫塔全科医学（第8版） 第92章 家庭计划(避孕)",
+                       "source_page":  "第92章‘生育控制’‘双重保护’相关段落",
+                       "source_file":  "莫塔全科医学---第92章.md",
+                       "file_path":  "避孕咨询与双重保护.md"
+                   }
+               ]
+}

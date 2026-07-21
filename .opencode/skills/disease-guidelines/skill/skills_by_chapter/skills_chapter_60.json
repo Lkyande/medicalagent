@@ -1,0 +1,59 @@
+{
+    "chapter_number":  60,
+    "chapter_title":  "睡眠障碍",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH60_HYPNOTIC_005",
+                       "skill_name":  "催眠药短期使用边界",
+                       "objective":  "在必要用药时明确催眠药仅作短期辅助,降低依赖和不良反应风险。",
+                       "scope":  "经评估后考虑短期药物辅助的失眠病人",
+                       "source_title":  "莫塔全科医学（第8版） 第60章 睡眠障碍",
+                       "source_page":  "第60章‘治疗失眠的基本原则’‘药物治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第60章.md",
+                       "file_path":  "催眠药短期使用边界.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH60_INSOMNIA_001",
+                       "skill_name":  "失眠基础评估与非药物起始管理",
+                       "objective":  "在失眠首诊中完成系统评估,并优先启动非药物管理路径。",
+                       "scope":  "主诉入睡困难、易醒、早醒或睡后不恢复的成人和青少年",
+                       "source_title":  "莫塔全科医学（第8版） 第60章 睡眠障碍",
+                       "source_page":  "第60章‘失眠’‘治疗失眠的基本原则’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第60章.md",
+                       "file_path":  "失眠基础评估与非药物起始管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH60_DIARY_003",
+                       "skill_name":  "睡眠日记记录与解读",
+                       "objective":  "用连续睡眠记录补足主诉信息,帮助判断失眠与睡眠-觉醒节律问题。",
+                       "scope":  "睡眠规律不清、主诉与实际作息不一致或怀疑昼夜节律问题的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第60章 睡眠障碍",
+                       "source_page":  "第60章‘关键事实和要点’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第60章.md",
+                       "file_path":  "睡眠日记记录与解读.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH60_HYGIENE_002",
+                       "skill_name":  "睡眠卫生核心宣教",
+                       "objective":  "通过标准化宣教改善可调整的日常行为,降低轻中度失眠维持因素。",
+                       "scope":  "以失眠、睡眠浅、睡眠不规律或夜间觉醒为主诉的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第60章 睡眠障碍",
+                       "source_page":  "第60章‘管理’‘睡眠卫生建议’相关段落",
+                       "source_file":  "莫塔全科医学---第60章.md",
+                       "file_path":  "睡眠卫生核心宣教.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH60_OSA_004",
+                       "skill_name":  "阻塞型睡眠呼吸暂停风险识别与转诊",
+                       "objective":  "在基层识别 OSA 高风险病人并及时转入规范睡眠评估与治疗路径。",
+                       "scope":  "打鼾、被目击呼吸暂停、白天困倦或总是感到疲倦的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第60章 睡眠障碍",
+                       "source_page":  "第60章‘睡眠呼吸暂停’‘睡眠呼吸暂停的管理’相关段落",
+                       "source_file":  "莫塔全科医学---第60章.md",
+                       "file_path":  "阻塞型睡眠呼吸暂停风险识别与转诊.md"
+                   }
+               ]
+}

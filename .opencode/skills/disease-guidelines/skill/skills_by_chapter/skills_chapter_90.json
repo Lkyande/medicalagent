@@ -1,0 +1,39 @@
+{
+    "chapter_number":  90,
+    "chapter_title":  "青少年健康",
+    "part_name":  "儿童和青少年健康",
+    "part_number":  6,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH90_TEEN_002",
+                       "skill_name":  "HEEADSSS心理社会筛查",
+                       "objective":  "系统识别青少年的家庭、教育、行为和心理健康风险因素。",
+                       "scope":  "青少年常规健康访视、心理健康咨询和复杂就诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第90章 青少年健康",
+                       "source_page":  "第90章‘HEEADSSS’相关段落",
+                       "source_file":  "莫塔全科医学---第90章.md",
+                       "file_path":  "HEEADSSS心理社会筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH90_TEEN_001",
+                       "skill_name":  "青少年保密边界解释",
+                       "objective":  "在青少年就诊初期建立对保密原则和例外情况的清晰共同理解。",
+                       "scope":  "12 至 24 岁青少年或年轻人全科就诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第90章 青少年健康",
+                       "source_page":  "第90章‘保密’‘表90.1 保密原则的三个例外’相关段落",
+                       "source_file":  "莫塔全科医学---第90章.md",
+                       "file_path":  "青少年保密边界解释.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH90_TEEN_003",
+                       "skill_name":  "青少年单独问诊安排",
+                       "objective":  "在不破坏家庭关系的前提下,为青少年创造安全的单独表达空间。",
+                       "scope":  "由父母陪同就诊的青少年病人",
+                       "source_title":  "莫塔全科医学（第8版） 第90章 青少年健康",
+                       "source_page":  "第90章‘谁在诊室里?谁说话?’相关段落",
+                       "source_file":  "莫塔全科医学---第90章.md",
+                       "file_path":  "青少年单独问诊安排.md"
+                   }
+               ]
+}

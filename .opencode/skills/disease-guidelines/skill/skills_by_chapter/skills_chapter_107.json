@@ -1,0 +1,39 @@
+{
+    "chapter_number":  107,
+    "chapter_title":  "生育力低下的夫妇",
+    "part_name":  "性健康",
+    "part_number":  9,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH107_FERTILITY_001",
+                       "skill_name":  "不孕夫妇共同评估",
+                       "objective":  "在不孕症评估中同时纳入双方因素,尽快明确主要检查方向。",
+                       "scope":  "12 个月无保护规律性生活后未孕的夫妇",
+                       "source_title":  "莫塔全科医学（第8版） 第107章 生育力低下的夫妇",
+                       "source_page":  "第107章‘不孕症定义’‘诊断的方法’‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第107章.md",
+                       "file_path":  "不孕夫妇共同评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH107_FERTILITY_002",
+                       "skill_name":  "男性精液分析安排",
+                       "objective":  "规范安排精液分析并正确解释首次异常结果的后续步骤。",
+                       "scope":  "不孕评估中的男性伴侣",
+                       "source_title":  "莫塔全科医学（第8版） 第107章 生育力低下的夫妇",
+                       "source_page":  "第107章‘初步辅助检查’‘男性:精液分析’相关段落",
+                       "source_file":  "莫塔全科医学---第107章.md",
+                       "file_path":  "男性精液分析安排.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH107_FERTILITY_003",
+                       "skill_name":  "女性排卵障碍初筛",
+                       "objective":  "在不孕女性中早期识别排卵障碍及其常见病因。",
+                       "scope":  "月经不规则、疑似无排卵或不孕评估中的女性伴侣",
+                       "source_title":  "莫塔全科医学（第8版） 第107章 生育力低下的夫妇",
+                       "source_page":  "第107章‘女性病史’‘女性:排卵状态’‘女性因素’相关段落",
+                       "source_file":  "莫塔全科医学---第107章.md",
+                       "file_path":  "女性排卵障碍初筛.md"
+                   }
+               ]
+}

@@ -1,0 +1,49 @@
+{
+    "chapter_number":  104,
+    "chapter_title":  "腹股沟阴囊肿块",
+    "part_name":  "男性健康",
+    "part_number":  8,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH104_HERNIA_001",
+                       "skill_name":  "腹股沟疝与股疝识别",
+                       "objective":  "识别腹股沟疝和股疝并区分高绞窄风险类型。",
+                       "scope":  "男性或女性腹股沟肿块、站立后加重不适或可复性包块来诊时",
+                       "source_title":  "莫塔全科医学（第8版） 第104章 腹股沟阴囊肿块",
+                       "source_page":  "第104章‘腹股沟肿块’‘临床特征’相关段落",
+                       "source_file":  "莫塔全科医学---第104章.md",
+                       "file_path":  "腹股沟疝与股疝识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH104_HERNIA_004",
+                       "skill_name":  "睾丸肿瘤警讯识别",
+                       "objective":  "在年轻男性阴囊肿块中尽早识别睾丸肿瘤并减少误诊为炎症或积液。",
+                       "scope":  "15 至 40 岁男性出现无痛或轻痛性睾丸肿块时",
+                       "source_title":  "莫塔全科医学（第8版） 第104章 腹股沟阴囊肿块",
+                       "source_page":  "第104章‘睾丸肿瘤’‘临床特征’相关段落",
+                       "source_file":  "莫塔全科医学---第104章.md",
+                       "file_path":  "睾丸肿瘤警讯识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH104_HERNIA_002",
+                       "skill_name":  "疝并发肠梗阻识别",
+                       "objective":  "识别疝并发嵌顿、梗阻或绞窄的紧急外科情况。",
+                       "scope":  "已知或怀疑疝病人出现急性腹痛、恶心呕吐或不可还纳肿块时",
+                       "source_title":  "莫塔全科医学（第8版） 第104章 腹股沟阴囊肿块",
+                       "source_page":  "第104章‘表104.2 疝引起肠梗阻的症状和体征’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第104章.md",
+                       "file_path":  "疝并发肠梗阻识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH104_HERNIA_003",
+                       "skill_name":  "阴囊肿块透光与定位检查",
+                       "objective":  "用床旁检查快速区分阴囊肿块的囊性、实性及腹股沟来源特征。",
+                       "scope":  "单侧或双侧阴囊肿胀、无痛肿块或牵拉不适的男性",
+                       "source_title":  "莫塔全科医学（第8版） 第104章 腹股沟阴囊肿块",
+                       "source_page":  "第104章‘阴囊检查’‘单侧阴囊肿胀’相关段落",
+                       "source_file":  "莫塔全科医学---第104章.md",
+                       "file_path":  "阴囊肿块透光与定位检查.md"
+                   }
+               ]
+}

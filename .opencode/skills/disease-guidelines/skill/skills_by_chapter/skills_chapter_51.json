@@ -1,0 +1,59 @@
+{
+    "chapter_number":  51,
+    "chapter_title":  "颈部疼痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH51_TORTICOLLIS_005",
+                       "skill_name":  "急性斜颈家庭与门诊处理",
+                       "objective":  "对典型急性斜颈进行以早期活动和舒缓治疗为核心的门诊处理。",
+                       "scope":  "无红旗征的急性疼痛性斜颈病人",
+                       "source_title":  "莫塔全科医学（第8版） 第51章 颈部疼痛",
+                       "source_page":  "第51章‘急性斜颈’相关段落",
+                       "source_file":  "莫塔全科医学---第51章.md",
+                       "file_path":  "急性斜颈家庭与门诊处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH51_HX_002",
+                       "skill_name":  "颈部疼痛病史要点采集",
+                       "objective":  "通过结构化问诊区分机械性颈痛、神经根痛和严重继发性病因。",
+                       "scope":  "门急诊所有颈痛、颈僵或斜颈病人",
+                       "source_title":  "莫塔全科医学（第8版） 第51章 颈部疼痛",
+                       "source_page":  "第51章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第51章.md",
+                       "file_path":  "颈部疼痛病史要点采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH51_RED_001",
+                       "skill_name":  "颈部疼痛红旗征识别",
+                       "objective":  "快速识别提示骨折、感染、肿瘤、神经根病或脊髓病的高危颈痛表现。",
+                       "scope":  "所有急性或持续性颈部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第51章 颈部疼痛",
+                       "source_page":  "第51章‘颈部疼痛的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第51章.md",
+                       "file_path":  "颈部疼痛红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH51_ROOT_004",
+                       "skill_name":  "颈神经根病基础神经查体",
+                       "objective":  "识别 C5 至 T1 神经根受压的典型感觉、肌力和反射异常。",
+                       "scope":  "颈痛伴手臂放射痛、麻木、无力或感觉异常的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第51章 颈部疼痛",
+                       "source_page":  "第51章‘神经系统检查’‘颈神经根综合征’相关段落",
+                       "source_file":  "莫塔全科医学---第51章.md",
+                       "file_path":  "颈神经根病基础神经查体.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH51_EXAM_003",
+                       "skill_name":  "颈椎定位触诊与活动度检查",
+                       "objective":  "通过标准化定位触诊和活动评估重现症状并初步定位受累节段。",
+                       "scope":  "无明显急性不稳定征象的颈部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第51章 颈部疼痛",
+                       "source_page":  "第51章‘身体检查’‘触诊’‘活动度检查’相关段落",
+                       "source_file":  "莫塔全科医学---第51章.md",
+                       "file_path":  "颈椎定位触诊与活动度检查.md"
+                   }
+               ]
+}

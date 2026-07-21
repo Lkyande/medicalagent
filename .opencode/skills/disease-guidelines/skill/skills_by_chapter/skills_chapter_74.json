@@ -1,0 +1,49 @@
+{
+    "chapter_number":  74,
+    "chapter_title":  "慢性阻塞性肺疾病",
+    "part_name":  "慢性疾病管理",
+    "part_number":  5,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH74_COPD_003",
+                       "skill_name":  "COPD急性加重门诊处理",
+                       "objective":  "在门诊或基层场景中快速处理 COPD 急性加重并识别需住院者。",
+                       "scope":  "COPD 病人出现呼吸困难、痰量或脓痰急性增加时",
+                       "source_title":  "莫塔全科医学（第8版） 第74章 慢性阻塞性肺疾病",
+                       "source_page":  "第74章‘X——急性加重期的管理’‘治疗的归纳’相关段落",
+                       "source_file":  "莫塔全科医学---第74章.md",
+                       "file_path":  "COPD急性加重门诊处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH74_COPD_002",
+                       "skill_name":  "COPD戒烟与功能优化",
+                       "objective":  "通过戒烟、吸入治疗和肺康复改善 COPD 症状并延缓恶化。",
+                       "scope":  "已确诊 COPD 的稳定期病人",
+                       "source_title":  "莫塔全科医学（第8版） 第74章 慢性阻塞性肺疾病",
+                       "source_page":  "第74章‘O——优化功能’‘给病人的建议’‘肺康复’相关段落",
+                       "source_file":  "莫塔全科医学---第74章.md",
+                       "file_path":  "COPD戒烟与功能优化.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH74_COPD_001",
+                       "skill_name":  "COPD诊断确认",
+                       "objective":  "对疑似 COPD 病人完成客观诊断确认并初步分级。",
+                       "scope":  "35 岁以上吸烟或既往吸烟者,伴慢性咳嗽、咳痰或进行性呼吸困难",
+                       "source_title":  "莫塔全科医学（第8版） 第74章 慢性阻塞性肺疾病",
+                       "source_page":  "第74章‘确认诊断和评估病情严重程度’‘肺功能测试’相关段落",
+                       "source_file":  "莫塔全科医学---第74章.md",
+                       "file_path":  "COPD诊断确认.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH74_COPD_004",
+                       "skill_name":  "COPD住院指征识别",
+                       "objective":  "识别不能继续居家或门诊处理的 COPD 病人并及时转入住院治疗。",
+                       "scope":  "急性加重或功能明显下降的 COPD 病人",
+                       "source_title":  "莫塔全科医学（第8版） 第74章 慢性阻塞性肺疾病",
+                       "source_page":  "第74章‘转诊到住院服务’相关段落",
+                       "source_file":  "莫塔全科医学---第74章.md",
+                       "file_path":  "COPD住院指征识别.md"
+                   }
+               ]
+}

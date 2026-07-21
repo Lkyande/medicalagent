@@ -1,0 +1,39 @@
+{
+    "chapter_number":  103,
+    "chapter_title":  "阴囊痛",
+    "part_name":  "男性健康",
+    "part_number":  8,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH103_SCROTUM_003",
+                       "skill_name":  "附睾睾丸炎经验治疗",
+                       "objective":  "在排除扭转后为附睾睾丸炎病人提供适当的经验性抗感染和支持治疗。",
+                       "scope":  "性活跃年轻男性或老年男性急性附睾睾丸炎",
+                       "source_title":  "莫塔全科医学（第8版） 第103章 阴囊痛",
+                       "source_page":  "第103章‘急性附睾睾丸炎’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第103章.md",
+                       "file_path":  "附睾睾丸炎经验治疗.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH103_SCROTUM_002",
+                       "skill_name":  "睾丸扭转与附睾睾丸炎鉴别",
+                       "objective":  "根据病史和查体快速区分睾丸扭转与附睾睾丸炎,指导紧急程度。",
+                       "scope":  "阴囊红肿疼痛的男童、青少年和成年男性",
+                       "source_title":  "莫塔全科医学（第8版） 第103章 阴囊痛",
+                       "source_page":  "第103章‘睾丸扭转和附睾睾丸炎’‘表103.2’相关段落",
+                       "source_file":  "莫塔全科医学---第103章.md",
+                       "file_path":  "睾丸扭转与附睾睾丸炎鉴别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH103_SCROTUM_001",
+                       "skill_name":  "急性阴囊痛扭转优先分诊",
+                       "objective":  "在急性阴囊痛场景中优先识别睾丸扭转并避免可挽救睾丸的延误。",
+                       "scope":  "儿童、青少年及年轻男性突发阴囊痛、腹股沟痛或相关呕吐时",
+                       "source_title":  "莫塔全科医学（第8版） 第103章 阴囊痛",
+                       "source_page":  "第103章‘儿童和青少年急性阴囊痛’‘睾丸扭转’‘转诊时机’相关段落",
+                       "source_file":  "莫塔全科医学---第103章.md",
+                       "file_path":  "急性阴囊痛扭转优先分诊.md"
+                   }
+               ]
+}

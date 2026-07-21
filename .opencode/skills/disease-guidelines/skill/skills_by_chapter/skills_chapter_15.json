@@ -1,0 +1,49 @@
+{
+    "chapter_number":  15,
+    "chapter_title":  "脊柱功能障碍",
+    "part_name":  "全科医学的诊断方法",
+    "part_number":  2,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH15_CERVICAL_002",
+                       "skill_name":  "颈椎手法治疗禁忌筛查",
+                       "objective":  "在考虑颈椎推拿或其他手法治疗前识别高风险禁忌,避免严重神经血管并发症。",
+                       "scope":  "拟接受颈椎推拿、松动或肌肉能量治疗的颈部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第15章 脊柱功能障碍",
+                       "source_page":  "第15章‘颈椎功能障碍’相关段落",
+                       "source_file":  "莫塔全科医学---第15章.md",
+                       "file_path":  "颈椎手法治疗禁忌筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH15_CERVICAL_001",
+                       "skill_name":  "颈椎源性疼痛识别",
+                       "objective":  "识别由颈椎功能障碍引起的非典型疼痛或神经症状,将其纳入鉴别诊断。",
+                       "scope":  "颈痛、头痛、肩臂痛、耳周面部痛、上胸背痛或眩晕病人",
+                       "source_title":  "莫塔全科医学（第8版） 第15章 脊柱功能障碍",
+                       "source_page":  "第15章‘颈椎功能障碍’‘源于颈椎的临床问题’相关段落",
+                       "source_file":  "莫塔全科医学---第15章.md",
+                       "file_path":  "颈椎源性疼痛识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH15_THORACIC_001",
+                       "skill_name":  "胸椎源性胸痛识别",
+                       "objective":  "在胸痛或上腹痛鉴别中识别胸椎和低位颈椎牵涉痛,减少不必要的误诊与焦虑。",
+                       "scope":  "单侧胸壁痛、前胸痛、肩胛区痛或上腹痛而内脏原因未明者",
+                       "source_title":  "莫塔全科医学（第8版） 第15章 脊柱功能障碍",
+                       "source_page":  "第15章‘胸椎功能障碍’‘低位颈椎引起的胸痛’相关段落",
+                       "source_file":  "莫塔全科医学---第15章.md",
+                       "file_path":  "胸椎源性胸痛识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH15_LUMBAR_001",
+                       "skill_name":  "腰椎功能障碍保守处理",
+                       "objective":  "对腰椎功能障碍和相关疼痛综合征实施以活动维持为核心的保守治疗。",
+                       "scope":  "腰痛、臀部痛、下肢后侧牵涉痛或坐骨神经痛而适合保守管理者",
+                       "source_title":  "莫塔全科医学（第8版） 第15章 脊柱功能障碍",
+                       "source_page":  "第15章‘腰骶椎功能障碍’‘腰椎功能障碍的处理’相关段落",
+                       "source_file":  "莫塔全科医学---第15章.md",
+                       "file_path":  "腰椎功能障碍保守处理.md"
+                   }
+               ]
+}

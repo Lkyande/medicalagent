@@ -1,0 +1,29 @@
+{
+    "chapter_number":  83,
+    "chapter_title":  "给儿童看病的方法",
+    "part_name":  "儿童和青少年健康",
+    "part_number":  6,
+    "skill_count":  2,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH83_PED_001",
+                       "skill_name":  "儿童就诊建立融洽关系",
+                       "objective":  "在儿童就诊开始阶段迅速建立孩子和家长的安全感与合作关系。",
+                       "scope":  "婴幼儿、学龄前儿童及学龄儿童门诊就诊场景",
+                       "source_title":  "莫塔全科医学（第8版） 第83章 给儿童看病的方法",
+                       "source_page":  "第83章‘与孩子的互动’‘其他建立融洽关系的策略’相关段落",
+                       "source_file":  "莫塔全科医学---第83章.md",
+                       "file_path":  "儿童就诊建立融洽关系.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH83_PED_002",
+                       "skill_name":  "儿童生长发育快速筛查",
+                       "objective":  "在常规门诊或免疫访视中快速发现儿童生长和发育偏离。",
+                       "scope":  "新生儿、婴儿及儿童预防保健或普通门诊复诊",
+                       "source_title":  "莫塔全科医学（第8版） 第83章 给儿童看病的方法",
+                       "source_page":  "第83章‘生长和发育’‘表83.1 接种疫苗时检查发育节点’相关段落",
+                       "source_file":  "莫塔全科医学---第83章.md",
+                       "file_path":  "儿童生长发育快速筛查.md"
+                   }
+               ]
+}

@@ -1,0 +1,59 @@
+{
+    "chapter_number":  59,
+    "chapter_title":  "心悸",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH59_TEST_004",
+                       "skill_name":  "心悸ECG与Holter分层检查",
+                       "objective":  "按发作特点选择合适的心电监测,提高心悸病因确诊率。",
+                       "scope":  "需进一步明确心悸是否由心律失常、缺血或结构性心脏病导致的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第59章 心悸",
+                       "source_page":  "第59章‘关键事实和要点’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第59章.md",
+                       "file_path":  "心悸ECG与Holter分层检查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH59_RED_001",
+                       "skill_name":  "心悸红旗征快速分流",
+                       "objective":  "在首诊时快速识别需要急诊或专科加速评估的高危心悸。",
+                       "scope":  "主诉心悸、心跳异常感、胸内扑动或停搏感的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第59章 心悸",
+                       "source_page":  "第59章‘心悸的红旗征’‘不能遗漏的严重疾病’相关段落",
+                       "source_file":  "莫塔全科医学---第59章.md",
+                       "file_path":  "心悸红旗征快速分流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH59_HISTORY_002",
+                       "skill_name":  "心悸节律敲击问诊",
+                       "objective":  "借助病人敲击发作节律与速率,提高常见心律失常的初步识别率。",
+                       "scope":  "发作性心悸但就诊时未发作,且能回忆发作节律特征的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第59章 心悸",
+                       "source_page":  "第59章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第59章.md",
+                       "file_path":  "心悸节律敲击问诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH59_TRIGGER_005",
+                       "skill_name":  "心悸诱发因素与药物排查",
+                       "objective":  "系统识别可逆的生活方式、药物和代谢性诱因,减少不必要的抗心律失常治疗。",
+                       "scope":  "首诊或复诊的心悸病人,尤其怀疑功能性或诱发性发作时",
+                       "source_title":  "莫塔全科医学（第8版） 第59章 心悸",
+                       "source_page":  "第59章‘关键的提问’‘引起心悸的某些药物’‘管理策略’相关段落",
+                       "source_file":  "莫塔全科医学---第59章.md",
+                       "file_path":  "心悸诱发因素与药物排查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH59_EXAM_003",
+                       "skill_name":  "心率与规则性床旁初筛",
+                       "objective":  "通过心率与脉律床旁判断,快速缩小心悸的常见鉴别范围。",
+                       "scope":  "就诊时仍有心悸或可测得脉搏异常的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第59章 心悸",
+                       "source_page":  "第59章‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第59章.md",
+                       "file_path":  "心率与规则性床旁初筛.md"
+                   }
+               ]
+}

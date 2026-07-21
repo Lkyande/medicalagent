@@ -1,0 +1,109 @@
+{
+    "chapter_number":  10,
+    "chapter_title":  "抑郁",
+    "part_name":  "全科医学的诊断方法",
+    "part_number":  2,
+    "skill_count":  10,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH10_SEROTONIN_001",
+                       "skill_name":  "5-羟色胺综合征识别与处置",
+                       "objective":  "尽早识别与 5-羟色胺药物相关的严重不良反应并立即采取停药和急诊处理。",
+                       "scope":  "正在使用 SSRIs、SNRIs、曲马多、锂剂、圣约翰草等 5-羟色胺相关药物的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘5-羟色胺综合征’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "5-羟色胺综合征识别与处置.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_SADPERSONS_001",
+                       "skill_name":  "SAD-PERSONS自杀评分",
+                       "objective":  "使用 SAD PERSONS 指数快速量化自杀风险,辅助决定监测和转诊强度。",
+                       "scope":  "已进行基础自杀风险评估的抑郁病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘悲伤者(SAD PERSONS)指数’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "SAD-PERSONS自杀评分.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_ADMON_001",
+                       "skill_name":  "抗抑郁药启动与监测",
+                       "objective":  "安全启动抗抑郁药并在早期和维持期持续监测疗效、不良反应和依从性。",
+                       "scope":  "中重度抑郁或抑郁合并焦虑障碍需药物治疗病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘抗抑郁药’‘持续治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "抗抑郁药启动与监测.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_PERINATAL_001",
+                       "skill_name":  "围产期抑郁筛查与转诊",
+                       "objective":  "在孕期和产后早期识别围产期抑郁及相关风险,提供家庭为中心的支持和必要转诊。",
+                       "scope":  "孕期女性和产后 12 个月内女性",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘围产期抑郁’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "围产期抑郁筛查与转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_4C_001",
+                       "skill_name":  "抑郁4C全面评估",
+                       "objective":  "从症状、严重度、共病背景和应对影响四个维度全面评估抑郁病人。",
+                       "scope":  "已识别抑郁或疑似重性抑郁病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘4C评估法’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "抑郁4C全面评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_SCREEN_001",
+                       "skill_name":  "抑郁核心筛查",
+                       "objective":  "在基层快速识别可能存在抑郁的病人,触发进一步系统评估。",
+                       "scope":  "情绪低落、疲劳、失眠、慢性疼痛、躯体化或反复就诊病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘诊断方法’‘两个特别好的问题’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "抑郁核心筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_ORGANIC_001",
+                       "skill_name":  "抑郁器质性鉴别排查",
+                       "objective":  "在诊断抑郁时同步排查可能模拟或加重抑郁表现的器质性疾病和药物因素。",
+                       "scope":  "新发抑郁、老年抑郁、症状非典型或伴明显躯体症状病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘重要的鉴别诊断(器质性疾病)’‘可考虑完善的检查’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "抑郁器质性鉴别排查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_TREATPLAN_001",
+                       "skill_name":  "抑郁治疗分层选择",
+                       "objective":  "根据抑郁严重程度和风险状态选择心理治疗、药物治疗、联合治疗或转诊路径。",
+                       "scope":  "已完成严重度评估的轻、中、重度抑郁病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘治疗’‘实用管理指南’‘转诊时机’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "抑郁治疗分层选择.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_MDD_001",
+                       "skill_name":  "重性抑郁诊断评估",
+                       "objective":  "依据症状数量、持续时间和核心特征评估是否符合重性抑郁障碍标准。",
+                       "scope":  "抑郁筛查阳性或疑似情绪障碍病人",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘重性抑郁障碍的诊断标准’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "重性抑郁诊断评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH10_SUICIDE_001",
+                       "skill_name":  "自杀风险评估",
+                       "objective":  "通过结构化提问识别自杀风险级别,及时决定支持、随访或紧急转诊。",
+                       "scope":  "所有抑郁病人,尤其中重度症状、绝望感或既往自伤病史者",
+                       "source_title":  "莫塔全科医学（第8版） 第10章 抑郁",
+                       "source_page":  "第10章‘自杀评估’相关段落",
+                       "source_file":  "莫塔全科医学---第10章.md",
+                       "file_path":  "自杀风险评估.md"
+                   }
+               ]
+}

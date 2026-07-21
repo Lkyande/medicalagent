@@ -1,0 +1,39 @@
+{
+    "chapter_number":  121,
+    "chapter_title":  "卒中和短暂性脑缺血发作",
+    "part_name":  "意外事故和急救医学",
+    "part_number":  11,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH121_STROKE_002",
+                       "skill_name":  "TIAABCD2风险分层",
+                       "objective":  "对 TIA 病人进行短期卒中风险分层并决定处理紧迫度。",
+                       "scope":  "神经症状已完全恢复或短暂发作的 TIA 可疑病人",
+                       "source_title":  "莫塔全科医学（第8版） 第121章 卒中和短暂性脑缺血发作",
+                       "source_page":  "第121章‘TIA 的意义’‘ABCD2 卒中风险工具’相关段落",
+                       "source_file":  "莫塔全科医学---第121章.md",
+                       "file_path":  "TIAABCD2风险分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH121_STROKE_003",
+                       "skill_name":  "一过性黑矇识别",
+                       "objective":  "识别颈动脉来源 TIA 的眼部表现并及时启动卒中预防路径。",
+                       "scope":  "突发短暂单眼视力丧失或‘窗帘样’视野遮挡的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第121章 卒中和短暂性脑缺血发作",
+                       "source_page":  "第121章‘一过性黑矇’相关段落",
+                       "source_file":  "莫塔全科医学---第121章.md",
+                       "file_path":  "一过性黑矇识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH121_STROKE_001",
+                       "skill_name":  "疑似卒中急诊分诊",
+                       "objective":  "将卒中或 TIA 视为医疗急症并尽快转入影像和卒中单元路径。",
+                       "scope":  "突发局灶神经功能缺损、语言障碍、单侧无力或短暂神经症状病人",
+                       "source_title":  "莫塔全科医学（第8版） 第121章 卒中和短暂性脑缺血发作",
+                       "source_page":  "第121章‘关键事实和要点’‘管理’‘紧急处理方法’相关段落",
+                       "source_file":  "莫塔全科医学---第121章.md",
+                       "file_path":  "疑似卒中急诊分诊.md"
+                   }
+               ]
+}

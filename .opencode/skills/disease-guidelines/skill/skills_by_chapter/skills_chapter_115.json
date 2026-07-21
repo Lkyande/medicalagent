@@ -1,0 +1,39 @@
+{
+    "chapter_number":  115,
+    "chapter_title":  "皮肤溃疡",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH115_ULCER_003",
+                       "skill_name":  "静脉性与动脉性溃疡鉴别",
+                       "objective":  "利用临床特征区分静脉性和动脉性溃疡,指导不同治疗方向。",
+                       "scope":  "下肢慢性溃疡病人",
+                       "source_title":  "莫塔全科医学（第8版） 第115章 皮肤溃疡",
+                       "source_page":  "第115章‘表115.3 腿部静脉性和动脉性溃疡典型特征比较’相关段落",
+                       "source_file":  "莫塔全科医学---第115章.md",
+                       "file_path":  "静脉性与动脉性溃疡鉴别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH115_ULCER_001",
+                       "skill_name":  "皮肤溃疡病因分层",
+                       "objective":  "根据病史和溃疡特征快速区分静脉性、动脉性、压力性、神经营养性和恶性溃疡。",
+                       "scope":  "腿、足、骶尾部或其他部位慢性皮肤溃疡病人",
+                       "source_title":  "莫塔全科医学（第8版） 第115章 皮肤溃疡",
+                       "source_page":  "第115章‘临床方法’‘表115.1 皮肤溃疡的类型和原因’相关段落",
+                       "source_file":  "莫塔全科医学---第115章.md",
+                       "file_path":  "皮肤溃疡病因分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH115_ULCER_002",
+                       "skill_name":  "腿部溃疡ABI评估",
+                       "objective":  "在腿部溃疡中评估动脉供血状况并判断加压治疗安全性。",
+                       "scope":  "需要制定下肢溃疡处理方案的静脉性、动脉性或混合性溃疡病人",
+                       "source_title":  "莫塔全科医学（第8版） 第115章 皮肤溃疡",
+                       "source_page":  "第115章‘踝臂指数的测量’‘表115.4 ABI 的典型水平’相关段落",
+                       "source_file":  "莫塔全科医学---第115章.md",
+                       "file_path":  "腿部溃疡ABI评估.md"
+                   }
+               ]
+}

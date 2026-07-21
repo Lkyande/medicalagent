@@ -1,0 +1,69 @@
+{
+    "chapter_number":  37,
+    "chapter_title":  "吞咽困难",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  6,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH37_ACH_004",
+                       "skill_name":  "贲门失弛症识别与转诊",
+                       "objective":  "识别贲门失弛症的动力障碍模式并及时进入测压和扩张/肌切开路径。",
+                       "scope":  "进行性固体和液体吞咽困难、波动性反流或胸部不适病人",
+                       "source_title":  "莫塔全科医学（第8版） 第37章 吞咽困难",
+                       "source_page":  "第37章‘贲门失弛症’相关段落",
+                       "source_file":  "莫塔全科医学---第37章.md",
+                       "file_path":  "贲门失弛症识别与转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH37_EOE_006",
+                       "skill_name":  "嗜酸性食管炎识别与饮食排除",
+                       "objective":  "识别与过敏相关的嗜酸性食管炎并启动内镜活检和六食物排除饮食路径。",
+                       "scope":  "反复食物卡喉、吞咽困难、反流或急性食物梗阻的儿童和成人",
+                       "source_title":  "莫塔全科医学（第8版） 第37章 吞咽困难",
+                       "source_page":  "第37章‘嗜酸性食管炎’相关段落",
+                       "source_file":  "莫塔全科医学---第37章.md",
+                       "file_path":  "嗜酸性食管炎识别与饮食排除.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH37_DYS_001",
+                       "skill_name":  "吞咽困难部位分型",
+                       "objective":  "根据症状位置和食物类型区分口咽性与食管性吞咽困难。",
+                       "scope":  "主诉吞咽时阻塞感、食物卡住或吞咽疼痛的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第37章 吞咽困难",
+                       "source_page":  "第37章‘诊断指南’相关段落",
+                       "source_file":  "莫塔全科医学---第37章.md",
+                       "file_path":  "吞咽困难部位分型.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH37_DYS_003",
+                       "skill_name":  "吞咽困难初始检查路径",
+                       "objective":  "根据病变部位和机制选择吞咽困难的首选检查,提高诊断效率。",
+                       "scope":  "需要进一步评估病因的吞咽困难病人",
+                       "source_title":  "莫塔全科医学（第8版） 第37章 吞咽困难",
+                       "source_page":  "第37章‘身体检查’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第37章.md",
+                       "file_path":  "吞咽困难初始检查路径.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH37_DYS_002",
+                       "skill_name":  "吞咽困难红旗征筛查",
+                       "objective":  "在吞咽困难病人中及时识别恶性梗阻和神经系统高危病因。",
+                       "scope":  "新发或进行性吞咽困难病人",
+                       "source_title":  "莫塔全科医学（第8版） 第37章 吞咽困难",
+                       "source_page":  "第37章‘吞咽困难的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第37章.md",
+                       "file_path":  "吞咽困难红旗征筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH37_PILL_005",
+                       "skill_name":  "药物性食管损伤预防与处理",
+                       "objective":  "识别药片相关食管损伤并通过用药方式调整减少再发。",
+                       "scope":  "吞咽痛、吞咽困难或胸骨后疼痛且近期口服刺激性药物的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第37章 吞咽困难",
+                       "source_page":  "第37章‘药物性食管损伤’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第37章.md",
+                       "file_path":  "药物性食管损伤预防与处理.md"
+                   }
+               ]
+}

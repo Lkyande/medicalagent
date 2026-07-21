@@ -1,0 +1,29 @@
+{
+    "chapter_number":  122,
+    "chapter_title":  "血栓形成和血栓栓塞",
+    "part_name":  "意外事故和急救医学",
+    "part_number":  11,
+    "skill_count":  2,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH122_THROMBOSIS_002",
+                       "skill_name":  "DVT抗凝起始",
+                       "objective":  "为已确诊或高度疑似 DVT 病人快速启动规范抗凝治疗。",
+                       "scope":  "深静脉血栓形成或肺栓塞确诊/高度怀疑的成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第122章 血栓形成和血栓栓塞",
+                       "source_page":  "第122章‘治疗’‘方法一’‘方法二’相关段落",
+                       "source_file":  "莫塔全科医学---第122章.md",
+                       "file_path":  "DVT抗凝起始.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH122_THROMBOSIS_001",
+                       "skill_name":  "DVT临床概率评估",
+                       "objective":  "根据危险因素和体征快速判断 DVT 的临床可能性并安排客观检查。",
+                       "scope":  "单侧小腿或大腿肿胀、压痛或无痛性肿胀的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第122章 血栓形成和血栓栓塞",
+                       "source_page":  "第122章‘深静脉血栓形成’‘危险因素’‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第122章.md",
+                       "file_path":  "DVT临床概率评估.md"
+                   }
+               ]
+}

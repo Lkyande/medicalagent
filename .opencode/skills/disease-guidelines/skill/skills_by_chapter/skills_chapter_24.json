@@ -1,0 +1,109 @@
+{
+    "chapter_number":  24,
+    "chapter_title":  "腹痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  10,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH24_MES_010",
+                       "skill_name":  "肠系膜动脉栓塞识别",
+                       "objective":  "在早期腹部体征尚不明显时识别肠系膜动脉栓塞并加速外科干预。",
+                       "scope":  "老年、房颤或动脉粥样硬化病人出现剧烈中腹痛和呕吐者",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘肠系膜动脉栓塞’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "肠系膜动脉栓塞识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_INT_005",
+                       "skill_name":  "儿童肠套叠识别与紧急转诊",
+                       "objective":  "在发病早期识别儿童肠套叠,尽快转入影像复位或手术路径,降低坏死和死亡风险。",
+                       "scope":  "3个月至2岁突发阵发性腹痛、呕吐或苍白的婴幼儿",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘肠套叠’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "儿童肠套叠识别与紧急转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_ABD_002",
+                       "skill_name":  "腹痛病史结构化采集",
+                       "objective":  "通过标准化提问明确腹痛性质、危险线索和可能病因范围。",
+                       "scope":  "急性、亚急性、慢性或复发性腹痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "腹痛病史结构化采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_ABD_004",
+                       "skill_name":  "腹痛初始辅助检查分层",
+                       "objective":  "根据腹痛表现选择最有价值的实验室和影像检查,减少漏诊和无效检查。",
+                       "scope":  "需要进一步检查的腹痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘辅助检查’‘影像学检查’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "腹痛初始辅助检查分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_ABD_003",
+                       "skill_name":  "腹痛体格检查顺序执行",
+                       "objective":  "按规范顺序完成腹痛查体,提高腹膜炎、疝和牵涉痛等关键体征的检出率。",
+                       "scope":  "需要进行腹部查体的腹痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘身体检查’‘指导原则’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "腹痛体格检查顺序执行.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_AAA_008",
+                       "skill_name":  "腹主动脉瘤家族筛查与转诊",
+                       "objective":  "识别腹主动脉瘤高危人群并依据直径分层安排影像筛查和血管外科转诊。",
+                       "scope":  "有腹主动脉瘤家族史、腹部搏动性肿块或老年腹痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘腹主动脉瘤’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "腹主动脉瘤家族筛查与转诊.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_ABD_001",
+                       "skill_name":  "急腹症红旗征筛查",
+                       "objective":  "在初诊时快速识别需要紧急转诊或住院处理的腹痛病人。",
+                       "scope":  "所有急性腹痛或病情不明的腹痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘急腹症的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "急腹症红旗征筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_APP_006",
+                       "skill_name":  "急性阑尾炎临床定位评估",
+                       "objective":  "通过典型病程演变和局部体征识别急性阑尾炎并区分常见变异位置。",
+                       "scope":  "怀疑急性阑尾炎的儿童或成人腹痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘急性阑尾炎’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "急性阑尾炎临床定位评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_AAA_009",
+                       "skill_name":  "破裂腹主动脉瘤紧急识别",
+                       "objective":  "尽早识别破裂腹主动脉瘤这一外科急症,缩短转运和术前复苏时间。",
+                       "scope":  "老年急性腹痛、背痛、晕厥或休克病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘动脉瘤破裂’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "破裂腹主动脉瘤紧急识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH24_SBO_007",
+                       "skill_name":  "小肠梗阻床旁识别与减压转诊",
+                       "objective":  "快速识别小肠梗阻并启动液体复苏、胃肠减压和外科处理流程。",
+                       "scope":  "中腹绞痛、呕吐、腹胀和停止排便排气的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第24章 腹痛",
+                       "source_page":  "第24章‘小肠梗阻’相关段落",
+                       "source_file":  "莫塔全科医学---第24章.md",
+                       "file_path":  "小肠梗阻床旁识别与减压转诊.md"
+                   }
+               ]
+}

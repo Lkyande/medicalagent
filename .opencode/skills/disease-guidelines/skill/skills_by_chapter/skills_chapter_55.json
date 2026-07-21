@@ -1,0 +1,59 @@
+{
+    "chapter_number":  55,
+    "chapter_title":  "腿部疼痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH55_MERALGIA_005",
+                       "skill_name":  "感觉异常性股痛识别与处理",
+                       "objective":  "识别股外侧皮神经卡压所致的大腿外侧灼痛并实施针对病因的保守处理。",
+                       "scope":  "大腿外侧局限性烧灼痛、麻木或刺痛的成人病人",
+                       "source_title":  "莫塔全科医学（第8版） 第55章 腿部疼痛",
+                       "source_page":  "第55章‘感觉异常性股痛’相关段落",
+                       "source_file":  "莫塔全科医学---第55章.md",
+                       "file_path":  "感觉异常性股痛识别与处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH55_ISCHAEMIA_004",
+                       "skill_name":  "急性下肢缺血6P识别与急转",
+                       "objective":  "尽早识别急性下肢动脉闭塞并在保肢时间窗内完成紧急分流。",
+                       "scope":  "突发严重腿痛、足痛或肢体发冷的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第55章 腿部疼痛",
+                       "source_page":  "第55章‘急性下肢缺血’相关段落",
+                       "source_file":  "莫塔全科医学---第55章.md",
+                       "file_path":  "急性下肢缺血6P识别与急转.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH55_CLAUD_003",
+                       "skill_name":  "神经源性与血管性跛行鉴别",
+                       "objective":  "依据诱发方式、缓解特点和伴随体征快速区分神经源性与血管性跛行。",
+                       "scope":  "50 岁以上行走后出现腿痛、麻木或无力的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第55章 腿部疼痛",
+                       "source_page":  "第55章‘表55.2 神经源性和血管性跛行的临床特征比较’相关段落",
+                       "source_file":  "莫塔全科医学---第55章.md",
+                       "file_path":  "神经源性与血管性跛行鉴别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH55_HX_001",
+                       "skill_name":  "腿痛病史与体位分层",
+                       "objective":  "通过疼痛发作方式、体位关系和行走模式快速区分机械性、血管性和神经性腿痛。",
+                       "scope":  "门急诊各种急性或慢性腿部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第55章 腿部疼痛",
+                       "source_page":  "第55章‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第55章.md",
+                       "file_path":  "腿痛病史与体位分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH55_EXAM_002",
+                       "skill_name":  "腿痛基础查体与L5S1快速筛查",
+                       "objective":  "通过局部、血管和神经系统查体快速定位常见腿痛来源并筛查 L5 与 S1 根性受累。",
+                       "scope":  "需要门诊快速分流的腿部疼痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第55章 腿部疼痛",
+                       "source_page":  "第55章‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第55章.md",
+                       "file_path":  "腿痛基础查体与L5S1快速筛查.md"
+                   }
+               ]
+}

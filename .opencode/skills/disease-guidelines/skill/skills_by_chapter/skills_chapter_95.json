@@ -1,0 +1,39 @@
+{
+    "chapter_number":  95,
+    "chapter_title":  "女性的下腹和盆腔痛",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH95_PELVIC_001",
+                       "skill_name":  "女性盆腔痛初始评估",
+                       "objective":  "对女性下腹和盆腔痛进行系统分层,尽快区分妇科、泌尿和腹部病因。",
+                       "scope":  "育龄期或绝经前后女性出现急性、慢性或反复发作的下腹和盆腔痛",
+                       "source_title":  "莫塔全科医学（第8版） 第95章 女性的下腹和盆腔痛",
+                       "source_page":  "第95章‘临床方法’‘病史’‘身体检查’‘辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第95章.md",
+                       "file_path":  "女性盆腔痛初始评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH95_PELVIC_002",
+                       "skill_name":  "异位妊娠红旗识别",
+                       "objective":  "在育龄女性腹痛中尽早识别异位妊娠,防止破裂性失血致命事件。",
+                       "scope":  "育龄女性出现下腹痛、闭经或异常阴道出血时",
+                       "source_title":  "莫塔全科医学（第8版） 第95章 女性的下腹和盆腔痛",
+                       "source_page":  "第95章‘异位妊娠’‘异位妊娠破裂的临床特点’‘诊断’相关段落",
+                       "source_file":  "莫塔全科医学---第95章.md",
+                       "file_path":  "异位妊娠红旗识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH95_PELVIC_003",
+                       "skill_name":  "月经周期相关盆腔痛分层",
+                       "objective":  "根据疼痛与月经周期关系快速区分痛经、排卵痛和内异症等常见病因。",
+                       "scope":  "周期性或反复发作的盆腔痛女性",
+                       "source_title":  "莫塔全科医学（第8版） 第95章 女性的下腹和盆腔痛",
+                       "source_page":  "第95章‘概率诊断’‘与月经有关的典型疼痛模式’相关段落",
+                       "source_file":  "莫塔全科医学---第95章.md",
+                       "file_path":  "月经周期相关盆腔痛分层.md"
+                   }
+               ]
+}

@@ -1,0 +1,39 @@
+{
+    "chapter_number":  97,
+    "chapter_title":  "绝经",
+    "part_name":  "女性健康",
+    "part_number":  7,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH97_MENOPAUSE_003",
+                       "skill_name":  "MHT禁忌筛查与方案选择",
+                       "objective":  "在考虑 MHT 时筛查禁忌证并根据子宫状态和风险特征选择方案。",
+                       "scope":  "有明显绝经症状并考虑使用激素治疗的围绝经期或绝经后女性",
+                       "source_title":  "莫塔全科医学（第8版） 第97章 绝经",
+                       "source_page":  "第97章‘绝经期激素治疗’‘MHT 禁忌证’‘黄金定则’相关段落",
+                       "source_file":  "莫塔全科医学---第97章.md",
+                       "file_path":  "MHT禁忌筛查与方案选择.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH97_MENOPAUSE_002",
+                       "skill_name":  "绝经期生活方式管理",
+                       "objective":  "通过生活方式和健康教育减轻绝经期症状并降低长期疾病风险。",
+                       "scope":  "围绝经期和绝经后女性",
+                       "source_title":  "莫塔全科医学（第8版） 第97章 绝经",
+                       "source_page":  "第97章‘管理’‘教育和生活方式’相关段落",
+                       "source_file":  "莫塔全科医学---第97章.md",
+                       "file_path":  "绝经期生活方式管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH97_MENOPAUSE_001",
+                       "skill_name":  "围绝经期症状评估",
+                       "objective":  "评估围绝经期女性的月经变化、潮热和生活质量受损情况。",
+                       "scope":  "45 至 55 岁出现月经紊乱、潮热、睡眠或泌尿生殖症状的女性",
+                       "source_title":  "莫塔全科医学（第8版） 第97章 绝经",
+                       "source_page":  "第97章‘临床表现’‘病史’‘诊断’相关段落",
+                       "source_file":  "莫塔全科医学---第97章.md",
+                       "file_path":  "围绝经期症状评估.md"
+                   }
+               ]
+}

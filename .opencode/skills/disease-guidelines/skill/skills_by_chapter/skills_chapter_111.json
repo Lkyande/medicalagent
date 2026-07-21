@@ -1,0 +1,39 @@
+{
+    "chapter_number":  111,
+    "chapter_title":  "皮肤问题的诊断和管理方法",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH111_DERM_001",
+                       "skill_name":  "皮肤三问病史采集",
+                       "objective":  "用简洁高效的病史框架为皮肤病诊断建立方向。",
+                       "scope":  "所有新发或复发皮疹、皮损、瘙痒或肿块的皮肤相关就诊",
+                       "source_title":  "莫塔全科医学（第8版） 第111章 皮肤问题的诊断和管理方法",
+                       "source_page":  "第111章‘病史’‘三个基本提问’相关段落",
+                       "source_file":  "莫塔全科医学---第111章.md",
+                       "file_path":  "皮肤三问病史采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH111_DERM_002",
+                       "skill_name":  "皮损原发继发表现分层",
+                       "objective":  "通过皮损形态学分层提高皮肤病诊断准确率。",
+                       "scope":  "任何可见皮疹或皮损的临床检查场景",
+                       "source_title":  "莫塔全科医学（第8版） 第111章 皮肤问题的诊断和管理方法",
+                       "source_page":  "第111章‘原发性皮损’‘继发性皮损’相关段落",
+                       "source_file":  "莫塔全科医学---第111章.md",
+                       "file_path":  "皮损原发继发表现分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH111_DERM_003",
+                       "skill_name":  "皮疹分布模式分析",
+                       "objective":  "结合分布和形态模式快速缩小皮肤病鉴别诊断。",
+                       "scope":  "需要在门诊进行皮疹临床判断的所有病人",
+                       "source_title":  "莫塔全科医学（第8版） 第111章 皮肤问题的诊断和管理方法",
+                       "source_page":  "第111章‘身体检查’‘单个病灶特征’‘分布或形态分析’相关段落",
+                       "source_file":  "莫塔全科医学---第111章.md",
+                       "file_path":  "皮疹分布模式分析.md"
+                   }
+               ]
+}

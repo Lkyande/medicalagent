@@ -1,0 +1,49 @@
+{
+    "chapter_number":  109,
+    "chapter_title":  "性传播感染",
+    "part_name":  "性健康",
+    "part_number":  9,
+    "skill_count":  4,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH109_STI_004",
+                       "skill_name":  "HIV暴露前后预防转介",
+                       "objective":  "对 HIV 高风险暴露者及时识别并转入 PrEP 或 PEP 路径。",
+                       "scope":  "有高风险性暴露或持续高风险性行为的个体",
+                       "source_title":  "莫塔全科医学（第8版） 第109章 性传播感染",
+                       "source_page":  "第109章‘HIV 感染’‘暴露前预防和接触后预防’相关段落",
+                       "source_file":  "莫塔全科医学---第109章.md",
+                       "file_path":  "HIV暴露前后预防转介.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH109_STI_001",
+                       "skill_name":  "STI风险分层与检测",
+                       "objective":  "根据性暴露和症状风险分层选择 STI 检测策略。",
+                       "scope":  "有无症状但存在性暴露风险,或主诉尿道炎、分泌物、溃疡等的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第109章 性传播感染",
+                       "source_page":  "第109章‘谁处于 STI 的风险中’‘对无症状 STI 的检测’‘采集性活动史’相关段落",
+                       "source_file":  "莫塔全科医学---第109章.md",
+                       "file_path":  "STI风险分层与检测.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH109_STI_002",
+                       "skill_name":  "男性尿道炎经验处理",
+                       "objective":  "对男性尿道炎进行初步病原判断、样本采集和经验性治疗。",
+                       "scope":  "出现排尿痛、尿道分泌物或相关 STI 暴露的男性",
+                       "source_title":  "莫塔全科医学（第8版） 第109章 性传播感染",
+                       "source_page":  "第109章‘男性尿道炎’‘诊断’‘管理原则’‘衣原体感染’‘淋病’相关段落",
+                       "source_file":  "莫塔全科医学---第109章.md",
+                       "file_path":  "男性尿道炎经验处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH109_STI_003",
+                       "skill_name":  "生殖器疱疹初发管理",
+                       "objective":  "识别首次发作的生殖器疱疹并尽早启动抗病毒和支持治疗。",
+                       "scope":  "出现肛门生殖器溃疡、疼痛性疱疹或相关全身症状的男性和女性",
+                       "source_title":  "莫塔全科医学（第8版） 第109章 性传播感染",
+                       "source_page":  "第109章‘生殖器疱疹’‘样本采集’‘治疗’‘支持性治疗’‘咨询’相关段落",
+                       "source_file":  "莫塔全科医学---第109章.md",
+                       "file_path":  "生殖器疱疹初发管理.md"
+                   }
+               ]
+}

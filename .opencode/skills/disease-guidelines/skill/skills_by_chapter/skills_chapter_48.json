@@ -1,0 +1,89 @@
+{
+    "chapter_number":  48,
+    "chapter_title":  "鼻疾病",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  8,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH48_EPISTAXIS_007",
+                       "skill_name":  "鼻出血一线止血处理",
+                       "objective":  "对常见前鼻部出血实施标准化一线止血处理。",
+                       "scope":  "血流动力学稳定的前鼻部鼻出血病人",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘鼻出血’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "鼻出血一线止血处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH48_RED_001",
+                       "skill_name":  "鼻疾病红旗征识别",
+                       "objective":  "及时识别提示肿瘤、异物、并发症或系统性疾病的危险鼻部表现。",
+                       "scope":  "以鼻塞、分泌物、鼻出血或嗅觉异常就诊的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘鼻疾病的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "鼻疾病红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH48_POLYP_006",
+                       "skill_name":  "鼻息肉药物初始处理",
+                       "objective":  "对典型鼻息肉进行以类固醇为核心的初始药物处理并识别恶性警示。",
+                       "scope":  "符合典型光滑苍白外观的鼻息肉病人",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘鼻息肉’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "鼻息肉药物初始处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH48_RHINITIS_004",
+                       "skill_name":  "鼻炎类型初步分层",
+                       "objective":  "根据症状模式和诱因对鼻炎进行过敏性、感染性和血管运动性初步分层。",
+                       "scope":  "主诉打喷嚏、流涕、鼻塞或鼻痒超过 1 小时的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘鼻炎’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "鼻炎类型初步分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH48_SINUS_005",
+                       "skill_name":  "慢性鼻窦炎阶梯处理",
+                       "objective":  "以冲洗和鼻内药物为基础对慢性鼻窦炎进行门诊阶梯管理并识别手术转诊时机。",
+                       "scope":  "症状和体征持续 8 至 12 周以上的慢性鼻窦炎病人",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘慢性鼻窦炎’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "慢性鼻窦炎阶梯处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH48_EPISTAXIS_008",
+                       "skill_name":  "难治性鼻出血填塞升级",
+                       "objective":  "在简单压迫止血失败后及时升级为规范填塞与专科处理。",
+                       "scope":  "持续鼻前部出血或怀疑严重鼻后部出血的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘持续的鼻前部出血’‘严重的鼻后部出血’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "难治性鼻出血填塞升级.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH48_SMELL_003",
+                       "skill_name":  "嗅觉丧失安全宣教",
+                       "objective":  "降低嗅觉丧失病人在家庭环境中的烟雾、煤气和食物安全风险。",
+                       "scope":  "已确认或高度怀疑嗅觉丧失的病人及家庭照护者",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘嗅觉丧失的治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "嗅觉丧失安全宣教.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH48_SMELL_002",
+                       "skill_name":  "嗅觉障碍基础评估",
+                       "objective":  "通过病史、鼻镜和简易嗅觉测试完成嗅觉障碍的初步定位评估。",
+                       "scope":  "主诉嗅觉丧失、减退、倒错或恶臭感的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第48章 鼻疾病",
+                       "source_page":  "第48章‘嗅觉障碍’‘临床方法’相关段落",
+                       "source_file":  "莫塔全科医学---第48章.md",
+                       "file_path":  "嗅觉障碍基础评估.md"
+                   }
+               ]
+}

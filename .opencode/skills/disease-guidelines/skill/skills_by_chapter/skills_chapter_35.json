@@ -1,0 +1,59 @@
+{
+    "chapter_number":  35,
+    "chapter_title":  "头晕/眩晕",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH35_BPPV_005",
+                       "skill_name":  "BPPV诊断与复位训练",
+                       "objective":  "确诊 BPPV 并通过复位或训练动作缩短症状持续时间。",
+                       "scope":  "头位改变诱发的短暂眩晕病人,尤其老年人",
+                       "source_title":  "莫塔全科医学（第8版） 第35章 头晕/眩晕",
+                       "source_page":  "第35章‘良性阵发性体位性眩晕’‘管理’‘位置性前庭训练’相关段落",
+                       "source_file":  "莫塔全科医学---第35章.md",
+                       "file_path":  "BPPV诊断与复位训练.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH35_VEST_004",
+                       "skill_name":  "急性前庭病初始处理",
+                       "objective":  "对急性前庭神经炎或迷路炎实施早期症状控制和安全分流。",
+                       "scope":  "突发眩晕伴恶心呕吐,怀疑前庭神经炎或迷路炎病人",
+                       "source_title":  "莫塔全科医学（第8版） 第35章 头晕/眩晕",
+                       "source_page":  "第35章‘急性前庭病’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第35章.md",
+                       "file_path":  "急性前庭病初始处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH35_VERT_002",
+                       "skill_name":  "头晕红旗征筛查",
+                       "objective":  "在头晕就诊时识别听神经瘤、脑血管病、心律失常和其他需紧急转诊的严重病因。",
+                       "scope":  "急性或慢性头晕、眩晕病人",
+                       "source_title":  "莫塔全科医学（第8版） 第35章 头晕/眩晕",
+                       "source_page":  "第35章‘头晕/眩晕的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第35章.md",
+                       "file_path":  "头晕红旗征筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH35_VERT_001",
+                       "skill_name":  "头晕眩晕病史分型",
+                       "objective":  "通过结构化病史区分真性眩晕、假性眩晕和系统性头晕,指导后续床旁检查与分诊。",
+                       "scope":  "主诉头晕、旋转感、失衡感或突发站立不稳的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第35章 头晕/眩晕",
+                       "source_page":  "第35章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第35章.md",
+                       "file_path":  "头晕眩晕病史分型.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH35_VERT_003",
+                       "skill_name":  "眩晕诊室床旁检查",
+                       "objective":  "在门诊用床旁动作试验复现症状并区分外周性与中枢性眩晕。",
+                       "scope":  "可在诊室安全完成动作诱发的头晕或眩晕病人",
+                       "source_title":  "莫塔全科医学（第8版） 第35章 头晕/眩晕",
+                       "source_page":  "第35章‘诊室里的头晕检查’相关段落",
+                       "source_file":  "莫塔全科医学---第35章.md",
+                       "file_path":  "眩晕诊室床旁检查.md"
+                   }
+               ]
+}

@@ -1,0 +1,79 @@
+{
+    "chapter_number":  28,
+    "chapter_title":  "腰背痛",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  7,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH28_LBP_006",
+                       "skill_name":  "非特异性急性腰背痛初始管理",
+                       "objective":  "对非特异性急性腰背痛实施基于证据的初始管理,缩短病程并降低慢性化风险。",
+                       "scope":  "无红旗征的急性非神经根性腰背痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第28章 腰背痛",
+                       "source_page":  "第28章‘椎体功能障碍伴非神经根痛’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第28章.md",
+                       "file_path":  "非特异性急性腰背痛初始管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH28_NEURO_004",
+                       "skill_name":  "弓背试验执行与判读",
+                       "objective":  "用高敏感度激发试验筛查椎间盘病变和硬脊膜牵拉所致的腰腿痛。",
+                       "scope":  "腰背痛向臀部或大腿后部放射的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第28章 腰背痛",
+                       "source_page":  "第28章‘弓背试验’‘弓背试验的意义’相关段落",
+                       "source_file":  "莫塔全科医学---第28章.md",
+                       "file_path":  "弓背试验执行与判读.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH28_LBP_002",
+                       "skill_name":  "机械性与炎性腰背痛鉴别",
+                       "objective":  "依据疼痛昼夜模式和活动关系区分机械性与炎性腰背痛,指导后续检查和治疗。",
+                       "scope":  "需要进行病因分层的腰背痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第28章 腰背痛",
+                       "source_page":  "第28章‘疼痛的性质’‘炎症性和机械性腰背痛的疼痛模式比较’相关段落",
+                       "source_file":  "莫塔全科医学---第28章.md",
+                       "file_path":  "机械性与炎性腰背痛鉴别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH28_LBP_003",
+                       "skill_name":  "腰背痛关键病史采集",
+                       "objective":  "通过结构化提问确定腰背痛的病理线索、诱因和社会心理风险。",
+                       "scope":  "所有腰背痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第28章 腰背痛",
+                       "source_page":  "第28章‘病史’‘关键的提问’相关段落",
+                       "source_file":  "莫塔全科医学---第28章.md",
+                       "file_path":  "腰背痛关键病史采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH28_LBP_001",
+                       "skill_name":  "腰背痛红旗征筛查",
+                       "objective":  "在腰背痛初诊时识别肿瘤、感染、骨折和神经压迫等严重病因。",
+                       "scope":  "所有急性、慢性或复发性腰背痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第28章 腰背痛",
+                       "source_page":  "第28章‘腰背痛的红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第28章.md",
+                       "file_path":  "腰背痛红旗征筛查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH28_NEURO_005",
+                       "skill_name":  "腰腿痛快速神经根检查",
+                       "objective":  "在 2~3 分钟内完成腰腿痛病人的快速神经根筛查,识别 L4/L5/S1 受压。",
+                       "scope":  "症状延伸至臀部、小腿或足部的腰背痛病人",
+                       "source_title":  "莫塔全科医学（第8版） 第28章 腰背痛",
+                       "source_page":  "第28章‘神经学检查’‘主要神经根’相关段落",
+                       "source_file":  "莫塔全科医学---第28章.md",
+                       "file_path":  "腰腿痛快速神经根检查.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH28_SPOND_007",
+                       "skill_name":  "腰椎滑脱屈曲锻炼方案",
+                       "objective":  "通过屈曲导向训练稳定腰椎滑脱节段并减轻疼痛。",
+                       "scope":  "站立或行走加重、影像证实的症状性腰椎滑脱病人",
+                       "source_title":  "莫塔全科医学（第8版） 第28章 腰背痛",
+                       "source_page":  "第28章‘腰椎滑脱’‘管理’相关段落",
+                       "source_file":  "莫塔全科医学---第28章.md",
+                       "file_path":  "腰椎滑脱屈曲锻炼方案.md"
+                   }
+               ]
+}

@@ -1,0 +1,149 @@
+{
+    "chapter_number":  18,
+    "chapter_title":  "令人困惑的病毒和原虫感染",
+    "part_name":  "全科医学的诊断方法",
+    "part_number":  2,
+    "skill_count":  14,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH18_EBV_004",
+                       "skill_name":  "EB病毒单核细胞增多症抗生素皮疹规避",
+                       "objective":  "在疑似或确诊EBM病人中避免因不当使用青霉素类药物而诱发广泛皮疹。",
+                       "scope":  "扁桃体炎、咽炎或发热性淋巴结病且怀疑EBM的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘皮疹’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "EB病毒单核细胞增多症抗生素皮疹规避.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_EBV_001",
+                       "skill_name":  "EB病毒单核细胞增多症识别",
+                       "objective":  "识别EBM的典型咽痛-发热-淋巴结病模式,并与其他相似感染区分。",
+                       "scope":  "10到35岁发热、咽喉痛、淋巴结肿大、不适或脾大病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘EBV所致单核细胞增多症’‘临床特征’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "EB病毒单核细胞增多症识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_EBV_002",
+                       "skill_name":  "EB病毒单核细胞增多症实验室诊断",
+                       "objective":  "使用血液学和血清学检查确认EBM,并识别假阴性或替代诊断。",
+                       "scope":  "临床怀疑EBM或假性EBM的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘EBV所致单核细胞增多症’‘诊断’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "EB病毒单核细胞增多症实验室诊断.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_EBV_003",
+                       "skill_name":  "EB病毒单核细胞增多症支持治疗",
+                       "objective":  "为EBM病人提供以休息和并发症预防为核心的支持治疗。",
+                       "scope":  "已诊断或高度怀疑EBM的门诊病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘EBV所致单核细胞增多症’‘治疗’‘预后’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "EB病毒单核细胞增多症支持治疗.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_INFECT_001",
+                       "skill_name":  "EB样综合征病原鉴别",
+                       "objective":  "对EBM样发热性疾病进行病原学分层,避免遗漏原发HIV、CMV和弓形虫感染。",
+                       "scope":  "发热、乏力、淋巴结肿大、肝功能异常或异型淋巴细胞增多的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘四种相似的临床表现’‘巨细胞病毒感染’‘弓形虫病’‘原发性HIV感染鉴别诊断’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "EB样综合征病原鉴别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_HIV_005",
+                       "skill_name":  "HIV暴露后预防启动",
+                       "objective":  "对显著高风险HIV暴露者及时评估并启动PEP,减少感染发生。",
+                       "scope":  "无保护高风险性暴露、针刺伤或其他高危体液暴露后72小时内病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘暴露后预防’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "HIV暴露后预防启动.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_HIV_006",
+                       "skill_name":  "HIV高危行为预防咨询",
+                       "objective":  "向高危个体提供可执行的安全性行为和减少血液暴露的预防建议。",
+                       "scope":  "HIV高危人群、性传播疾病病人、注射药物使用者及其伴侣",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘HIV感染的预防’‘向高危人群提供有关更安全做法的咨询’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "HIV高危行为预防咨询.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_HIV_002",
+                       "skill_name":  "HIV检测前咨询与同意",
+                       "objective":  "在HIV检测前完成风险沟通、保密说明和知情同意,降低检测障碍和结果冲击。",
+                       "scope":  "所有计划接受HIV检测或有高危暴露评估需求的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘HIV检测:全科医生的作用’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "HIV检测前咨询与同意.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_HIV_003",
+                       "skill_name":  "HIV实验室评估",
+                       "objective":  "用标准化实验室路径确认HIV感染并评估免疫状态、病毒活性和并发感染。",
+                       "scope":  "HIV初筛阳性、疑似感染或已知感染需基线评估的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘检查和诊断’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "HIV实验室评估.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_HIV_004",
+                       "skill_name":  "HIV整体支持管理",
+                       "objective":  "为HIV感染者提供持续的心理社会支持、生活方式指导和与专科协作的慢病管理框架。",
+                       "scope":  "所有已知HIV感染者及其长期随访阶段",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘管理’‘整体化的管理方法’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "HIV整体支持管理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_PANDEMIC_001",
+                       "skill_name":  "大流行期全科诊所响应",
+                       "objective":  "在传染病大流行不同阶段保持全科诊所业务连续性并减少社区传播。",
+                       "scope":  "流感、冠状病毒或其他全国性大流行期间的全科诊所与基层团队",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘全科医生在疾病大流行时的作用’‘表18.6 澳大利亚全科医学针对大流行不同阶段的响应计划’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "大流行期全科诊所响应.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_TOXO_001",
+                       "skill_name":  "弓形虫病评估与治疗分流",
+                       "objective":  "识别弓形虫病的临床表现并根据症状严重度和宿主状态决定是否治疗。",
+                       "scope":  "无痛性淋巴结肿大、EBM样发热、免疫低下神经系统症状或妊娠病人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘弓形虫病’‘诊断’‘治疗’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "弓形虫病评估与治疗分流.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_HIV_001",
+                       "skill_name":  "急性HIV感染识别",
+                       "objective":  "在血清转化期尽早识别急性HIV感染,避免被误诊为单纯EBM或普通病毒感染。",
+                       "scope":  "发热、严重不适、淋巴结肿大、皮疹或高危暴露后出现EB样综合征者",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘人类免疫缺陷病毒/艾滋病’‘急性症状期(血清转化期)’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "急性HIV感染识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH18_CMV_001",
+                       "skill_name":  "巨细胞病毒EB样感染诊断",
+                       "objective":  "识别健康成人中类似EBM的获得性CMV感染,并通过血清学或PCR确认。",
+                       "scope":  "发热、乏力、关节肌痛、肝功能异常且异嗜性抗体阴性的成人",
+                       "source_title":  "莫塔全科医学（第8版） 第18章 令人困惑的病毒和原虫感染",
+                       "source_page":  "第18章‘巨细胞病毒感染’相关段落",
+                       "source_file":  "莫塔全科医学---第18章.md",
+                       "file_path":  "巨细胞病毒EB样感染诊断.md"
+                   }
+               ]
+}

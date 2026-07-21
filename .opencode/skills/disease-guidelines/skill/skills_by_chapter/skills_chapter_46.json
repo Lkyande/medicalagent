@@ -1,0 +1,59 @@
+{
+    "chapter_number":  46,
+    "chapter_title":  "声音嘶哑",
+    "part_name":  "全科医学中的主要症状和问题",
+    "part_number":  3,
+    "skill_count":  5,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH46_LARYNGITIS_004",
+                       "skill_name":  "急性喉炎家庭处理",
+                       "objective":  "对典型急性喉炎提供以声带休息和环境控制为核心的家庭管理方案。",
+                       "scope":  "无气道红旗征的急性病毒性喉炎或短期用嗓过度病人",
+                       "source_title":  "莫塔全科医学（第8版） 第46章 声音嘶哑",
+                       "source_page":  "第46章‘急性喉炎’‘处理’相关段落",
+                       "source_file":  "莫塔全科医学---第46章.md",
+                       "file_path":  "急性喉炎家庭处理.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH46_HX_002",
+                       "skill_name":  "声音嘶哑病史要点采集",
+                       "objective":  "通过结构化病史在嘶哑病人中快速定位感染、用嗓过度、反流和肿瘤风险。",
+                       "scope":  "新发、反复或持续声音嘶哑病人",
+                       "source_title":  "莫塔全科医学（第8版） 第46章 声音嘶哑",
+                       "source_page":  "第46章‘病史’相关段落",
+                       "source_file":  "莫塔全科医学---第46章.md",
+                       "file_path":  "声音嘶哑病史要点采集.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH46_RED_001",
+                       "skill_name":  "声音嘶哑红旗征识别",
+                       "objective":  "快速识别提示喉癌、气道受损或严重基础病的声音嘶哑表现。",
+                       "scope":  "所有急性或慢性声音嘶哑病人",
+                       "source_title":  "莫塔全科医学（第8版） 第46章 声音嘶哑",
+                       "source_page":  "第46章‘红旗征’相关段落",
+                       "source_file":  "莫塔全科医学---第46章.md",
+                       "file_path":  "声音嘶哑红旗征识别.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH46_EXAM_003",
+                       "skill_name":  "声音嘶哑基础查体",
+                       "objective":  "用基层查体快速识别颈部肿块、甲状腺异常、气道受损和特征性嗓音线索。",
+                       "scope":  "初诊或复诊的声音嘶哑病人",
+                       "source_title":  "莫塔全科医学（第8版） 第46章 声音嘶哑",
+                       "source_page":  "第46章‘身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第46章.md",
+                       "file_path":  "声音嘶哑基础查体.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH46_STEROID_005",
+                       "skill_name":  "吸入激素相关喉炎处理",
+                       "objective":  "识别并纠正吸入激素导致的声音嘶哑和真菌相关喉炎。",
+                       "scope":  "使用类固醇吸入剂后出现声音嘶哑或口咽不适的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第46章 声音嘶哑",
+                       "source_page":  "第46章‘类固醇吸入剂诱发的喉炎’相关段落",
+                       "source_file":  "莫塔全科医学---第46章.md",
+                       "file_path":  "吸入激素相关喉炎处理.md"
+                   }
+               ]
+}

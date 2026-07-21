@@ -1,0 +1,39 @@
+{
+    "chapter_number":  112,
+    "chapter_title":  "瘙痒",
+    "part_name":  "皮肤问题",
+    "part_number":  10,
+    "skill_count":  3,
+    "skills":  [
+                   {
+                       "skill_id":  "GP_CH112_PRURITUS_001",
+                       "skill_name":  "局部与全身性瘙痒分层",
+                       "objective":  "区分局部性与全身性瘙痒,快速判断是原发皮肤病还是系统性疾病线索。",
+                       "scope":  "主诉瘙痒,伴或不伴皮疹的儿童和成人",
+                       "source_title":  "莫塔全科医学（第8版） 第112章 瘙痒",
+                       "source_page":  "第112章‘局部瘙痒’‘广泛性瘙痒’相关段落",
+                       "source_file":  "莫塔全科医学---第112章.md",
+                       "file_path":  "局部与全身性瘙痒分层.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH112_PRURITUS_003",
+                       "skill_name":  "皮肤划痕症床旁测试",
+                       "objective":  "通过床旁划痕试验识别皮肤划痕症,帮助解释慢性瘙痒与荨麻疹反应。",
+                       "scope":  "轻触即痒或疑似物理性荨麻疹的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第112章 瘙痒",
+                       "source_page":  "第112章‘指南’‘关键的身体检查’相关段落",
+                       "source_file":  "莫塔全科医学---第112章.md",
+                       "file_path":  "皮肤划痕症床旁测试.md"
+                   },
+                   {
+                       "skill_id":  "GP_CH112_PRURITUS_002",
+                       "skill_name":  "全身性瘙痒系统病筛查",
+                       "objective":  "在全身性瘙痒中及时筛查潜在的肝胆、肾脏、血液和恶性疾病。",
+                       "scope":  "广泛性瘙痒、润肤剂无效且影响睡眠,或无明显原发皮疹的病人",
+                       "source_title":  "莫塔全科医学（第8版） 第112章 瘙痒",
+                       "source_page":  "第112章‘可能导致瘙痒的全身性因素’‘关键病史’‘关键辅助检查’相关段落",
+                       "source_file":  "莫塔全科医学---第112章.md",
+                       "file_path":  "全身性瘙痒系统病筛查.md"
+                   }
+               ]
+}
