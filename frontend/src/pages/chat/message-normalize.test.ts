@@ -131,6 +131,58 @@ describe("normalizeMessages", () => {
     })
   })
 
+  test("exposes an education preview job from the completed create result", () => {
+    const result = normalizeMessages([
+      user("u1", 1000),
+      assistant("a1", "u1", 1100, 1200, [
+        {
+          id: "tool",
+          sessionID: "session",
+          messageID: "a1",
+          type: "tool",
+          callID: "call",
+          tool: "education-content_education_create_preview",
+          state: {
+            status: "completed",
+            input: { topic: "流感预防" },
+            output: JSON.stringify({ data: { job_id: "job_123" }, stage: "pending" }),
+            title: "created",
+            metadata: {},
+            time: { start: 1150, end: 1200 },
+          },
+        } as Part,
+      ]),
+    ])
+
+    expect(latestEducationJobID(result)).toBe("job_123")
+  })
+
+  test("ignores invalid education job IDs in create results", () => {
+    const result = normalizeMessages([
+      user("u1", 1000),
+      assistant("a1", "u1", 1100, 1200, [
+        {
+          id: "tool",
+          sessionID: "session",
+          messageID: "a1",
+          type: "tool",
+          callID: "call",
+          tool: "education-content_education_create_preview",
+          state: {
+            status: "completed",
+            input: { topic: "流感预防" },
+            output: JSON.stringify({ job_id: "../secret" }),
+            title: "created",
+            metadata: {},
+            time: { start: 1150, end: 1200 },
+          },
+        } as Part,
+      ]),
+    ])
+
+    expect(latestEducationJobID(result)).toBeUndefined()
+  })
+
   test("does not expose invalid or unrelated tool inputs for progress polling", () => {
     const result = normalizeMessages([
       user("u1", 1000),

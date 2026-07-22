@@ -268,6 +268,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
       if (id !== sessionId()) return
       setSessionStatus(status ?? { type: "idle" })
       setSessionStatusReady(true)
+      if (!status || status.type === "idle") setLocalGeneratingMessageID(undefined)
     } catch (error) {
       console.debug("Failed to load session status", error)
     }
@@ -470,6 +471,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
         if (status.type === "idle") {
           setLocalGeneratingMessageID(undefined)
           setWorkspaceRefresh((value) => value + 1)
+          void loadMessages()
         }
       },
       onSessionError: (sid, error) => {
@@ -498,7 +500,11 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
       onQuestionResolved: (_, requestID) => {
         setQuestions((current) => current.filter((item) => item.id !== requestID))
       },
-      onConnected: loadInteractions,
+      onConnected: () => {
+        void loadInteractions()
+        void loadMessages()
+        void loadStatus()
+      },
       onError: (error) => console.debug("[chat] event stream error", error),
     })
 

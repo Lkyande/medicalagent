@@ -12,3 +12,6 @@ __pycache__/
 /frontend/dist/
 /frontend/vite.log
 /backend/tests/
+!/backend/tests/
+!/backend/tests/test_connection_lifecycle.py
+/backend/tests/test_workspace_uploads.py

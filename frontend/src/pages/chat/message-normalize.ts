@@ -78,6 +78,24 @@ export function educationJobIDs(messages: DisplayMessage[]): string[] {
   return [...result]
 }
 
+function validEducationJobID(value: unknown): value is string {
+  return typeof value === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(value)
+}
+
+function educationJobIDFromOutput(output: string): string | undefined {
+  try {
+    const value = JSON.parse(output)
+    if (!value || typeof value !== "object") return undefined
+    if ("job_id" in value && validEducationJobID(value.job_id)) return value.job_id
+    if ("data" in value && value.data && typeof value.data === "object" && "job_id" in value.data) {
+      return validEducationJobID(value.data.job_id) ? value.data.job_id : undefined
+    }
+    return undefined
+  } catch {
+    return undefined
+  }
+}
+
 function toolFromPart(part: ToolPart): DisplayTool {
   const state = part.state
   const base: DisplayTool = {
@@ -92,14 +110,16 @@ function toolFromPart(part: ToolPart): DisplayTool {
     toolInput &&
     typeof toolInput === "object" &&
     "job_id" in toolInput &&
-    typeof toolInput.job_id === "string" &&
-    /^[A-Za-z0-9_-]{1,80}$/.test(toolInput.job_id)
+    validEducationJobID(toolInput.job_id)
   ) {
     base.educationJobID = toolInput.job_id
   }
   if (state.status === "completed") {
     base.output = state.output
     base.title = state.title
+    if (part.tool.endsWith("education_create_preview")) {
+      base.educationJobID = educationJobIDFromOutput(state.output)
+    }
   } else if (state.status === "error") {
     base.error = state.error
   } else if (state.status === "running") {
