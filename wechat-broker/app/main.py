@@ -5,7 +5,7 @@ import hmac
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,6 +14,7 @@ from app.config import settings, validate_settings
 from app.database import async_session, get_db, init_db
 from app.models import AuthorizationAttempt
 from app.wechat_service import (
+    AUTHORIZATION_START_PATH,
     WechatAPIError,
     WechatAuthorizationError,
     WechatAuthorizationRequired,
@@ -71,6 +72,10 @@ class AccessTokenResponse(BaseModel):
 
 class InvalidateTokenRequest(BaseModel):
     access_token: str = Field(alias="accessToken", min_length=1, max_length=4096)
+
+
+class ResolveAuthorizationStartRequest(BaseModel):
+    payload: str = Field(min_length=1, max_length=8192)
 
 
 async def require_internal_api_key(
@@ -144,6 +149,69 @@ def callback_result(
         f"<title>{title}</title></head><body><p>{body}</p>"
         "<script>setTimeout(function(){window.close();},800);</script></body></html>"
     )
+
+
+@app.get(AUTHORIZATION_START_PATH, response_class=HTMLResponse)
+async def authorization_start():
+    return HTMLResponse(
+        """<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>正在打开微信授权</title></head>
+<body><p id="status">正在打开微信授权页面...</p>
+<script>
+(async () => {
+  const status = document.getElementById("status");
+  try {
+    const payload = window.location.hash.slice(1);
+    if (!payload) throw new Error("missing authorization target");
+    const response = await window.fetch(window.location.pathname + "/resolve", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({payload}),
+      credentials: "same-origin",
+      cache: "no-store"
+    });
+    if (!response.ok) throw new Error("authorization target rejected");
+    const resolved = await response.json();
+    const target = new URL(resolved.target);
+    if (target.origin !== "https://mp.weixin.qq.com"
+        || target.username
+        || target.password
+        || target.pathname !== "/cgi-bin/componentloginpage"
+        || !target.searchParams.get("component_appid")
+        || !target.searchParams.get("pre_auth_code")
+        || !target.searchParams.get("redirect_uri")) {
+      throw new Error("invalid authorization target");
+    }
+    history.replaceState(null, "", window.location.pathname);
+    window.location.replace(target.href);
+  } catch (_error) {
+    status.textContent = "授权地址无效或已损坏，请关闭窗口后重新发起授权。";
+  }
+})();
+</script></body></html>""",
+        headers={
+            "Cache-Control": "no-store",
+            "Referrer-Policy": "origin",
+            "Content-Security-Policy": (
+                "default-src 'none'; script-src 'unsafe-inline'; connect-src 'self'; "
+                "base-uri 'none'; frame-ancestors 'none'"
+            ),
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
+
+
+@app.post(f"{AUTHORIZATION_START_PATH}/resolve")
+async def resolve_authorization_start(request: ResolveAuthorizationStartRequest):
+    try:
+        target = WechatService.resolve_authorization_target(request.payload)
+    except WechatAuthorizationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Authorization start payload is invalid",
+        ) from exc
+    return JSONResponse({"target": target}, headers={"Cache-Control": "no-store"})
 
 
 @app.get("/health")

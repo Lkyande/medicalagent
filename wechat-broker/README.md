@@ -18,8 +18,15 @@
 公开接口：
 
 ```text
+GET /api/wechat-broker/authorization/start
 GET /api/wechat-broker/authorization/callback
 ```
+
+内部创建授权接口返回的 `authUrl` 指向 Broker 同域的 `authorization/start` 页面，
+该页面再跳转到微信。这样即使主项目前端部署在其他域名，微信看到的授权发起页与
+授权回调页仍使用 `WECHAT_BROKER_AUTHORIZATION_CALLBACK_URL` 的域名。真实微信
+授权 URL 及其 HMAC 签名只保存在浏览器 fragment 中，不会进入 Nginx 请求日志；
+发起页通过同源 POST 交给 Broker 验签后才会跳转微信。
 
 内部接口均要求 `X-API-Key`：
 
@@ -151,9 +158,11 @@ curl -i http://127.0.0.1:18000/api/wechat-broker/authorization/callback
 
 ## 6. Nginx
 
-将 `deploy/nginx-location.conf` 的两个 location 加入
+将 `deploy/nginx-location.conf` 的三个 location 加入
 `saas.science.kangqiao.vip` 对应的 HTTPS server 块。必须先把
-`MAIN_APPLICATION_SERVER_IP` 替换为主项目服务器的固定出口 IP。
+内部 API location 中的示例 `allow` 改为主项目服务器的固定出口 IP 并取消注释。
+`authorization/start` 和 `authorization/callback` 是公开浏览器入口，不能放入内部
+API 的 IP 白名单；两者都关闭访问日志，避免临时授权凭据进入日志。
 
 ```bash
 nginx -t
@@ -164,9 +173,10 @@ systemctl reload nginx
 
 ```bash
 curl -i https://saas.science.kangqiao.vip/api/wechat-broker/authorization/callback
+curl -i https://saas.science.kangqiao.vip/api/wechat-broker/authorization/start
 ```
 
-无参数时必须返回 `422`，而不是 `502`。内部 API从非白名单 IP访问应返回
+callback 无参数时必须返回 `422`，start 必须返回 `200`，而不是 `502`。内部 API从非白名单 IP访问应返回
 `403`；从主项目服务器访问但未携带 API Key 应返回 `401`。
 
 ## 7. 主项目配置
@@ -185,7 +195,8 @@ WECHAT_BROKER_ALLOW_INSECURE_HTTP=false
 ## 8. 微信平台检查
 
 - 现有 PHP 授权事件接收 URL 保持不变。
-- 授权回调域名必须属于第三方平台允许的授权发起域名。
+- `WECHAT_BROKER_AUTHORIZATION_CALLBACK_URL` 的域名必须与第三方平台填写的授权发起页域名一致。
+- 主项目前端可以使用其他域名；浏览器必须先打开 Broker 返回的同域 `authorization/start` 页面，不能直接打开微信 URL。
 - 微信 API IP 白名单添加 `8.137.189.226` 上 Broker 的实际出口 IP。
 - AppSecret、数据库密码和 Fernet 密钥泄露后必须立即轮换。
 

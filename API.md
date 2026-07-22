@@ -1,6 +1,6 @@
 # Your Platform API
 
-本文档描述 FastAPI 网关对前端开放的接口。开发环境默认后端地址为 `http://localhost:8000`，业务 API 前缀为 `/api`，OpenCode 代理前缀为 `/opencode`。
+本文档描述 FastAPI 网关对前端开放的接口。开发环境默认后端地址为 `http://localhost:20136`，业务 API 前缀为 `/api`，OpenCode 代理前缀为 `/opencode`。
 
 FastAPI 自动文档：
 
@@ -372,6 +372,8 @@ Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.m
 
 微信 `component_access_token`、`authorizer_refresh_token` 和 `authorizer_access_token` 都由 broker 使用 Fernet 加密保存。主项目只通过带 API Key 的内部 HTTPS API 查询绑定或获取短期 authorizer access token，相关部署见 `wechat-broker/README.md`。
 
+创建授权返回的 `authUrl` 是 Broker 回调域名下的同域授权发起页，而不是直接暴露微信授权 URL。浏览器打开该页面后再跳转微信，使前端部署域名不受微信“授权发起页域名必须与授权回调域名相同”的限制。
+
 ### `GET /api/workspace/archive`
 
 下载整个用户工作目录 ZIP。
@@ -456,7 +458,7 @@ Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.m
 示例：
 
 ```bash
-curl http://localhost:8000/opencode/session \
+curl http://localhost:20136/opencode/session \
   -H "Authorization: Bearer your-jwt-token"
 ```
 

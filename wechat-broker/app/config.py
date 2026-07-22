@@ -1,4 +1,9 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
+
+
+_ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
 
 
 class Settings(BaseSettings):
@@ -17,7 +22,7 @@ class Settings(BaseSettings):
     ticket_database_ssl_verify: bool = True
 
     model_config = {
-        "env_file": ".env",
+        "env_file": _ENV_FILE,
         "env_prefix": "WECHAT_BROKER_",
         "extra": "ignore",
     }

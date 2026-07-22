@@ -5,14 +5,14 @@ from app.config import settings
 
 
 def _engine_options() -> dict:
-    options = {
+    if not settings.database_url.startswith("mysql+"):
+        return {}
+    return {
         "pool_pre_ping": True,
         "pool_recycle": 1800,
         "pool_timeout": 10,
+        "connect_args": {"connect_timeout": 5},
     }
-    if settings.database_url.startswith("mysql+"):
-        options["connect_args"] = {"connect_timeout": 5}
-    return options
 
 
 engine = create_async_engine(settings.database_url, **_engine_options())

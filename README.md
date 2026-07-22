@@ -154,7 +154,7 @@ WantedBy=multi-user.target
 cd backend
 
 # 安装依赖
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # 配置环境
 cp .env.example .env
@@ -165,7 +165,7 @@ cp .env.example .env
 #   JWT_SECRET=你的JWT密钥
 
 # 启动开发服务器。远程沙盒需要访问 MCP，因此不能只监听 127.0.0.1。
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 20136
 ```
 
 ### 3. 启动前端
@@ -178,8 +178,8 @@ npm install
 
 # 配置环境（开发环境）
 # .env 已预配置：
-#   VITE_OPENCODE_PROXY_BASE=http://localhost:8000/opencode
-#   VITE_BACKEND_API_URL=http://localhost:8000/api
+#   VITE_OPENCODE_PROXY_BASE=http://localhost:20136/opencode
+#   VITE_BACKEND_API_URL=http://localhost:20136/api
 
 # 启动开发服务器
 npm run dev
@@ -199,7 +199,7 @@ make down           # Docker 停止
 
 ## API 接口
 
-完整请求/响应示例、错误码和代理规则见 [API.md](./API.md)。后端同时提供 FastAPI 自动文档：开发环境打开 `http://localhost:8000/docs`，OpenAPI JSON 为 `http://localhost:8000/openapi.json`。
+完整请求/响应示例、错误码和代理规则见 [API.md](./API.md)。后端同时提供 FastAPI 自动文档：开发环境打开 `http://localhost:20136/docs`，OpenAPI JSON 为 `http://localhost:20136/openapi.json`。
 
 ### 认证
 
@@ -212,7 +212,7 @@ make down           # Docker 停止
 **注册示例：**
 
 ```bash
-curl -X POST http://localhost:8000/api/auth/register \
+curl -X POST http://localhost:20136/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"account":"user@example.com","password":"your-password"}'
 ```
@@ -268,7 +268,7 @@ curl -X POST http://localhost:8000/api/auth/register \
 **使用示例（带 JWT）：**
 
 ```bash
-curl http://localhost:8000/opencode/session \
+curl http://localhost:20136/opencode/session \
   -H "Authorization: Bearer your-jwt-token"
 ```
 
@@ -291,8 +291,8 @@ curl http://localhost:8000/opencode/session \
 开发环境：
 
 ```env
-VITE_OPENCODE_PROXY_BASE=http://localhost:8000/opencode
-VITE_BACKEND_API_URL=http://localhost:8000/api
+VITE_OPENCODE_PROXY_BASE=http://localhost:20136/opencode
+VITE_BACKEND_API_URL=http://localhost:20136/api
 ```
 
 生产环境（同域 Nginx）：
@@ -349,7 +349,7 @@ SANDBOX_C_PASSWORD=password-c
 FastAPI 环境需要配置：
 
 ```env
-MURTAGH_MCP_URL=http://backend:8000/mcp/murtagh
+MURTAGH_MCP_URL=http://backend:20136/mcp/murtagh
 MURTAGH_KNOWLEDGE_ROOT=/app/knowledge/murtagh
 ```
 
@@ -374,10 +374,10 @@ curl -u opencode:你的沙盒密码 \
 
 ```env
 # OpenCode 沙盒能够访问的平台 MCP 地址，不能使用沙盒自身的 localhost。
-EDUCATION_MCP_URL=http://backend:8000/mcp/education
+EDUCATION_MCP_URL=http://backend:20136/mcp/education
 EDUCATION_MCP_TIMEOUT_MS=120000
 # OpenCode 沙盒访问当前平台热点 MCP 的地址。
-HOT_TOPICS_MCP_URL=http://backend:8000/mcp/hot-topics
+HOT_TOPICS_MCP_URL=http://backend:20136/mcp/hot-topics
 HOT_TOPICS_MCP_TIMEOUT_MS=60000
 # 当前平台后端访问 Smart Market HTTP API 的地址。
 SMART_MARKET_BASE_URL=https://mkt.kangqiao.vip/api/v1
@@ -406,6 +406,8 @@ Agent 提交宣教任务并取得 `job_id` 后，使用该编号分段等待后�
 
 微信公众号授权和 token 刷新由仓库中的 `wechat-broker/` 独立服务管理。已有 PHP 继续接收微信开放平台推送并保存最新 `component_verify_ticket`；broker 只读 ticket，并加密保存 component token、authorizer refresh token 和 authorizer access token。当前平台仅通过内部 HTTPS API查询绑定或取得短期 token，排版 HTML 仍交给现有 `wechat_agent` 完成草稿转换和发布提交。
 
+Broker 返回的授权 URL 会先打开其回调域名下的同域授权发起页，再由该页面跳转微信。前端可以部署在 `medicalagent.kangqiao.vip` 或本地开发地址，而微信检测到的授权发起页和授权回调页仍统一为 Broker 在微信开放平台登记的域名。
+
 Broker 的 MySQL 权限、Nginx 分流、systemd 和虚拟环境部署步骤见 `wechat-broker/README.md`。AppSecret、ticket 数据库账号、Fernet 密钥和 refresh token 不再部署到主项目服务器。
 
 `SMART_MARKET_BASE_URL` 是平台后端访问 Smart Market 的 HTTPS API 基地址，已包含 `/api/v1`，与沙盒访问的 `HOT_TOPICS_MCP_URL` 方向不同。线上必须部署 `POST /track/hot_topics/search` 增强接口；如果后续启用 API Key，可通过 `SMART_MARKET_API_KEY` 注入 `X-API-Key` 请求头。
@@ -431,7 +433,7 @@ docker compose down
 
 ```nginx
 location /opencode/ {
-    proxy_pass http://backend:8000/opencode/;
+    proxy_pass http://backend:20136/opencode/;
     proxy_http_version 1.1;
     proxy_set_header Connection "";
 

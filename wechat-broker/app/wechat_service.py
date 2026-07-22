@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import hashlib
+import hmac
+import re
 import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Any
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import parse_qs, urlencode, urlsplit
 
 import httpx
 from cryptography.fernet import Fernet, InvalidToken
@@ -17,10 +21,12 @@ from app.ticket_store import TicketStore, TicketStoreError
 
 
 WECHAT_API = "https://api.weixin.qq.com"
+AUTHORIZATION_START_PATH = "/api/wechat-broker/authorization/start"
 _COMPONENT_TOKEN_ERRORS = {40001, 40014, 42001}
 _AUTHORIZATION_ERRORS = {61007, 61023, 61024}
 _component_token_lock = asyncio.Lock()
 _authorizer_token_lock = asyncio.Lock()
+_STATE_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 
 
 class WechatConfigurationError(RuntimeError):
@@ -134,7 +140,87 @@ class WechatService:
                 "auth_type": "1",
             }
         )
-        return attempt, f"https://mp.weixin.qq.com/cgi-bin/componentloginpage?{query}"
+        wechat_url = f"https://mp.weixin.qq.com/cgi-bin/componentloginpage?{query}"
+        return attempt, self._authorization_start_url(wechat_url)
+
+    @staticmethod
+    def _authorization_start_url(wechat_url: str) -> str:
+        callback = urlsplit(settings.authorization_callback_url)
+        encoded = base64.urlsafe_b64encode(wechat_url.encode("utf-8")).decode("ascii")
+        encoded = encoded.rstrip("=")
+        signature = hmac.new(
+            settings.internal_api_key.encode("utf-8"),
+            encoded.encode("ascii"),
+            hashlib.sha256,
+        ).hexdigest()
+        return f"{callback.scheme}://{callback.netloc}{AUTHORIZATION_START_PATH}#{encoded}.{signature}"
+
+    @staticmethod
+    def resolve_authorization_target(payload: str) -> str:
+        try:
+            encoded, signature = payload.split(".", 1)
+            expected = hmac.new(
+                settings.internal_api_key.encode("utf-8"),
+                encoded.encode("ascii"),
+                hashlib.sha256,
+            ).hexdigest()
+            if not hmac.compare_digest(signature, expected):
+                raise ValueError("invalid signature")
+            padding = "=" * (-len(encoded) % 4)
+            target = base64.b64decode(
+                encoded + padding,
+                altchars=b"-_",
+                validate=True,
+            ).decode("utf-8")
+            WechatService._validate_authorization_target(target)
+            return target
+        except (UnicodeError, ValueError) as exc:
+            raise WechatAuthorizationError("Authorization start payload is invalid") from exc
+
+    @staticmethod
+    def _validate_authorization_target(target: str) -> None:
+        parsed = urlsplit(target)
+        try:
+            port = parsed.port
+        except ValueError as exc:
+            raise ValueError("invalid target port") from exc
+        if (
+            parsed.scheme != "https"
+            or parsed.hostname != "mp.weixin.qq.com"
+            or port not in (None, 443)
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.path != "/cgi-bin/componentloginpage"
+            or parsed.fragment
+        ):
+            raise ValueError("invalid authorization target")
+
+        query = parse_qs(parsed.query, keep_blank_values=True)
+        if set(query) != {"component_appid", "pre_auth_code", "redirect_uri", "auth_type"}:
+            raise ValueError("invalid authorization query")
+        if query["component_appid"] != [settings.component_appid]:
+            raise ValueError("invalid component appid")
+        if query["auth_type"] != ["1"]:
+            raise ValueError("invalid authorization type")
+        if len(query["pre_auth_code"]) != 1 or not query["pre_auth_code"][0]:
+            raise ValueError("invalid pre-authorization code")
+        if len(query["redirect_uri"]) != 1:
+            raise ValueError("invalid redirect URI")
+
+        callback = urlsplit(settings.authorization_callback_url)
+        redirect = urlsplit(query["redirect_uri"][0])
+        if (
+            redirect.scheme != callback.scheme
+            or redirect.netloc != callback.netloc
+            or redirect.path != callback.path
+            or redirect.fragment
+        ):
+            raise ValueError("invalid redirect URI")
+        callback_query = parse_qs(callback.query, keep_blank_values=True)
+        redirect_query = parse_qs(redirect.query, keep_blank_values=True)
+        state = redirect_query.pop("state", [])
+        if redirect_query != callback_query or len(state) != 1 or not _STATE_PATTERN.fullmatch(state[0]):
+            raise ValueError("invalid authorization state")
 
     async def complete_authorization(
         self,
