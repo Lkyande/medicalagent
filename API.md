@@ -1,6 +1,6 @@
 # Your Platform API
 
-本文档描述 FastAPI 网关对前端开放的接口。开发环境默认后端地址为 `http://localhost:20136`，业务 API 前缀为 `/api`，OpenCode 代理前缀为 `/opencode`。
+本文档描述 FastAPI 网关对前端开放的接口。开发环境默认后端地址为 `http://localhost:20140`，业务 API 前缀为 `/api`，OpenCode 代理前缀为 `/opencode`。
 
 FastAPI 自动文档：
 
@@ -458,7 +458,7 @@ Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.m
 示例：
 
 ```bash
-curl http://localhost:20136/opencode/session \
+curl http://localhost:20140/opencode/session \
   -H "Authorization: Bearer your-jwt-token"
 ```
 

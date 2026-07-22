@@ -165,7 +165,7 @@ cp .env.example .env
 #   JWT_SECRET=你的JWT密钥
 
 # 启动开发服务器。远程沙盒需要访问 MCP，因此不能只监听 127.0.0.1。
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 20136
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 20140
 ```
 
 ### 3. 启动前端
@@ -178,8 +178,8 @@ npm install
 
 # 配置环境（开发环境）
 # .env 已预配置：
-#   VITE_OPENCODE_PROXY_BASE=http://localhost:20136/opencode
-#   VITE_BACKEND_API_URL=http://localhost:20136/api
+#   VITE_OPENCODE_PROXY_BASE=http://localhost:20140/opencode
+#   VITE_BACKEND_API_URL=http://localhost:20140/api
 
 # 启动开发服务器
 npm run dev
@@ -199,7 +199,7 @@ make down           # Docker 停止
 
 ## API 接口
 
-完整请求/响应示例、错误码和代理规则见 [API.md](./API.md)。后端同时提供 FastAPI 自动文档：开发环境打开 `http://localhost:20136/docs`，OpenAPI JSON 为 `http://localhost:20136/openapi.json`。
+完整请求/响应示例、错误码和代理规则见 [API.md](./API.md)。后端同时提供 FastAPI 自动文档：开发环境打开 `http://localhost:20140/docs`，OpenAPI JSON 为 `http://localhost:20140/openapi.json`。
 
 ### 认证
 
@@ -212,7 +212,7 @@ make down           # Docker 停止
 **注册示例：**
 
 ```bash
-curl -X POST http://localhost:20136/api/auth/register \
+curl -X POST http://localhost:20140/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"account":"user@example.com","password":"your-password"}'
 ```
@@ -268,7 +268,7 @@ curl -X POST http://localhost:20136/api/auth/register \
 **使用示例（带 JWT）：**
 
 ```bash
-curl http://localhost:20136/opencode/session \
+curl http://localhost:20140/opencode/session \
   -H "Authorization: Bearer your-jwt-token"
 ```
 
@@ -291,8 +291,8 @@ curl http://localhost:20136/opencode/session \
 开发环境：
 
 ```env
-VITE_OPENCODE_PROXY_BASE=http://localhost:20136/opencode
-VITE_BACKEND_API_URL=http://localhost:20136/api
+VITE_OPENCODE_PROXY_BASE=http://localhost:20140/opencode
+VITE_BACKEND_API_URL=http://localhost:20140/api
 ```
 
 生产环境（同域 Nginx）：
@@ -349,7 +349,7 @@ SANDBOX_C_PASSWORD=password-c
 FastAPI 环境需要配置：
 
 ```env
-MURTAGH_MCP_URL=http://backend:20136/mcp/murtagh
+MURTAGH_MCP_URL=http://backend:20140/mcp/murtagh
 MURTAGH_KNOWLEDGE_ROOT=/app/knowledge/murtagh
 ```
 
@@ -374,10 +374,10 @@ curl -u opencode:你的沙盒密码 \
 
 ```env
 # OpenCode 沙盒能够访问的平台 MCP 地址，不能使用沙盒自身的 localhost。
-EDUCATION_MCP_URL=http://backend:20136/mcp/education
+EDUCATION_MCP_URL=http://backend:20140/mcp/education
 EDUCATION_MCP_TIMEOUT_MS=120000
 # OpenCode 沙盒访问当前平台热点 MCP 的地址。
-HOT_TOPICS_MCP_URL=http://backend:20136/mcp/hot-topics
+HOT_TOPICS_MCP_URL=http://backend:20140/mcp/hot-topics
 HOT_TOPICS_MCP_TIMEOUT_MS=60000
 # 当前平台后端访问 Smart Market HTTP API 的地址。
 SMART_MARKET_BASE_URL=https://mkt.kangqiao.vip/api/v1
@@ -433,7 +433,7 @@ docker compose down
 
 ```nginx
 location /opencode/ {
-    proxy_pass http://backend:20136/opencode/;
+    proxy_pass http://backend:20140/opencode/;
     proxy_http_version 1.1;
     proxy_set_header Connection "";
 
