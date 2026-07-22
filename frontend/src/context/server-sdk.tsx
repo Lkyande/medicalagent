@@ -76,6 +76,10 @@ export function resumeStreamAfterPageShow(event: PageTransitionEvent, start: () 
   start()
 }
 
+export function canStartServerEventStream(server: ServerConnection.Any) {
+  return !server.http.requiresBearerAuth || !!server.http.bearerToken
+}
+
 function createServerSdkContextBase(server: ServerConnection.Any, scope: ServerScope) {
   const platform = usePlatform()
   const abort = new AbortController()
@@ -159,6 +163,7 @@ function createServerSdkContextBase(server: ServerConnection.Any, scope: ServerS
   }
 
   const start = () => {
+    if (!canStartServerEventStream(server)) return
     if (started) return run
     started = true
     const active = ++generation

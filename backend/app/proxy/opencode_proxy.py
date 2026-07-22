@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 import httpx
 from fastapi import HTTPException, Request, Response, status
 from fastapi.responses import StreamingResponse
+from starlette.requests import ClientDisconnect
 from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -232,9 +233,14 @@ async def proxy_to_sandbox(
     if re.fullmatch(r"session/[^/]+/shell", normalized_path):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Endpoint not available")
     session_id = await _require_owned_session(path, user, db)
-    target_url = _target_url(path, request, sandbox, workspace.directory)
+    directory = workspace.directory
+    target_url = _target_url(path, request, sandbox, directory)
     headers = {**filter_request_headers(request), **basic_auth_header(sandbox)}
     is_sse = path.startswith("global/event") or "text/event-stream" in request.headers.get("accept", "")
+
+    # Release the connection before waiting on the sandbox. Later persistence
+    # operations can check out a fresh connection from the same session.
+    await db.commit()
 
     if is_sse:
         async def stream():
@@ -242,7 +248,7 @@ async def proxy_to_sandbox(
             async with httpx.AsyncClient(timeout=timeout) as client:
                 async with client.stream("GET", target_url, headers=headers) as resp:
                     resp.raise_for_status()
-                    async for record in _iter_filtered_sse(resp.aiter_raw(), workspace.directory):
+                    async for record in _iter_filtered_sse(resp.aiter_raw(), directory):
                         yield record
 
         return StreamingResponse(
@@ -255,7 +261,12 @@ async def proxy_to_sandbox(
             },
         )
 
-    body = _secure_request_body(path, request.method, await request.body())
+    try:
+        raw_body = await request.body()
+    except ClientDisconnect:
+        return Response(status_code=499)
+
+    body = _secure_request_body(path, request.method, raw_body)
     timeout = httpx.Timeout(300.0, connect=30.0)
     async with httpx.AsyncClient(timeout=timeout) as client:
         resp = await client.request(request.method, target_url, headers=headers, content=body)

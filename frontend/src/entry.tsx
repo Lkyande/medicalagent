@@ -161,6 +161,7 @@ if (root instanceof HTMLElement) {
     http: {
       url: getCurrentUrl(),
       bearerToken: getToken() ?? undefined,
+      requiresBearerAuth: true,
       ...auth,
     },
   }

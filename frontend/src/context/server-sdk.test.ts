@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
-import { coalesceServerEvents, enqueueServerEvent, resumeStreamAfterPageShow } from "./server-sdk"
+import { canStartServerEventStream, coalesceServerEvents, enqueueServerEvent, resumeStreamAfterPageShow } from "./server-sdk"
 import type { Event } from "@opencode-ai/sdk/v2/client"
+import type { ServerConnection } from "./server"
 
 describe("resumeStreamAfterPageShow", () => {
   test("restarts a stream only after a back-forward cache restore", () => {
@@ -11,6 +12,23 @@ describe("resumeStreamAfterPageShow", () => {
     resumeStreamAfterPageShow({ persisted: true } as PageTransitionEvent, start)
 
     expect(starts).toBe(1)
+  })
+})
+
+describe("canStartServerEventStream", () => {
+  const connection = (requiresBearerAuth?: boolean, bearerToken?: string) =>
+    ({
+      type: "http",
+      http: { url: "/opencode", requiresBearerAuth, bearerToken },
+    }) as ServerConnection.Any
+
+  test("waits for a bearer token on authenticated hosted connections", () => {
+    expect(canStartServerEventStream(connection(true))).toBe(false)
+    expect(canStartServerEventStream(connection(true, "token"))).toBe(true)
+  })
+
+  test("keeps unauthenticated OpenCode servers supported", () => {
+    expect(canStartServerEventStream(connection())).toBe(true)
   })
 })
 

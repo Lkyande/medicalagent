@@ -186,6 +186,7 @@ export namespace ServerConnection {
     username?: string
     password?: string
     bearerToken?: string
+    requiresBearerAuth?: boolean
   }
 
   // Regular web connections

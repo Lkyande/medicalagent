@@ -416,7 +416,11 @@ async def get_or_create_workspace(user: User, db: AsyncSession) -> tuple[dict, U
     if workspace:
         directory = workspace_directory(root, workspace.id)
         if workspace.sandbox_id == sandbox["id"] and workspace.directory == directory:
+            await db.commit()
             return sandbox, workspace
+
+    # Do not hold the read transaction while waiting for the process-local lock.
+    await db.commit()
 
     async with _assignment_lock:
         result = await db.execute(
