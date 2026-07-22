@@ -32,8 +32,6 @@ class Settings(BaseSettings):
     wechat_agent_timeout_seconds: float = 30.0
     wechat_agent_preview_wait_seconds: int = 60
     wechat_agent_preview_poll_seconds: float = 5.0
-    wechat_agent_api_key: str = ""
-    wechat_agent_allow_insecure_http: bool = False
     image_upload_url: str = ""
     image_upload_field_name: str = "file"
     image_upload_timeout_seconds: float = 120.0
@@ -41,6 +39,11 @@ class Settings(BaseSettings):
     wechat_broker_api_key: str = ""
     wechat_broker_timeout_seconds: float = 30.0
     wechat_broker_allow_insecure_http: bool = False
+    wechat_api_timeout_seconds: float = 120.0
+    wechat_author: str = ""
+    wechat_content_source_url: str = ""
+    wechat_need_open_comment: int = 0
+    wechat_only_fans_can_comment: int = 0
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 

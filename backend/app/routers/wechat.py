@@ -20,12 +20,15 @@ from app.routers.education import (
     _preview_sandbox,
     _read_artifact_bytes,
 )
-from app.services.wechat_agent_client import WeChatAgentClient, WeChatAgentUncertainError
 from app.services.wechat_broker_client import (
     WechatAPIError,
     WechatAuthorizationRequired,
     WechatBrokerClient,
     WechatConfigurationError,
+)
+from app.services.wechat_publish_service import (
+    WechatPublishService,
+    WechatPublishUncertainError,
 )
 
 
@@ -83,7 +86,7 @@ def _upstream_errcode(payload: dict) -> int:
     try:
         return int(payload.get("errcode") or 0)
     except (TypeError, ValueError) as exc:
-        raise RuntimeError("Wechat Agent returned an invalid errcode") from exc
+        raise RuntimeError("WeChat API returned an invalid errcode") from exc
 
 
 @router.get("/authorization", response_model=AuthorizationResponse)
@@ -249,8 +252,8 @@ async def _sync_draft_locked(
             await db.rollback()
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="WeChat draft sync is already running") from exc
         try:
-            upstream = await WeChatAgentClient().sync_official_account_draft(
-                job_id=job_id,
+            publisher = WechatPublishService()
+            upstream = await publisher.sync_official_account_draft(
                 authorizer_access_token=access_token,
                 html=content.decode("utf-8", errors="strict"),
             )
@@ -260,8 +263,7 @@ async def _sync_draft_locked(
                 access_token, binding = await platform.authorizer_access_token(user.id)
                 if binding.authorizer_appid != release.authorizer_appid:
                     raise WechatAPIError("The authorized official account changed during draft sync")
-                upstream = await WeChatAgentClient().sync_official_account_draft(
-                    job_id=job_id,
+                upstream = await publisher.sync_official_account_draft(
                     authorizer_access_token=access_token,
                     html=content.decode("utf-8", errors="strict"),
                 )
@@ -371,7 +373,8 @@ async def _publish_draft_locked(
         release.updated_at = now
         await db.commit()
         try:
-            upstream = await WeChatAgentClient().submit_official_account_publish(
+            publisher = WechatPublishService()
+            upstream = await publisher.submit_official_account_publish(
                 media_id=release.media_id,
                 authorizer_access_token=access_token,
             )
@@ -381,7 +384,7 @@ async def _publish_draft_locked(
                 access_token, binding = await platform.authorizer_access_token(user.id)
                 if binding.authorizer_appid != release.authorizer_appid:
                     raise WechatAPIError("The authorized official account changed during publish")
-                upstream = await WeChatAgentClient().submit_official_account_publish(
+                upstream = await publisher.submit_official_account_publish(
                     media_id=release.media_id,
                     authorizer_access_token=access_token,
                 )
@@ -397,7 +400,7 @@ async def _publish_draft_locked(
             )
             await db.commit()
             raise _service_error(exc) from exc
-        except WeChatAgentUncertainError as exc:
+        except WechatPublishUncertainError as exc:
             await db.execute(
                 update(EducationWechatPublication)
                 .where(

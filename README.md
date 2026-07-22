@@ -320,12 +320,15 @@ VITE_BACKEND_API_URL=/api
 | `IMAGE_UPLOAD_URL` | - | 平台后端代理上传公众号排版图片的服务地址 |
 | `IMAGE_UPLOAD_FIELD_NAME` | `file` | 上游 multipart 图片字段名 |
 | `IMAGE_UPLOAD_TIMEOUT_SECONDS` | `120` | 上游图片上传超时，单位秒 |
-| `WECHAT_AGENT_API_KEY` | - | `wechat_agent` 写接口服务鉴权密钥 |
-| `WECHAT_AGENT_ALLOW_INSECURE_HTTP` | `false` | 仅可信私网临时允许通过 HTTP 传递公众号 token |
 | `WECHAT_BROKER_BASE_URL` | - | 独立微信授权服务的 HTTPS 基地址 |
 | `WECHAT_BROKER_API_KEY` | - | 主项目调用 broker 的服务间密钥 |
 | `WECHAT_BROKER_TIMEOUT_SECONDS` | `30` | broker 请求超时秒数 |
 | `WECHAT_BROKER_ALLOW_INSECURE_HTTP` | `false` | 仅隔离私网临时允许 HTTP |
+| `WECHAT_API_TIMEOUT_SECONDS` | `120` | 当前后端调用微信草稿、素材和发布 API 的超时秒数 |
+| `WECHAT_AUTHOR` | - | 微信草稿作者，微信限制内自动截断 |
+| `WECHAT_CONTENT_SOURCE_URL` | - | 微信草稿可选原文链接 |
+| `WECHAT_NEED_OPEN_COMMENT` | `0` | 是否开启评论，取值 `0` 或 `1` |
+| `WECHAT_ONLY_FANS_CAN_COMMENT` | `0` | 是否仅粉丝可评论，取值 `0` 或 `1` |
 
 **多沙盒配置示例：**
 
@@ -387,8 +390,6 @@ WECHAT_AGENT_BASE_URL=https://wechat-agent.internal:8330
 WECHAT_AGENT_TIMEOUT_SECONDS=30
 WECHAT_AGENT_PREVIEW_WAIT_SECONDS=60
 WECHAT_AGENT_PREVIEW_POLL_SECONDS=5
-WECHAT_AGENT_API_KEY=replace-with-service-api-key
-WECHAT_AGENT_ALLOW_INSECURE_HTTP=false
 # 编辑器替换图片时由平台后端代理调用，不暴露给浏览器。
 IMAGE_UPLOAD_URL=https://saas.aitool.backend.kangqiao.vip/api/common/upload
 IMAGE_UPLOAD_FIELD_NAME=file
@@ -398,13 +399,18 @@ WECHAT_BROKER_BASE_URL=https://saas.science.kangqiao.vip/api/wechat-broker
 WECHAT_BROKER_API_KEY=replace-with-service-api-key
 WECHAT_BROKER_TIMEOUT_SECONDS=30
 WECHAT_BROKER_ALLOW_INSECURE_HTTP=false
+WECHAT_API_TIMEOUT_SECONDS=120
+WECHAT_AUTHOR=
+WECHAT_CONTENT_SOURCE_URL=
+WECHAT_NEED_OPEN_COMMENT=0
+WECHAT_ONLY_FANS_CAN_COMMENT=0
 ```
 
 宣教 MCP 提供 `education_create_preview`、`education_wait_for_preview`、`education_get_preview` 和 `education_list_templates`。热点 MCP 挂载在 `/mcp/hot-topics`，提供 `hot_topics_search` 和 `hot_topics_list_tracks`，内部调用 `POST /api/v1/track/hot_topics/search` 与 `GET /api/v1/track/tracks`。用户只给出“医院科普宣传”等宽泛意图、受众或图片风格而没有具体医学主题时，Agent 会先询问是否需要结合当前热点素材，不会立即搜索或创建预览；用户确认需要后才搜索。用户已给出明确医学主题且未要求热点时，直接按主题生成。热点只能作为传播背景，不能替代医学证据。
 
 Agent 提交宣教任务并取得 `job_id` 后，使用该编号分段等待后台任务；每段最多 60 秒并明显短于 MCP 超时，未完成时正常返回 `running`，再按同一 `job_id` 续查，不将等待超时视为任务失败。前端按任务编号持续查询，完成后将 `result.html` 幂等保存到 `education-previews/<job_id>.html`，并提供可视化排版编辑、revision 冲突保护、HTML 下载和图片替换。图片替换通过平台后端代理上传，成功地址优先读取 `data.fullurl`，兼容顶层 `fullurl`。热点搜索默认不返回完整正文和图片，以控制模型上下文和上游开销。
 
-微信公众号授权和 token 刷新由仓库中的 `wechat-broker/` 独立服务管理。已有 PHP 继续接收微信开放平台推送并保存最新 `component_verify_ticket`；broker 只读 ticket，并加密保存 component token、authorizer refresh token 和 authorizer access token。当前平台仅通过内部 HTTPS API查询绑定或取得短期 token，排版 HTML 仍交给现有 `wechat_agent` 完成草稿转换和发布提交。
+微信公众号授权和 token 刷新由仓库中的 `wechat-broker/` 独立服务管理。已有 PHP 继续接收微信开放平台推送并保存最新 `component_verify_ticket`；broker 只读 ticket，并加密保存 component token、authorizer refresh token 和 authorizer access token。当前平台通过内部 HTTPS API 查询绑定或取得短期 token，再由 FastAPI 直接上传正文图片和封面、创建微信草稿并提交正式发布；`wechat_agent` 只负责生成排版预览，不再接收公众号 token。
 
 Broker 返回的授权 URL 会先打开其回调域名下的同域授权发起页，再由该页面跳转微信。前端可以部署在 `medicalagent.kangqiao.vip` 或本地开发地址，而微信检测到的授权发起页和授权回调页仍统一为 Broker 在微信开放平台登记的域名。
 

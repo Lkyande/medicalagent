@@ -368,9 +368,9 @@ Content-Disposition: attachment; filename="README.md"; filename*=UTF-8''README.m
 }
 ```
 
-服务端重新读取工作区 HTML 并校验 revision，浏览器不能直接覆盖正文。同步成功后保存 `mediaId` 和 `contentRevision`；发布前再次校验文件未变化且当前授权公众号与草稿一致。发布提交状态为 `submitted`，表示微信已接收发布任务，不等同于最终审核成功。如果网络中断导致无法确定微信是否已经接收请求，状态为 `unknown` 并禁止自动重试，必须先到微信后台人工核对，再通过 `resolve` 接口提交 `{ "published": true }` 或 `{ "published": false }`，避免重复发布。
+服务端重新读取工作区 HTML 并校验 revision，浏览器不能直接覆盖正文。FastAPI 从 HTML 提取标题和摘要，安全下载公网图片，上传正文图片和封面素材后直接调用微信 `draft/add`。同步成功后保存 `mediaId` 和 `contentRevision`；发布前再次校验文件未变化且当前授权公众号与草稿一致。发布提交状态为 `submitted`，表示微信已接收发布任务，不等同于最终审核成功。如果网络中断导致无法确定微信是否已经接收请求，状态为 `unknown` 并禁止自动重试，必须先到微信后台人工核对，再通过 `resolve` 接口提交 `{ "published": true }` 或 `{ "published": false }`，避免重复发布。
 
-微信 `component_access_token`、`authorizer_refresh_token` 和 `authorizer_access_token` 都由 broker 使用 Fernet 加密保存。主项目只通过带 API Key 的内部 HTTPS API 查询绑定或获取短期 authorizer access token，相关部署见 `wechat-broker/README.md`。
+微信 `component_access_token`、`authorizer_refresh_token` 和 `authorizer_access_token` 都由 broker 使用 Fernet 加密保存。主项目只通过带 API Key 的内部 HTTPS API 查询绑定或获取短期 authorizer access token，并使用该短期 token 直接调用微信 API；token 不再转发给 `wechat_agent`。相关部署见 `wechat-broker/README.md`。
 
 创建授权返回的 `authUrl` 是 Broker 回调域名下的同域授权发起页，而不是直接暴露微信授权 URL。浏览器打开该页面后再跳转微信，使前端部署域名不受微信“授权发起页域名必须与授权回调域名相同”的限制。
 
