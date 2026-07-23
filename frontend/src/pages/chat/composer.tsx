@@ -436,7 +436,12 @@ export function ChatComposer(props: {
           <Show when={props.conversationTypeReady !== false && (props.clinical || props.education)}>
             <div class="chat-clinical-status" classList={{ error: assistantStatus() === "error" }} role="status">
               <span class="chat-clinical-status-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>
+                <Show
+                  when={props.education}
+                  fallback={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/><path d="M9 18v3M15 18v3"/></svg>
+                </Show>
               </span>
               <strong>{props.education ? "宣教助手" : "诊疗助手"}</strong>
               <span class="chat-clinical-status-dot" />

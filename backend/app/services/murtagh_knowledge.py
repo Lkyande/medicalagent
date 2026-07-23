@@ -6,11 +6,17 @@ from typing import Any
 from app.config import settings
 
 
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+
 def knowledge_root() -> Path:
     if settings.murtagh_knowledge_root:
-        return Path(settings.murtagh_knowledge_root).expanduser().resolve()
+        configured_root = Path(settings.murtagh_knowledge_root).expanduser()
+        if not configured_root.is_absolute():
+            configured_root = PROJECT_ROOT / configured_root
+        return configured_root.resolve()
     return (
-        Path(__file__).resolve().parents[2]
+        PROJECT_ROOT
         / ".opencode"
         / "skills"
         / "disease-guidelines"
@@ -20,7 +26,7 @@ def knowledge_root() -> Path:
 
 def _read_json(path: Path) -> dict[str, Any]:
     if not path.is_file():
-        raise RuntimeError(f"Murtagh knowledge file is unavailable: {path.name}")
+        raise RuntimeError(f"Murtagh knowledge file is unavailable: {path}")
     return json.loads(path.read_text(encoding="utf-8-sig"))
 
 

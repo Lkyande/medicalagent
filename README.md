@@ -353,8 +353,18 @@ FastAPI 环境需要配置：
 
 ```env
 MURTAGH_MCP_URL=http://backend:20140/mcp/murtagh
+# Docker Compose 容器内路径
 MURTAGH_KNOWLEDGE_ROOT=/app/knowledge/murtagh
 ```
+
+裸机部署时，`backend/.env` 可以使用服务器绝对路径，也可以使用固定从项目根目录解析的相对路径：
+
+```env
+MURTAGH_KNOWLEDGE_ROOT=/www/wwwroot/MedicalAgent/.opencode/skills/disease-guidelines/skill
+# 或：MURTAGH_KNOWLEDGE_ROOT=.opencode/skills/disease-guidelines/skill
+```
+
+后端始终从 `backend/.env` 加载该变量，不依赖 Uvicorn 的启动目录。修改 `.env` 后需要重启后端进程。
 
 后端内置的 MCP 地址为 `/mcp/murtagh`，提供 `murtagh_route` 和 `murtagh_get_skills` 工具。`MURTAGH_MCP_URL` 必须填写为 OpenCode 沙盒能够访问的内部地址，不能使用 `localhost` 或只在浏览器侧有效的相对路径。远程沙盒开发环境应让 Uvicorn 监听 `0.0.0.0`，填写后端的内网/Tailscale IP，并仅允许沙盒 IP 访问该端口。FastMCP 的 Host 允许列表会自动加入该 URL 中配置的主机和端口；如果实际访问地址与配置不一致，会返回 `421 Invalid Host header`。安装接口会主动重连并检查 OpenCode `/mcp` 状态，只有 `murtagh-medical` 为 `connected` 时才返回启用成功。
 

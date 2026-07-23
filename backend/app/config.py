@@ -1,9 +1,15 @@
-from pydantic_settings import BaseSettings
-from dotenv import load_dotenv
 import os
+from pathlib import Path
 from typing import Dict
 
-load_dotenv()
+from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
+
+
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+ENV_FILE = BACKEND_ROOT / ".env"
+
+load_dotenv(ENV_FILE)
 
 
 class Settings(BaseSettings):
@@ -45,7 +51,7 @@ class Settings(BaseSettings):
     wechat_need_open_comment: int = 0
     wechat_only_fans_can_comment: int = 0
 
-    model_config = {"env_file": ".env", "extra": "ignore"}
+    model_config = {"env_file": ENV_FILE, "extra": "ignore"}
 
 
 settings = Settings()
