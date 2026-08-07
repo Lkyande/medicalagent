@@ -26,6 +26,7 @@ from app.auth.dependencies import get_current_user
 from app.database import get_db
 from app.models import User, UserWorkspace
 from app.proxy.opencode_proxy import basic_auth_header
+from app.services.image_upload_client import ImageUploadClient
 from app.sandbox.manager import (
     delete_sandbox_files,
     ensure_workspace,
@@ -465,6 +466,7 @@ async def upload_workspace_files(
     files: Annotated[list[UploadFile], File(...)],
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    publish_images: Annotated[bool, Form()] = False,
 ):
     try:
         safe_session_id = validate_upload_session_id(session_id)
@@ -492,6 +494,18 @@ async def upload_workspace_files(
             )
             prepared.append(item)
 
+        if publish_images:
+            public_images = [
+                item
+                for item in prepared
+                if item["mime"] in {"image/png", "image/jpeg", "image/webp"}
+            ]
+            if len(public_images) != 1:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Video generation requires exactly one PNG, JPEG, or WebP image",
+                )
+
         sandbox, workspace = await workspace_context(user, db)
         response_files = []
         for item in prepared:
@@ -504,6 +518,22 @@ async def upload_workspace_files(
                 sha256=item["sha256"],
             )
             uploaded_paths.append(item["path"])
+            public_url = None
+            if (
+                publish_images
+                and item["mime"] in {"image/png", "image/jpeg", "image/webp"}
+            ):
+                try:
+                    public_url = await ImageUploadClient().upload(
+                        item["name"],
+                        item["spool"],
+                        item["mime"],
+                    )
+                except RuntimeError as exc:
+                    raise HTTPException(
+                        status_code=status.HTTP_502_BAD_GATEWAY,
+                        detail="Unable to prepare image for video generation",
+                    ) from exc
             response_files.append(
                 {
                     "name": item["name"],
@@ -512,6 +542,7 @@ async def upload_workspace_files(
                     "size": item["size"],
                     "url": url,
                     "direct": item["direct"],
+                    **({"publicUrl": public_url} if public_url else {}),
                 }
             )
         invalidate_workspace_directory_cache(sandbox, workspace)

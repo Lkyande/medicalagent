@@ -10,6 +10,7 @@ describe("workspace attachment marker", () => {
       size: 42,
       direct: true,
       filePartID: "prt_1",
+      publicUrl: "https://example.com/image.png",
     }
 
     expect(parseWorkspaceAttachment(serializeWorkspaceAttachment(attachment))).toEqual(attachment)

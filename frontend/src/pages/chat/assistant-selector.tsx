@@ -1,9 +1,9 @@
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
-import { useNavigate } from "@solidjs/router"
 import { backend, type PlatformAssistant } from "@/api/backend"
 
 export const DEFAULT_ASSISTANT_ID = "build"
 export const CLINICAL_ASSISTANT_ID = "clinical-assistant"
+export const DISEASE_MANAGEMENT_ASSISTANT_ID = "disease-management-assistant"
 export const EDUCATION_ASSISTANT_ID = "education-assistant"
 
 export type AssistantOption = {
@@ -52,36 +52,15 @@ export function resolveAssistant(catalog: PlatformAssistant[], selected: string,
 
 export function ChatAssistantSelector(props: {
   selected: string
-  sessionId?: string
   onSelect: (assistant: AssistantOption) => void
 }) {
-  const navigate = useNavigate()
   const [open, setOpen] = createSignal(false)
   const [catalog, setCatalog] = createSignal<PlatformAssistant[]>([])
-  const [enabling, setEnabling] = createSignal("")
-  const [enabled, setEnabled] = createSignal(new Set<string>())
   const [error, setError] = createSignal("")
   let ref: HTMLDivElement | undefined
 
   const options = createMemo(() => assistantOptions(catalog()))
   const current = createMemo(() => resolveAssistant(catalog(), props.selected))
-
-  const enablePlatformAssistant = async (assistant: AssistantOption, closeAfterEnable: boolean) => {
-    if (!assistant.platform || enabling()) return
-    setEnabling(assistant.id)
-    setError("")
-    try {
-      const result = await backend.enableAssistant(assistant.id)
-      setEnabled((items) => new Set([...items, assistant.id]))
-      props.onSelect({ ...assistant, platform: result })
-      if (closeAfterEnable) setOpen(false)
-      if (result.requiresNewSession && props.sessionId) navigate("/chat")
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "启用助手能力失败")
-    } finally {
-      setEnabling("")
-    }
-  }
 
   onMount(async () => {
     try {
@@ -100,13 +79,9 @@ export function ChatAssistantSelector(props: {
     onCleanup(() => document.removeEventListener("click", close))
   })
 
-  const select = async (assistant: AssistantOption) => {
-    if (!assistant.platform) {
-      props.onSelect(assistant)
-      setOpen(false)
-      return
-    }
-    await enablePlatformAssistant(assistant, true)
+  const select = (assistant: AssistantOption) => {
+    props.onSelect(assistant)
+    setOpen(false)
   }
 
   return (
@@ -130,7 +105,6 @@ export function ChatAssistantSelector(props: {
                 type="button"
                 class="chat-assistant-option"
                 classList={{ active: assistant.id === props.selected }}
-                disabled={!!enabling()}
                 role="option"
                 aria-selected={assistant.id === props.selected}
                 onClick={() => select(assistant)}
@@ -138,9 +112,7 @@ export function ChatAssistantSelector(props: {
                 <span class="chat-assistant-option-row">
                   <span class="chat-assistant-option-name">{assistant.name}</span>
                   <Show when={assistant.platform}>
-                    <span class="chat-assistant-install-action">
-                      {enabling() === assistant.id ? "启用中..." : enabled().has(assistant.id) ? "已启用" : "启用"}
-                    </span>
+                    <span class="chat-assistant-install-action">已就绪</span>
                   </Show>
                 </span>
                 <span class="chat-assistant-option-description">{assistant.description}</span>

@@ -41,13 +41,6 @@ export type PlatformAssistant = {
   tools: string[]
 }
 
-export type AssistantEnableResult = PlatformAssistant & {
-  enabled: boolean
-  changed: boolean
-  mcpStatus: "connected"
-  requiresNewSession: boolean
-}
-
 export type WorkspaceUploadFile = {
   name: string
   path: string
@@ -55,6 +48,7 @@ export type WorkspaceUploadFile = {
   size: number
   url: string
   direct: boolean
+  publicUrl?: string | null
 }
 
 export type EducationPreviewProgress = {
@@ -66,6 +60,17 @@ export type EducationPreviewProgress = {
   title?: string | null
   summary?: string | null
   editableHtmlUrl?: string | null
+}
+
+export type VideoProgress = {
+  videoId: string
+  taskId?: string | null
+  status: "running" | "completed" | "failed"
+  progress: number
+  seconds?: string | null
+  size?: string | null
+  url?: string | null
+  error?: string | null
 }
 
 export type PendingInteractions = {
@@ -100,9 +105,12 @@ export type EducationPreviewImage = {
 
 export type WechatAuthorization = {
   authorized: boolean
+  authorizationId?: string | null
+  status?: "pending" | "processing" | "authorized" | "failed" | "expired" | null
   authorizerAppid?: string | null
   authUrl?: string | null
   expiresAt?: string | null
+  error?: string | null
 }
 
 export type EducationWechatRelease = {
@@ -196,15 +204,31 @@ export const backend = {
       body: JSON.stringify({ account, password }),
     }),
   me: () => apiFetch<{ id: string; email: string | null; phone: string | null }>("/auth/me", undefined, 8000),
-  dispatch: () => apiFetch<{ sandboxId: string; proxyBase: string; workspace: string }>("/dispatch", { method: "POST" }),
+  dispatch: () =>
+    apiFetch<{
+      sandboxId: string
+      proxyBase: string
+      workspace: string
+      capabilitiesReady: boolean
+      capabilitiesChanged: boolean
+    }>("/dispatch", { method: "POST" }, 240_000),
   assistants: () => apiFetch<PlatformAssistant[]>("/assistants"),
-  enableAssistant: (id: string) =>
-    apiFetch<AssistantEnableResult>(`/assistants/${encodeURIComponent(id)}/install`, { method: "POST" }),
   educationPreviewProgress: (sessionID: string, jobID: string) =>
     apiFetch<EducationPreviewProgress>(
       `/education/preview-progress/${encodeURIComponent(jobID)}?session_id=${encodeURIComponent(sessionID)}`,
       undefined,
       10_000,
+    ),
+  videoProgress: (sessionID: string, videoID: string, signal?: AbortSignal) =>
+    apiFetch<VideoProgress>(
+      `/media/videos/${encodeURIComponent(videoID)}/progress?session_id=${encodeURIComponent(sessionID)}`,
+      { signal },
+      15_000,
+    ),
+  downloadVideo: (sessionID: string, videoID: string) =>
+    apiDownload(
+      `/media/videos/${encodeURIComponent(videoID)}/download?session_id=${encodeURIComponent(sessionID)}`,
+      `${videoID}.mp4`,
     ),
   materializeEducationPreview: (sessionID: string, jobID: string) =>
     apiFetch<EducationPreviewArtifact>(
@@ -233,9 +257,15 @@ export const backend = {
       130_000,
     )
   },
-  wechatAuthorization: () => apiFetch<WechatAuthorization>("/wechat/authorization", undefined, 15_000),
+  wechatAuthorization: () => apiFetch<WechatAuthorization>("/wechat/authorization", { cache: "no-store" }, 15_000),
   createWechatAuthorization: () =>
     apiFetch<WechatAuthorization>("/wechat/authorization", { method: "POST" }, 30_000),
+  wechatAuthorizationAttempt: (authorizationID: string) =>
+    apiFetch<WechatAuthorization>(
+      `/wechat/authorization/${encodeURIComponent(authorizationID)}`,
+      { cache: "no-store" },
+      15_000,
+    ),
   educationWechatRelease: (sessionID: string, jobID: string) =>
     apiFetch<EducationWechatRelease | null>(
       `/wechat/previews/${encodeURIComponent(jobID)}/release?session_id=${encodeURIComponent(sessionID)}`,
@@ -290,9 +320,10 @@ export const backend = {
       { method: "PUT", body: JSON.stringify({ html, revision }) },
       180_000,
     ),
-  uploadWorkspaceFiles: (sessionID: string, files: File[]) => {
+  uploadWorkspaceFiles: (sessionID: string, files: File[], publishImages = false) => {
     const form = new FormData()
     form.append("session_id", sessionID)
+    form.append("publish_images", String(publishImages))
     for (const file of files) form.append("files", file, file.name)
     return apiFetch<{ files: WorkspaceUploadFile[] }>("/workspace/uploads", {
       method: "POST",

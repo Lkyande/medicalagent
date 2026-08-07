@@ -2,7 +2,7 @@ import { createEffect, createMemo, Show, createSignal, onMount, onCleanup } from
 import { createStore, reconcile } from "solid-js/store"
 import { useLocation, useParams, useNavigate } from "@solidjs/router"
 import type { Message, Part, PermissionRequest, QuestionRequest, Session, SessionStatus } from "@opencode-ai/sdk/v2"
-import { ApiError, backend } from "@/api/backend"
+import { ApiError, backend, type PlatformAssistant } from "@/api/backend"
 import { getChatClient, getToken, setToken } from "./chat-client"
 import { LoginPage } from "./login"
 import { ChatSidebar, type SidebarSession } from "./sidebar"
@@ -10,11 +10,13 @@ import { ChatMessageList } from "./message-list"
 import { ChatComposer } from "./composer"
 import { ChatHeader } from "./header"
 import { ChatEmptyState } from "./empty-state"
+import { ChatStartupScreen, type ChatStartupPhase } from "./startup-screen"
 import { WorkspacePanel } from "./workspace-panel"
 import { subscribeChatEvents } from "./chat-events"
 import { useDialog } from "@/ui/context/dialog"
 import {
   CLINICAL_CONVERSATION_TYPE,
+  DISEASE_MANAGEMENT_CONVERSATION_TYPE,
   EDUCATION_CONVERSATION_TYPE,
   GENERAL_CONVERSATION_TYPE,
   conversationHref,
@@ -47,9 +49,12 @@ export function ChatLayout() {
   setV2Toast(false)
   const location = useLocation()
   const clinical = createMemo(() => location.pathname === "/clinical" || location.pathname.startsWith("/clinical/"))
+  const diseaseManagement = createMemo(() => location.pathname === "/disease-management" || location.pathname.startsWith("/disease-management/"))
   const education = createMemo(() => location.pathname === "/education" || location.pathname.startsWith("/education/"))
   const [loggedIn, setLoggedIn] = createSignal<boolean | undefined>(undefined)
   const [authError, setAuthError] = createSignal("")
+  const [startupPhase, setStartupPhase] = createSignal<ChatStartupPhase>("identity")
+  const [assistantCatalog, setAssistantCatalog] = createSignal<PlatformAssistant[]>([])
 
   const verifyIdentity = async () => {
     if (!getToken()) {
@@ -59,8 +64,12 @@ export function ChatLayout() {
 
     setLoggedIn(undefined)
     setAuthError("")
+    setStartupPhase("identity")
     try {
       await backend.me()
+      setStartupPhase("capabilities")
+      const [, assistants] = await Promise.all([backend.dispatch(), backend.assistants()])
+      setAssistantCatalog(assistants)
       setLoggedIn(true)
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
@@ -69,7 +78,7 @@ export function ChatLayout() {
         return
       }
       setAuthError(error instanceof Error ? error.message : "身份验证失败")
-      setLoggedIn(false)
+      setLoggedIn(undefined)
     }
   }
 
@@ -78,29 +87,36 @@ export function ChatLayout() {
   return (
     <>
       <ToastRegion v2={false} />
-      <Show when={loggedIn() !== undefined} fallback={<div class="chat-loading chat-loading-page">正在验证身份...</div>}>
+      <Show
+        when={loggedIn() !== undefined}
+        fallback={<ChatStartupScreen phase={startupPhase()} error={authError()} onRetry={verifyIdentity} />}
+      >
         <Show
           when={loggedIn()}
           fallback={
             <>
-              <Show when={authError()}>
-                <div class="chat-auth-error" role="alert">
-                  <span>{authError()}</span>
-                  <button type="button" onClick={verifyIdentity}>重试</button>
-                </div>
-              </Show>
-              <LoginPage onLogin={() => setLoggedIn(true)} />
+              <LoginPage onLogin={() => undefined} />
             </>
           }
         >
-          <ChatWorkspace clinical={clinical()} education={education()} />
+          <ChatWorkspace
+            clinical={clinical()}
+            diseaseManagement={diseaseManagement()}
+            education={education()}
+            assistants={assistantCatalog()}
+          />
         </Show>
       </Show>
     </>
   )
 }
 
-function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
+function ChatWorkspace(props: {
+  clinical?: boolean
+  diseaseManagement?: boolean
+  education?: boolean
+  assistants: PlatformAssistant[]
+}) {
   const params = useParams()
   const navigate = useNavigate()
   const location = useLocation()
@@ -122,6 +138,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
   const [revertingMessageID, setRevertingMessageID] = createSignal<string>()
   const [localGeneratingMessageID, setLocalGeneratingMessageID] = createSignal<string>()
   const [messagesLoadedSession, setMessagesLoadedSession] = createSignal<string>()
+  const [scrollToLatestRequest, setScrollToLatestRequest] = createSignal(0)
   const [permissions, setPermissions] = createSignal<PermissionRequest[]>([])
   const [questions, setQuestions] = createSignal<QuestionRequest[]>([])
   const [sessionStatusReady, setSessionStatusReady] = createSignal(false)
@@ -155,7 +172,9 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
       raw(),
       props.clinical
         ? CLINICAL_CONVERSATION_TYPE
-        : props.education
+        : props.diseaseManagement
+          ? DISEASE_MANAGEMENT_CONVERSATION_TYPE
+          : props.education
           ? EDUCATION_CONVERSATION_TYPE
           : GENERAL_CONVERSATION_TYPE,
     )
@@ -164,7 +183,9 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
     if (!sessionId()) {
       return props.clinical
         ? CLINICAL_CONVERSATION_TYPE
-        : props.education
+        : props.diseaseManagement
+          ? DISEASE_MANAGEMENT_CONVERSATION_TYPE
+          : props.education
           ? EDUCATION_CONVERSATION_TYPE
           : GENERAL_CONVERSATION_TYPE
     }
@@ -173,6 +194,9 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
   const conversationTypeReady = createMemo(() => !sessionId() || conversationType() !== undefined)
   const clinical = createMemo(
     () => conversationType() === CLINICAL_CONVERSATION_TYPE || (!conversationTypeReady() && !!props.clinical),
+  )
+  const diseaseManagement = createMemo(
+    () => conversationType() === DISEASE_MANAGEMENT_CONVERSATION_TYPE || (!conversationTypeReady() && !!props.diseaseManagement),
   )
   const education = createMemo(
     () => conversationType() === EDUCATION_CONVERSATION_TYPE || (!conversationTypeReady() && !!props.education),
@@ -271,6 +295,9 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
       if (!status || status.type === "idle") setLocalGeneratingMessageID(undefined)
     } catch (error) {
       console.debug("Failed to load session status", error)
+      if (id !== sessionId()) return
+      setSessionStatusReady(true)
+      setSessionError("会话状态加载失败，当前生成状态可能未及时更新")
     }
   }
 
@@ -458,7 +485,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
         setSessions((prev) => prev.filter((s) => s.id !== sid))
         if (sid === sessionId()) {
           setLocalGeneratingMessageID(undefined)
-          navigate(clinical() ? "/clinical" : education() ? "/education" : "/chat")
+          navigate(clinical() ? "/clinical" : diseaseManagement() ? "/disease-management" : education() ? "/education" : "/chat")
         }
       },
       onFileEdited: () => setWorkspaceRefresh((value) => value + 1),
@@ -515,6 +542,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
     setSessionError("")
     setLocalGeneratingMessageID(optimistic.info.id)
     setRaw((prev) => [...prev, optimistic])
+    setScrollToLatestRequest((value) => value + 1)
   }
 
   const handleSendFailed = (messageID: string) => {
@@ -587,7 +615,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
     try {
       await getChatClient().session.delete({ sessionID: sid } as any)
       setSessions((prev) => prev.filter((s) => s.id !== sid))
-      if (sid === sessionId()) navigate(clinical() ? "/clinical" : education() ? "/education" : "/chat")
+      if (sid === sessionId()) navigate(clinical() ? "/clinical" : diseaseManagement() ? "/disease-management" : education() ? "/education" : "/chat")
     } catch (e: any) {
       alert("删除失败: " + (e?.message ?? String(e)))
     }
@@ -617,6 +645,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
         loading={sessionsLoading()}
         currentSessionId={sessionId()}
         clinical={clinical()}
+        diseaseManagement={diseaseManagement()}
         education={education()}
         open={sidebarOpen()}
         collapsed={sidebarCollapsed()}
@@ -627,7 +656,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
       />
       <div class="chat-main">
         <ChatHeader
-          title={sessionInfo()?.title || (clinical() ? "诊疗助手" : education() ? "宣教助手" : "新对话")}
+          title={sessionInfo()?.title || (clinical() ? "诊疗助手" : diseaseManagement() ? "疾病管理助手" : education() ? "宣教助手" : "新对话")}
           generating={isGenerating()}
           sidebarExpanded={!sidebarCollapsed()}
           onToggleSidebar={() => {
@@ -636,7 +665,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
           }}
           onOpenWorkspace={() => openWorkspace()}
         />
-        <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} education={education()} />}>
+        <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} diseaseManagement={diseaseManagement()} education={education()} />}>
           <Show
             when={!messagesLoading() || messages.length > 0}
             fallback={<div class="chat-loading">加载消息中...</div>}
@@ -645,6 +674,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
               messages={messages}
               sessionID={sessionId()}
               generating={isGenerating()}
+              scrollToLatestRequest={scrollToLatestRequest()}
               revertingMessageID={revertingMessageID()}
               onRevert={handleRevert}
             />
@@ -667,6 +697,7 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
           }}
         />
         <ChatComposer
+          assistants={props.assistants}
           sessionId={sessionId()}
           isGenerating={isGenerating()}
           draft={composerDraft()}
@@ -680,9 +711,9 @@ function ChatWorkspace(props: { clinical?: boolean; education?: boolean }) {
           onAbortComplete={refreshAfterAbort}
           onWorkspaceChanged={() => setWorkspaceRefresh((value) => value + 1)}
           clinical={clinical()}
+          diseaseManagement={diseaseManagement()}
           education={education()}
           conversationTypeReady={conversationTypeReady()}
-          sessionStatusReady={sessionStatusReady()}
         />
       </div>
     </div>

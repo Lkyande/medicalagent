@@ -1,6 +1,6 @@
-import { Show, For, Match, Switch, createMemo, createSignal, type JSX } from "solid-js"
+import { Show, For, Match, Switch, createEffect, createMemo, createSignal, onCleanup, type JSX } from "solid-js"
 import { Markdown } from "@/session-ui/markdown"
-import { backend } from "@/api/backend"
+import { backend, type VideoProgress } from "@/api/backend"
 import type { DisplayBlock, DisplayFile, DisplayMessage, DisplayTool } from "./message-normalize"
 
 type ToolKind = "terminal" | "file" | "search" | "edit" | "task" | "checklist" | "question" | "skill" | "web" | "connector"
@@ -48,6 +48,14 @@ function toolSummary(tool: DisplayTool): string {
   return ""
 }
 
+function toolLabel(name: string): string {
+  if (name.endsWith("video_create_from_text")) return "创建文生视频"
+  if (name.endsWith("video_create_from_image")) return "创建图生视频"
+  if (name.endsWith("video_wait")) return "等待视频生成"
+  if (name.endsWith("video_get")) return "查询视频状态"
+  return toolLabels[name] ?? "调用工具"
+}
+
 function ToolGlyph(props: { kind: ToolKind }): JSX.Element {
   const common = { width: 18, height: 18, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 1.8, "aria-hidden": true } as const
   switch (props.kind) {
@@ -64,9 +72,111 @@ function ToolGlyph(props: { kind: ToolKind }): JSX.Element {
   }
 }
 
-function ToolCard(props: { tool: DisplayTool }) {
+function VideoResultCard(props: { sessionID: string; videoID: string }) {
+  const [progress, setProgress] = createSignal<VideoProgress>()
+  const [queryError, setQueryError] = createSignal("")
+  const [downloading, setDownloading] = createSignal(false)
+
+  createEffect(() => {
+    const sessionID = props.sessionID
+    const videoID = props.videoID
+    let active = true
+    let timer: number | undefined
+    let failures = 0
+    const controller = new AbortController()
+    const deadline = Date.now() + 30 * 60 * 1000
+
+    const poll = async () => {
+      try {
+        const next = await backend.videoProgress(sessionID, videoID, controller.signal)
+        if (!active) return
+        setProgress(next)
+        setQueryError("")
+        failures = 0
+        if (next.status !== "running") return
+      } catch (cause) {
+        if (!active) return
+        failures += 1
+        setQueryError(cause instanceof Error ? cause.message : "暂时无法查询视频状态")
+      }
+      if (!active || Date.now() >= deadline || failures >= 6) return
+      const delay = failures ? Math.min(30_000, 4_000 * 2 ** failures) : document.hidden ? 15_000 : 4_000
+      timer = window.setTimeout(() => void poll(), delay)
+    }
+
+    void poll()
+    onCleanup(() => {
+      active = false
+      controller.abort()
+      if (timer !== undefined) window.clearTimeout(timer)
+    })
+  })
+
+  const download = async () => {
+    if (downloading()) return
+    setDownloading(true)
+    setQueryError("")
+    try {
+      await backend.downloadVideo(props.sessionID, props.videoID)
+    } catch (cause) {
+      setQueryError(cause instanceof Error ? cause.message : "视频下载失败")
+    } finally {
+      setDownloading(false)
+    }
+  }
+
+  const statusText = createMemo(() => {
+    if (progress()?.status === "completed") return "生成完成"
+    if (progress()?.status === "failed") return "生成失败"
+    return `生成中 ${progress()?.progress ?? 0}%`
+  })
+
+  return (
+    <section class="chat-video-card" aria-label={`视频任务 ${props.videoID}`}>
+      <header class="chat-video-header">
+        <span class="chat-video-mark" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="5" width="14" height="14" rx="3"/><path d="m17 10 4-2v8l-4-2z"/>
+          </svg>
+        </span>
+        <span class="chat-video-heading">
+          <strong>AI 宣教视频</strong>
+          <small>{progress()?.size ?? "正在准备画面"}{progress()?.seconds ? ` · ${progress()!.seconds} 秒` : ""}</small>
+        </span>
+        <span class="chat-video-state" data-status={progress()?.status ?? "running"}>{statusText()}</span>
+      </header>
+
+      <Show when={(progress()?.status ?? "running") === "running"}>
+        <div class="chat-video-progress" role="progressbar" aria-valuenow={progress()?.progress ?? 0} aria-valuemin="0" aria-valuemax="100">
+          <span style={{ width: `${progress()?.progress ?? 0}%` }} />
+        </div>
+      </Show>
+
+      <Show when={progress()?.status === "completed" && progress()?.url}>
+        <div class="chat-video-frame">
+          <video controls preload="metadata" playsinline src={progress()!.url!} />
+        </div>
+        <div class="chat-video-actions">
+          <span title={props.videoID}>任务 {props.videoID}</span>
+          <button type="button" onClick={() => void download()} disabled={downloading()}>
+            {downloading() ? "下载中..." : "下载 MP4"}
+          </button>
+        </div>
+      </Show>
+
+      <Show when={progress()?.status === "failed"}>
+        <div class="chat-video-error" role="alert">{progress()?.error || "视频生成失败，请调整描述后重新发起。"}</div>
+      </Show>
+      <Show when={queryError() && progress()?.status !== "failed"}>
+        <div class="chat-video-notice" role="status">状态同步中：{queryError()}</div>
+      </Show>
+    </section>
+  )
+}
+
+function ToolCard(props: { tool: DisplayTool; sessionID?: string }) {
   const kind = createMemo(() => toolKind(props.tool.name))
-  const label = createMemo(() => toolLabels[props.tool.name] ?? "调用工具")
+  const label = createMemo(() => toolLabel(props.tool.name))
   const summary = createMemo(() => toolSummary(props.tool))
   const statusLabel = createMemo(() => {
     if (props.tool.educationWaitTimedOut) return "后台生成中"
@@ -88,6 +198,7 @@ function ToolCard(props: { tool: DisplayTool }) {
   })
 
   return (
+    <>
     <details class="chat-tool-card" data-kind={kind()} data-status={visualStatus()} open={props.tool.status === "error" && !props.tool.educationWaitTimedOut}>
       <summary>
         <span class="chat-tool-glyph">
@@ -118,6 +229,10 @@ function ToolCard(props: { tool: DisplayTool }) {
         </Show>
       </div>
     </details>
+    <Show when={props.sessionID && props.tool.videoID}>
+      <VideoResultCard sessionID={props.sessionID!} videoID={props.tool.videoID!} />
+    </Show>
+    </>
   )
 }
 
@@ -200,7 +315,7 @@ function MessageBlock(props: { block: DisplayBlock; streaming: boolean; sessionI
         </details>
       </Match>
       <Match when={props.block.type === "tool"}>
-        <div class="chat-tools"><ToolCard tool={(props.block as Extract<DisplayBlock, { type: "tool" }>).tool} /></div>
+        <div class="chat-tools"><ToolCard tool={(props.block as Extract<DisplayBlock, { type: "tool" }>).tool} sessionID={props.sessionID} /></div>
       </Match>
       <Match when={props.block.type === "file"}>
         <FileBlock file={(props.block as Extract<DisplayBlock, { type: "file" }>).file} />

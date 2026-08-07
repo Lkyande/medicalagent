@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import {
   CLINICAL_CONVERSATION_TYPE,
+  DISEASE_MANAGEMENT_CONVERSATION_TYPE,
   EDUCATION_CONVERSATION_TYPE,
   GENERAL_CONVERSATION_TYPE,
   conversationHref,
@@ -10,12 +11,15 @@ import {
 } from "./conversation-type"
 
 describe("conversation type", () => {
-  test("reads persisted clinical and general types", () => {
+  test("reads persisted platform and general types", () => {
     expect(conversationTypeFromSession({ metadata: { platformConversationType: "clinical" } })).toBe(
       CLINICAL_CONVERSATION_TYPE,
     )
     expect(conversationTypeFromSession({ metadata: { platformConversationType: "general" } })).toBe(
       GENERAL_CONVERSATION_TYPE,
+    )
+    expect(conversationTypeFromSession({ metadata: { platformConversationType: "disease-management" } })).toBe(
+      DISEASE_MANAGEMENT_CONVERSATION_TYPE,
     )
     expect(conversationTypeFromSession({ metadata: { platformConversationType: "unknown" } })).toBeUndefined()
   })
@@ -29,18 +33,31 @@ describe("conversation type", () => {
     expect(result).toBe(CLINICAL_CONVERSATION_TYPE)
   })
 
+  test("detects a disease management conversation from its system prompt", () => {
+    const result = detectLegacyConversationType(
+      [{ info: { role: "user", system: "本会话启用了疾病管理助手能力，仅面向院内工作人员。" } }],
+      GENERAL_CONVERSATION_TYPE,
+    )
+
+    expect(result).toBe(DISEASE_MANAGEMENT_CONVERSATION_TYPE)
+  })
+
   test("keeps non-clinical legacy conversations general", () => {
     expect(detectLegacyConversationType([{ info: { role: "user" } }], CLINICAL_CONVERSATION_TYPE)).toBe(GENERAL_CONVERSATION_TYPE)
   })
 
   test("uses the entry route only for an empty legacy conversation", () => {
     expect(detectLegacyConversationType([], CLINICAL_CONVERSATION_TYPE)).toBe(CLINICAL_CONVERSATION_TYPE)
+    expect(detectLegacyConversationType([], DISEASE_MANAGEMENT_CONVERSATION_TYPE)).toBe(DISEASE_MANAGEMENT_CONVERSATION_TYPE)
     expect(detectLegacyConversationType([], EDUCATION_CONVERSATION_TYPE)).toBe(EDUCATION_CONVERSATION_TYPE)
     expect(detectLegacyConversationType([], GENERAL_CONVERSATION_TYPE)).toBe(GENERAL_CONVERSATION_TYPE)
   })
 
   test("builds canonical links and preserves unrelated metadata", () => {
     expect(conversationHref("ses_1", CLINICAL_CONVERSATION_TYPE)).toBe("/clinical/ses_1")
+    expect(conversationHref("ses_management", DISEASE_MANAGEMENT_CONVERSATION_TYPE)).toBe(
+      "/disease-management/ses_management",
+    )
     expect(conversationHref("ses_education", EDUCATION_CONVERSATION_TYPE)).toBe("/education/ses_education")
     expect(conversationHref("ses_2", GENERAL_CONVERSATION_TYPE)).toBe("/chat/ses_2")
     expect(conversationMetadata(CLINICAL_CONVERSATION_TYPE, { retained: true })).toEqual({

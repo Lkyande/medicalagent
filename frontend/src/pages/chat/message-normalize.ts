@@ -16,6 +16,7 @@ export interface DisplayTool {
   title?: string
   educationJobID?: string
   educationWaitTimedOut?: boolean
+  videoID?: string
 }
 
 export interface DisplayFile {
@@ -96,6 +97,20 @@ function educationJobIDFromOutput(output: string): string | undefined {
   }
 }
 
+function validVideoID(value: unknown): value is string {
+  return typeof value === "string" && /^[A-Za-z0-9_.:-]{1,200}$/.test(value)
+}
+
+function videoIDFromOutput(output: string): string | undefined {
+  try {
+    const value = JSON.parse(output)
+    if (!value || typeof value !== "object" || !("video_id" in value)) return undefined
+    return validVideoID(value.video_id) ? value.video_id : undefined
+  } catch {
+    return undefined
+  }
+}
+
 function toolFromPart(part: ToolPart): DisplayTool {
   const state = part.state
   const base: DisplayTool = {
@@ -119,6 +134,9 @@ function toolFromPart(part: ToolPart): DisplayTool {
     base.title = state.title
     if (part.tool.endsWith("education_create_preview")) {
       base.educationJobID = educationJobIDFromOutput(state.output)
+    }
+    if (part.tool.endsWith("video_create_from_text") || part.tool.endsWith("video_create_from_image")) {
+      base.videoID = videoIDFromOutput(state.output)
     }
   } else if (state.status === "error") {
     base.error = state.error

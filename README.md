@@ -30,7 +30,7 @@
 ### 数据流
 
 1. 用户登录 → FastAPI 验证身份 → 返回 JWT
-2. 前端调用 `POST /api/dispatch` → FastAPI 选择负载最低的沙盒并创建随机用户工作目录
+2. 前端调用 `POST /api/dispatch` → FastAPI 选择沙盒、创建用户工作目录并初始化统一助手能力包
 3. 前端 OpenCode SDK 以 `/opencode` 为 baseUrl 发起请求
 4. FastAPI 校验会话所有权、覆盖工作目录参数并注入 Basic Auth
 5. SSE 事件流（`/opencode/global/event`）按用户工作目录过滤后透传
@@ -345,9 +345,11 @@ SANDBOX_C_URL=http://10.0.0.13:4096
 SANDBOX_C_PASSWORD=password-c
 ```
 
-### 诊疗助手自动安装
+### 助手能力初始化
 
-左侧业务入口会显示管理员发布的“诊疗助手”。它不是独立 OpenCode Agent，而是 `build` 基础 Agent 的能力配置。用户进入后，FastAPI 自动把入口 Skill 和 MCP 配置写入该用户的沙盒工作目录；仅在配置实际变化时刷新该目录对应的 OpenCode 实例。前端继续发送 `agent: "build"`，同时通过 `system` 注入诊疗规则。莫塔医学正文不复制到用户目录，而是通过远程 MCP 按需获取。随访助手、统计助手等能力沿用相同机制。
+诊疗、疾病管理和宣教助手都不是独立 OpenCode Agent，而是 `build` 基础 Agent 的能力配置。用户登录后，前端先调用 `POST /api/dispatch`；FastAPI 将所有入口 Skill 去重写入用户工作目录，一次合并全部 MCP 配置，并确认 MCP 已连接。首次工作区初始化才会写配置和刷新实例，后续登录只做幂等检查。创建或切换会话时不再执行安装，前端只通过 `system` 注入对应规则，Agent 按任务加载已安装的 Skill，因此多个会话可以并发运行。
+
+莫塔医学正文不复制到用户目录，而是通过远程 MCP 按需获取。平台新增或升级助手能力时，统一能力包会在下一次 `dispatch` 时更新；配置未变化时不会重载工作区实例。
 
 FastAPI 环境需要配置：
 
@@ -366,7 +368,7 @@ MURTAGH_KNOWLEDGE_ROOT=/www/wwwroot/MedicalAgent/.opencode/skills/disease-guidel
 
 后端始终从 `backend/.env` 加载该变量，不依赖 Uvicorn 的启动目录。修改 `.env` 后需要重启后端进程。
 
-后端内置的 MCP 地址为 `/mcp/murtagh`，提供 `murtagh_route` 和 `murtagh_get_skills` 工具。`MURTAGH_MCP_URL` 必须填写为 OpenCode 沙盒能够访问的内部地址，不能使用 `localhost` 或只在浏览器侧有效的相对路径。远程沙盒开发环境应让 Uvicorn 监听 `0.0.0.0`，填写后端的内网/Tailscale IP，并仅允许沙盒 IP 访问该端口。FastMCP 的 Host 允许列表会自动加入该 URL 中配置的主机和端口；如果实际访问地址与配置不一致，会返回 `421 Invalid Host header`。安装接口会主动重连并检查 OpenCode `/mcp` 状态，只有 `murtagh-medical` 为 `connected` 时才返回启用成功。
+后端内置的 MCP 地址为 `/mcp/murtagh`，提供 `murtagh_route` 和 `murtagh_get_skills` 工具。`MURTAGH_MCP_URL` 必须填写为 OpenCode 沙盒能够访问的内部地址，不能使用 `localhost` 或只在浏览器侧有效的相对路径。远程沙盒开发环境应让 Uvicorn 监听 `0.0.0.0`，填写后端的内网/Tailscale IP，并仅允许沙盒 IP 访问该端口。FastMCP 的 Host 允许列表会自动加入该 URL 中配置的主机和端口；如果实际访问地址与配置不一致，会返回 `421 Invalid Host header`。登录初始化会主动重连并检查统一能力包声明的全部 MCP，全部为 `connected` 后才进入聊天页面。
 
 诊疗入口 Skill 的唯一发布源是 `backend/app/assistant_catalog/clinical-assistant/skills/`。仓库根目录 `.opencode/skills/` 下的同名文件只作为本地 OpenCode 开发镜像，并由测试保证与发布源完全一致。`MURTAGH_KNOWLEDGE_ROOT` 指向 `.opencode/skills/disease-guidelines/skill/`，该目录只保存路由索引、注册表和审核后的医学正文，不是入口 `SKILL.md` 的发布源。生产部署需要把该 `skill` 目录以只读方式挂载，并通过内网、防火墙或反向代理认证限制 MCP 访问。
 
@@ -379,9 +381,9 @@ curl -u opencode:你的沙盒密码 \
 
 正常结果中 `murtagh-medical.status` 应为 `connected`。若为 `failed` 且提示无法连接，优先检查后端监听地址、防火墙、Tailscale ACL 和 `MURTAGH_MCP_URL`。
 
-### 宣教助手自动安装
+### 宣教助手能力
 
-“宣教助手”沿用相同的 Build Agent 能力安装机制。平台把 `health-education-content` 入口 Skill、远程 `education-content` MCP 和 `smart-market-hot-topics` MCP 配置写入用户工作目录。宣教 MCP 只封装独立 `wechat_agent` 的异步生成预览接口；热点 MCP 通过 HTTP 封装独立 Smart Market 后端，不复制其数据库和检索逻辑。
+“宣教助手”使用登录时已初始化的统一能力包，其中包含 `health-education-content` Skill、远程 `education-content` MCP、`smart-market-hot-topics` MCP 和 `media-generation` MCP。宣教 MCP 只封装独立 `wechat_agent` 的异步生成预览接口；热点 MCP 通过 HTTP 封装独立 Smart Market 后端，不复制其数据库和检索逻辑。
 
 平台开放生成、查看和工作区内可视化编辑微信公众号 HTML，不向 Agent 暴露创建草稿、正式发布或删除接口。平台后端需要配置：
 

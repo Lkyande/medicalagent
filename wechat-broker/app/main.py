@@ -53,6 +53,7 @@ class AuthorizationResponse(BaseModel):
     authorizer_appid: str | None = Field(alias="authorizerAppid")
     auth_url: str | None = Field(default=None, alias="authUrl")
     expires_at: datetime = Field(alias="expiresAt")
+    error: str | None = None
 
 
 class BindingResponse(BaseModel):
@@ -120,6 +121,7 @@ def attempt_response(
         authorizerAppid=attempt.authorizer_appid,
         authUrl=auth_url,
         expiresAt=attempt.expires_at,
+        error=attempt.error,
     )
 
 
@@ -144,10 +146,15 @@ def callback_result(
         return RedirectResponse(target, status_code=status.HTTP_303_SEE_OTHER)
     title = "Authorization succeeded" if success else "Authorization failed"
     body = escape(message)
+    close_script = (
+        "<script>setTimeout(function(){window.close();},800);</script>"
+        if success
+        else ""
+    )
     return HTMLResponse(
         "<!doctype html><html><head><meta charset=\"utf-8\">"
         f"<title>{title}</title></head><body><p>{body}</p>"
-        "<script>setTimeout(function(){window.close();},800);</script></body></html>"
+        f"{close_script}</body></html>"
     )
 
 

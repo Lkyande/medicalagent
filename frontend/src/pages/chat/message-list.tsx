@@ -1,4 +1,4 @@
-import { For, Show, createEffect, createMemo, createSignal, onCleanup, onMount } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
 import { ChatMessageBubble } from "./message-bubble"
 import type { DisplayMessage } from "./message-normalize"
 
@@ -6,6 +6,7 @@ export function ChatMessageList(props: {
   messages: DisplayMessage[]
   sessionID?: string
   generating?: boolean
+  scrollToLatestRequest: number
   revertingMessageID?: string
   onRevert?: (messageID: string) => void
 }) {
@@ -40,6 +41,17 @@ export function ChatMessageList(props: {
     setShowLatest(false)
     scrollRef.scrollTo({ top: scrollRef.scrollHeight, behavior: "smooth" })
   }
+
+  const forceScrollToBottom = () => {
+    atBottom = true
+    setShowLatest(false)
+    scrollToBottom()
+  }
+
+  createEffect(on(
+    () => [props.sessionID, props.scrollToLatestRequest] as const,
+    () => forceScrollToBottom(),
+  ))
 
   createEffect(() => {
     props.messages.map((m) =>

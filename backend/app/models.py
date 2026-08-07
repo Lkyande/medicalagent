@@ -71,3 +71,24 @@ class EducationWechatPublication(Base):
     operation_id = Column(String(64), nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+
+
+class MediaGenerationJob(Base):
+    __tablename__ = "media_generation_jobs"
+    __table_args__ = (
+        UniqueConstraint("video_id", name="uq_media_generation_video"),
+        UniqueConstraint(
+            "user_id",
+            "workspace_id",
+            "request_fingerprint",
+            name="uq_media_generation_request",
+        ),
+    )
+
+    id = Column(String(64), primary_key=True, default=_gen_id)
+    user_id = Column(String(64), ForeignKey("users.id"), nullable=False, index=True)
+    workspace_id = Column(String(64), ForeignKey("user_workspaces.id"), nullable=False, index=True)
+    video_id = Column(String(200), nullable=False, index=True)
+    request_fingerprint = Column(String(64), nullable=False)
+    generation_type = Column(String(32), nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)

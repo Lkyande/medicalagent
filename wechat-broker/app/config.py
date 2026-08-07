@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from pydantic_settings import BaseSettings
 
@@ -48,3 +49,13 @@ def validate_settings() -> None:
         raise RuntimeError("WECHAT_BROKER_INTERNAL_API_KEY must contain at least 32 characters")
     if not settings.authorization_callback_url.startswith("https://"):
         raise RuntimeError("WECHAT_BROKER_AUTHORIZATION_CALLBACK_URL must use HTTPS")
+    callback = urlsplit(settings.authorization_callback_url)
+    if (
+        callback.path != "/api/wechat-broker/authorization/callback"
+        or callback.query
+        or callback.fragment
+    ):
+        raise RuntimeError(
+            "WECHAT_BROKER_AUTHORIZATION_CALLBACK_URL must end with "
+            "/api/wechat-broker/authorization/callback and must not contain a query or fragment"
+        )

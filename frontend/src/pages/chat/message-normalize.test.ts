@@ -257,6 +257,33 @@ describe("normalizeMessages", () => {
     expect(educationJobIDs(result)).toEqual(["job_old", "job_new"])
   })
 
+  test("extracts a video id only from a completed video creation tool", () => {
+    const result = normalizeMessages([
+      user("u1", 1000),
+      assistant("a1", "u1", 1100, 1200, [{
+        id: "tool-video",
+        sessionID: "session",
+        messageID: "a1",
+        type: "tool",
+        callID: "call-video",
+        tool: "media-generation_video_create_from_image",
+        state: {
+          status: "completed",
+          input: { prompt: "subtle motion", image_url: "https://example.com/image.png" },
+          output: '{"video_id":"video_123","status":"queued"}',
+          title: "queued",
+          metadata: {},
+          time: { start: 1100, end: 1200 },
+        },
+      } as Part]),
+    ])
+
+    expect(result[1]?.blocks[0]).toMatchObject({
+      type: "tool",
+      tool: { videoID: "video_123", status: "completed" },
+    })
+  })
+
   test("renders a persisted workspace attachment once and hides its marker", () => {
     const raw = user("u1", 1000)
     const marker = serializeWorkspaceAttachment({

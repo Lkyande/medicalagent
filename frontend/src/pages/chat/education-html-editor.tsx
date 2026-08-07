@@ -9,6 +9,7 @@ import {
 } from "@/api/backend"
 import { DialogBody, DialogFooter, DialogHeader, DialogTitle, DialogV2 } from "@/ui/v2/dialog-v2"
 import { showToast } from "@/utils/toast"
+import { waitForWechatAuthorization } from "./wechat-authorization"
 
 const IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"])
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024
@@ -378,40 +379,39 @@ export function EducationHtmlEditor(props: {
     }
   }
 
-  const waitForWechatAuthorization = async (popup: Window): Promise<WechatAuthorization> => {
-    const deadline = Date.now() + 10 * 60 * 1000
-    while (!disposed && Date.now() < deadline) {
-      const authorization = await backend.wechatAuthorization()
-      if (authorization.authorized) return authorization
-      if (popup.closed) throw new Error("授权窗口已关闭，公众号授权未完成")
-      await new Promise((resolve) => window.setTimeout(resolve, 1500))
-    }
-    throw new Error("公众号授权等待超时，请重新操作")
-  }
+  const openWechatAuthorizationPopup = (): Window | null =>
+    window.open("about:blank", "wechat-official-authorization", "width=980,height=760,resizable=yes,scrollbars=yes")
 
-  const authorizeWechat = async (popup: Window | null): Promise<WechatAuthorization> => {
+  const authorizeWechat = async (): Promise<WechatAuthorization> => {
+    const popup = openWechatAuthorizationPopup()
     const authorization = await backend.createWechatAuthorization()
     if (!authorization.authUrl) throw new Error("未获取到微信公众号授权地址")
+    const authorizationID = authorization.authorizationId
+    if (!authorizationID) throw new Error("未获取到微信公众号授权记录")
     if (!popup) throw new Error("浏览器阻止了授权窗口，请允许本站打开弹窗后重试")
     popup.location.href = authorization.authUrl
-    return waitForWechatAuthorization(popup)
+    try {
+      return await waitForWechatAuthorization({
+        check: () => backend.wechatAuthorizationAttempt(authorizationID),
+        popupClosed: () => popup.closed,
+        disposed: () => disposed,
+      })
+    } finally {
+      if (!popup.closed) popup.close()
+    }
   }
 
   const syncWechatDraft = async () => {
     const jobID = props.jobID
     if (!jobID || syncingWechat() || publishingWechat() || loading()) return
-    const popup = window.open("about:blank", "wechat-official-authorization", "width=980,height=760,resizable=yes,scrollbars=yes")
     setSyncingWechat(true)
     setError("")
     try {
       const current = dirty() ? await save() : artifact()
-      if (!current) {
-        if (popup && !popup.closed) popup.close()
-        return
-      }
+      if (!current) return
       if (dirty()) throw new Error("保存期间排版又发生了修改，请再次同步草稿")
       let authorization = await backend.wechatAuthorization()
-      if (!authorization.authorized) authorization = await authorizeWechat(popup)
+      if (!authorization.authorized) authorization = await authorizeWechat()
       let release: EducationWechatRelease
       try {
         release = await backend.syncEducationWechatDraft(props.sessionID, jobID, current.revision)
@@ -420,10 +420,9 @@ export function EducationHtmlEditor(props: {
           && cause.status === 409
           && cause.message.toLowerCase().includes("authorization")
         if (!authorizationExpired) throw cause
-        authorization = await authorizeWechat(popup)
+        authorization = await authorizeWechat()
         release = await backend.syncEducationWechatDraft(props.sessionID, jobID, current.revision)
       }
-      if (popup && !popup.closed) popup.close()
       setWechatRelease(release)
       showToast({
         class: "chat-preview-toast",
@@ -434,7 +433,6 @@ export function EducationHtmlEditor(props: {
       })
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "同步微信公众号草稿失败")
-      if (popup && !popup.closed) popup.close()
     } finally {
       setSyncingWechat(false)
     }

@@ -532,7 +532,7 @@ function Routes(props: { serverScoped?: JSX.Element }) {
   return (
     <>
       <Route
-        path={["/", "/chat", "/chat/:id", "/clinical", "/clinical/:id", "/education", "/education/:id"]}
+        path={["/", "/chat", "/chat/:id", "/clinical", "/clinical/:id", "/disease-management", "/disease-management/:id", "/education", "/education/:id"]}
         component={ChatLayout}
       />
     </>

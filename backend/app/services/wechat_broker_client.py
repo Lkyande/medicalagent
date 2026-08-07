@@ -27,6 +27,17 @@ class WechatBinding:
     authorizer_appid: str
 
 
+@dataclass(frozen=True)
+class WechatAuthorizationAttempt:
+    authorization_id: str
+    status: str
+    subject_id: str
+    authorizer_appid: str | None
+    auth_url: str | None
+    expires_at: datetime
+    error: str | None
+
+
 class WechatBrokerClient:
     def __init__(self) -> None:
         if not settings.wechat_broker_base_url:
@@ -49,16 +60,22 @@ class WechatBrokerClient:
             authorizer_appid=self._required_string(payload, "authorizerAppid")
         )
 
-    async def create_authorization_url(self, subject_id: str) -> tuple[str, datetime]:
+    async def create_authorization(self, subject_id: str) -> WechatAuthorizationAttempt:
         payload = await self._request(
             "POST",
             "internal/v1/authorizations",
             json={"subjectId": subject_id},
         )
-        return (
-            self._required_string(payload, "authUrl"),
-            self._required_datetime(payload, "expiresAt"),
+        return self._authorization_attempt(payload, require_auth_url=True)
+
+    async def authorization_attempt(
+        self, authorization_id: str
+    ) -> WechatAuthorizationAttempt:
+        payload = await self._request(
+            "GET",
+            f"internal/v1/authorizations/{quote(authorization_id, safe='')}",
         )
+        return self._authorization_attempt(payload)
 
     async def authorizer_access_token(
         self, subject_id: str
@@ -145,3 +162,31 @@ class WechatBrokerClient:
         except ValueError as exc:
             raise WechatAPIError(f"WeChat broker returned an invalid {key}") from exc
         return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed
+
+    @classmethod
+    def _authorization_attempt(
+        cls,
+        payload: dict[str, Any],
+        *,
+        require_auth_url: bool = False,
+    ) -> WechatAuthorizationAttempt:
+        auth_url = payload.get("authUrl")
+        if require_auth_url and (not isinstance(auth_url, str) or not auth_url):
+            raise WechatAPIError("WeChat broker response omitted authUrl")
+        if auth_url is not None and not isinstance(auth_url, str):
+            raise WechatAPIError("WeChat broker returned an invalid authUrl")
+        authorizer_appid = payload.get("authorizerAppid")
+        if authorizer_appid is not None and not isinstance(authorizer_appid, str):
+            raise WechatAPIError("WeChat broker returned an invalid authorizerAppid")
+        error = payload.get("error")
+        if error is not None and not isinstance(error, str):
+            raise WechatAPIError("WeChat broker returned an invalid authorization error")
+        return WechatAuthorizationAttempt(
+            authorization_id=cls._required_string(payload, "authorizationId"),
+            status=cls._required_string(payload, "status"),
+            subject_id=cls._required_string(payload, "subjectId"),
+            authorizer_appid=authorizer_appid,
+            auth_url=auth_url,
+            expires_at=cls._required_datetime(payload, "expiresAt"),
+            error=error,
+        )

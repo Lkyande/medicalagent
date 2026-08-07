@@ -5,6 +5,7 @@ export type WorkspaceAttachment = {
   size: number
   direct: boolean
   filePartID?: string
+  publicUrl?: string
 }
 
 const OPEN = "<workspace_attachment>"
@@ -23,7 +24,10 @@ export function serializeWorkspaceAttachment(attachment: WorkspaceAttachment): s
     size: attachment.size,
     direct: attachment.direct,
     filePartID: attachment.filePartID,
-    instruction: attachment.direct
+    publicUrl: attachment.publicUrl,
+    instruction: attachment.publicUrl
+      ? "This image is attached from the workspace. Use publicUrl only when the user explicitly requests image-to-video generation."
+      : attachment.direct
       ? "This file is attached from the workspace."
       : "This opaque file is stored in the workspace. Use workspace tools to inspect or convert it; do not execute it automatically.",
   })}${CLOSE}`
@@ -40,7 +44,8 @@ export function parseWorkspaceAttachment(value: string): WorkspaceAttachment | u
       typeof parsed.mime !== "string" || !parsed.mime.includes("/") ||
       typeof parsed.size !== "number" || !Number.isSafeInteger(parsed.size) || parsed.size < 0 ||
       typeof parsed.direct !== "boolean" ||
-      (parsed.filePartID !== undefined && typeof parsed.filePartID !== "string")
+      (parsed.filePartID !== undefined && typeof parsed.filePartID !== "string") ||
+      (parsed.publicUrl !== undefined && (typeof parsed.publicUrl !== "string" || !parsed.publicUrl.startsWith("https://")))
     ) return undefined
     return {
       name: parsed.name,
@@ -49,6 +54,7 @@ export function parseWorkspaceAttachment(value: string): WorkspaceAttachment | u
       size: parsed.size,
       direct: parsed.direct,
       filePartID: parsed.filePartID,
+      publicUrl: parsed.publicUrl,
     }
   } catch {
     return undefined

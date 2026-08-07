@@ -5,7 +5,7 @@ import hashlib
 import secrets
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from pydantic import BaseModel, Field
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
@@ -39,9 +39,12 @@ _TOKEN_ERRCODES = {40001, 40014, 42001}
 
 class AuthorizationResponse(BaseModel):
     authorized: bool
+    authorizationId: str | None = None
+    status: str | None = None
     authorizerAppid: str | None = None
     authUrl: str | None = None
     expiresAt: datetime | None = None
+    error: str | None = None
 
 
 class DraftRequest(BaseModel):
@@ -90,7 +93,9 @@ def _upstream_errcode(payload: dict) -> int:
 
 
 @router.get("/authorization", response_model=AuthorizationResponse)
-async def authorization_status(user: User = Depends(get_current_user)):
+async def authorization_status(response: Response, user: User = Depends(get_current_user)):
+    response.headers["Cache-Control"] = "no-store, private"
+    response.headers["Pragma"] = "no-cache"
     try:
         binding = await WechatBrokerClient().authorization_status(user.id)
     except (WechatConfigurationError, WechatAPIError) as exc:
@@ -104,10 +109,40 @@ async def authorization_status(user: User = Depends(get_current_user)):
 @router.post("/authorization", response_model=AuthorizationResponse)
 async def create_authorization(user: User = Depends(get_current_user)):
     try:
-        auth_url, expires_at = await WechatBrokerClient().create_authorization_url(user.id)
+        attempt = await WechatBrokerClient().create_authorization(user.id)
     except (WechatConfigurationError, WechatAPIError) as exc:
         raise _service_error(exc) from exc
-    return AuthorizationResponse(authorized=False, authUrl=auth_url, expiresAt=expires_at)
+    return AuthorizationResponse(
+        authorized=False,
+        authorizationId=attempt.authorization_id,
+        status=attempt.status,
+        authUrl=attempt.auth_url,
+        expiresAt=attempt.expires_at,
+    )
+
+
+@router.get("/authorization/{authorization_id}", response_model=AuthorizationResponse)
+async def authorization_attempt_status(
+    authorization_id: str,
+    response: Response,
+    user: User = Depends(get_current_user),
+):
+    response.headers["Cache-Control"] = "no-store, private"
+    response.headers["Pragma"] = "no-cache"
+    try:
+        attempt = await WechatBrokerClient().authorization_attempt(authorization_id)
+    except (WechatConfigurationError, WechatAPIError) as exc:
+        raise _service_error(exc) from exc
+    if attempt.subject_id != user.id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Authorization not found")
+    return AuthorizationResponse(
+        authorized=attempt.status == "authorized",
+        authorizationId=attempt.authorization_id,
+        status=attempt.status,
+        authorizerAppid=attempt.authorizer_appid,
+        expiresAt=attempt.expires_at,
+        error=attempt.error,
+    )
 
 
 @router.get("/previews/{job_id}/release", response_model=ReleaseResponse | None)

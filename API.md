@@ -143,7 +143,7 @@ FastAPI 业务错误通常返回：
 
 ### `POST /api/dispatch`
 
-为当前用户分配或获取已有沙盒，并确保用户工作目录存在。首次调用会按已分配用户数选择负载最低的沙盒。
+为当前用户分配或获取已有沙盒，确保用户工作目录存在，并初始化统一的助手能力包。首次调用会安装所有入口 Skill、合并全部 MCP 配置并确认连接；后续调用只做幂等一致性和连接检查，不重复写配置或重载实例。
 
 响应：
 
@@ -151,7 +151,9 @@ FastAPI 业务错误通常返回：
 {
   "sandboxId": "a",
   "proxyBase": "/opencode",
-  "workspace": "/workspace/users/2f1c..."
+  "workspace": "/workspace/users/2f1c...",
+  "capabilitiesReady": true,
+  "capabilitiesChanged": false
 }
 ```
 
@@ -160,6 +162,8 @@ FastAPI 业务错误通常返回：
 - `sandboxId` 是平台内部沙盒 ID，不是沙盒 URL。
 - `proxyBase` 是前端 OpenCode SDK 使用的代理基路径。
 - `workspace` 是当前用户在沙盒内的真实工作目录。
+- `capabilitiesReady` 表示统一能力包及其 MCP 已可用。
+- `capabilitiesChanged` 仅在本次调用实际更新 Skill 或 MCP 配置时为 `true`。
 
 ## 沙盒管理
 
@@ -176,7 +180,7 @@ FastAPI 业务错误通常返回：
 ]
 ```
 
-当前目录同时包含 `education-assistant`（宣教助手）。它安装 `health-education-content` Skill 和 `education-content` MCP，第一期只允许生成及查询微信公众号排版预览。
+统一能力包同时包含 `education-assistant`（宣教助手）所需的 `health-education-content` Skill，以及宣教、热点和媒体生成 MCP。
 
 ### `GET /api/sandboxes/{sandbox_id}/status`
 
@@ -483,7 +487,7 @@ curl http://localhost:20140/opencode/session \
 ]
 ```
 
-`POST /api/assistants/{assistant_id}/install` 在当前用户工作目录启用能力所需的入口 Skill 和 MCP 配置。客户端不能提供来源路径、目标路径或文件内容，也不会创建新的 OpenCode Agent。
+`POST /api/assistants/{assistant_id}/install` 保留用于后台兼容和单项维护。正常前端不再按会话调用该接口；登录后的 `POST /api/dispatch` 已统一初始化所有助手能力。客户端不能提供来源路径、目标路径或文件内容，也不会创建新的 OpenCode Agent。
 
 ```json
 {
@@ -502,9 +506,9 @@ curl http://localhost:20140/opencode/session \
 }
 ```
 
-启用内容由助手目录决定：诊疗助手安装两个入口 Skill 和 `murtagh-medical` MCP；宣教助手安装 `health-education-content` Skill、`education-content` MCP 和 `smart-market-hot-topics` MCP。热点 MCP 通过 HTTP 调用 Smart Market 的结构化热点搜索接口。宽泛宣教请求若没有具体医学主题，助手先询问是否需要结合当前热点素材；用户确认后才搜索。明确主题且未要求热点时不强制搜索。前端发送消息时仍使用 `agent: "build"`，并通过 `system` 注入对应能力规则。安装是幂等的：`changed` 仅在 Skill、清单或 MCP 配置实际变化时为 `true`，此时 `requiresNewSession` 也为 `true`，后端只刷新当前工作目录的 OpenCode 实例。配置未变化时不会刷新实例，避免中止正在进行的会话。
+能力内容由助手目录决定。`dispatch` 会把诊疗、疾病管理和宣教助手的入口 Skill 去重合并，并一次配置 `murtagh-medical`、`education-content`、`smart-market-hot-topics` 和 `media-generation` MCP。热点 MCP 通过 HTTP 调用 Smart Market 的结构化热点搜索接口。前端创建或切换会话时不再修改工作区配置，仍使用 `agent: "build"`，只通过 `system` 注入对应能力规则；Agent 再按任务加载已安装的 Skill。安装是幂等的，配置未变化时不会刷新实例，因此多个会话可以并发运行。
 
-接口返回成功前还会查询沙盒 OpenCode 的 `/mcp` 状态；助手声明的所有 MCP 都为 `connected` 时才返回 `mcpStatus: "connected"`。宣教助手会同时检查 `education-content` 和 `smart-market-hot-topics`；任一 MCP 不可达时返回 `502`，不会让前端误显示“已启用”。
+接口返回成功前还会查询沙盒 OpenCode 的 `/mcp` 状态；助手声明的所有 MCP 都为 `connected` 时才返回 `mcpStatus: "connected"`。登录初始化会并行检查 `murtagh-medical`、`education-content`、`smart-market-hot-topics` 和 `media-generation`；任一 MCP 不可达时返回 `502`，不会让前端进入未就绪的工作区。
 
 入口 Skill 的唯一发布源为 `backend/app/assistant_catalog/<assistant_id>/skills/`。根目录 `.opencode/skills/` 下的同名文件是本地开发镜像，不是安装源；测试会校验两者内容一致。`MURTAGH_KNOWLEDGE_ROOT` 仅包含莫塔路由索引、注册表和审核后的 Markdown 正文，不会复制到用户沙盒。
 
