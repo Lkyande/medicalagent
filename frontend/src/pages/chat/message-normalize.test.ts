@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import type { Message, Part } from "@opencode-ai/sdk/v2"
-import { appendPartDelta, educationJobIDs, filterRevertedMessages, latestEducationJobID, mergeMessageSnapshot, normalizeMessages, upsertMessage, upsertPart, type RawMessage } from "./message-normalize"
+import { appendPartDelta, educationJobIDs, filterRevertedMessages, latestEducationJobID, mergeMessageSnapshot, normalizeMessages, shouldShowThinkingIndicator, upsertMessage, upsertPart, type DisplayBlock, type DisplayMessage, type RawMessage } from "./message-normalize"
 import { serializeWorkspaceAttachment } from "./workspace-attachment"
 
 const user = (id: string, created: number): RawMessage => ({
@@ -41,6 +41,51 @@ const assistant = (
 
 const text = (id: string, messageID: string, value: string) =>
   ({ id, sessionID: "session", messageID, type: "text", text: value } as Part)
+
+const displayMessage = (role: DisplayMessage["role"], blocks: DisplayBlock[] = []): DisplayMessage => ({
+  id: role,
+  role,
+  blocks,
+  text: "",
+  time: 0,
+  streaming: true,
+})
+
+const displayTool = (
+  status: "pending" | "running" | "completed" | "error",
+  educationWaitTimedOut = false,
+): DisplayBlock => ({
+  id: `tool-${status}`,
+  type: "tool",
+  tool: { id: `tool-${status}`, name: "bash", status, educationWaitTimedOut },
+})
+
+describe("shouldShowThinkingIndicator", () => {
+  test("shows while waiting for the first assistant output", () => {
+    expect(shouldShowThinkingIndicator([displayMessage("user")], true)).toBe(true)
+    expect(shouldShowThinkingIndicator([displayMessage("user")], false)).toBe(false)
+  })
+
+  test("shows after a tool reaches a terminal state while generation continues", () => {
+    expect(shouldShowThinkingIndicator([displayMessage("assistant", [displayTool("completed")])], true)).toBe(true)
+    expect(shouldShowThinkingIndicator([displayMessage("assistant", [displayTool("error")])], true)).toBe(true)
+  })
+
+  test("does not compete with an active tool status", () => {
+    expect(shouldShowThinkingIndicator([displayMessage("assistant", [displayTool("pending")])], true)).toBe(false)
+    expect(shouldShowThinkingIndicator([displayMessage("assistant", [displayTool("running")])], true)).toBe(false)
+    expect(shouldShowThinkingIndicator([displayMessage("assistant", [displayTool("error", true)])], true)).toBe(false)
+  })
+
+  test("hides when later model output arrives or generation stops", () => {
+    const blocks: DisplayBlock[] = [
+      displayTool("completed"),
+      { id: "answer", type: "text", text: "Finished" },
+    ]
+    expect(shouldShowThinkingIndicator([displayMessage("assistant", blocks)], true)).toBe(false)
+    expect(shouldShowThinkingIndicator([displayMessage("assistant", [displayTool("completed")])], false)).toBe(false)
+  })
+})
 
 describe("normalizeMessages", () => {
   test("merges assistant steps by parent while preserving part order", () => {

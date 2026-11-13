@@ -266,6 +266,8 @@ FastAPI 业务错误通常返回：
 - `session_id`：会话 ID，只允许字母、数字、`_` 和 `-`。
 - `files`：一个或多个文件字段。
 
+如果配置了 `DOOR_WINDOW_MCP_URL`，上传的 PDF 会在保存到沙盒后自动注册到门窗拆图 MCP，PDF 文件项会额外返回 `drawingSessionId`。OpenCode 的门窗 Agent 使用该 ID 调用页面渲染、视觉识别和裁剪工具。
+
 文件保存到 `attachments/<session_id>/`。每次最多上传 5 个文件，单文件最大 `10 MiB`，批次总大小最大 `50 MiB`。所有格式均可保存，但只有检测为 UTF-8 文本、PNG、JPEG、GIF、WebP 或 PDF 的文件会返回 `direct: true`，其他文件应由 Agent 使用工作目录工具读取或转换，不能自动执行或解压。
 
 响应：
@@ -279,13 +281,16 @@ FastAPI 业务错误通常返回：
       "mime": "text/plain",
       "size": 128,
       "url": "file:///workspace/attachments/ses_123/7f2c-%E7%97%85%E4%BE%8B.txt",
-      "direct": true
+      "direct": true,
+      "drawingSessionId": "drawing_abc123..."
     }
   ]
 }
 ```
 
 上传使用远程沙盒的认证 PTY 分块写入，服务端按实际字节数限制大小并校验 SHA-256，完成前写入临时文件，校验成功后原子重命名。批次失败会清理本批次已写入的文件。
+
+门窗拆图助手可以同时接收 PDF 图纸和客户报价说明 `.txt`/`.docx`。PDF 上传后由平台自动注册到门窗 MCP 并返回 `drawingSessionId`；TXT/DOCX 仅作为工作区文档读取，不调用图纸注册、渲染或裁剪工具。助手会从客户说明中提取 U-value、SHGC 和其他玻璃要求。没有门窗编号的项目级玻璃要求默认应用于所有有玻璃或未明确标记为 opaque、solid、unglazed、no glass 的门窗，并在导出结果中保留要求来源、实际值和复核状态。
 
 ### `GET /api/workspace/content?path=<file>`
 

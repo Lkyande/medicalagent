@@ -17,7 +17,7 @@ class UploadSizeLimitMiddleware:
             return
         if path == "/api/workspace/uploads":
             maximum_bytes = self.maximum_bytes
-        elif path.startswith("/api/education/previews/") and path.endswith("/images"):
+        elif (path.startswith("/api/education/previews/") and path.endswith("/images")) or path == "/api/education/files/images":
             maximum_bytes = min(self.maximum_bytes, 11 * 1024 * 1024)
         else:
             await self.app(scope, receive, send)

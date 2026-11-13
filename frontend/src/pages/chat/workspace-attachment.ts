@@ -6,6 +6,7 @@ export type WorkspaceAttachment = {
   direct: boolean
   filePartID?: string
   publicUrl?: string
+  drawingSessionId?: string
 }
 
 const OPEN = "<workspace_attachment>"
@@ -25,6 +26,7 @@ export function serializeWorkspaceAttachment(attachment: WorkspaceAttachment): s
     direct: attachment.direct,
     filePartID: attachment.filePartID,
     publicUrl: attachment.publicUrl,
+    drawingSessionId: attachment.drawingSessionId,
     instruction: attachment.publicUrl
       ? "This image is attached from the workspace. Use publicUrl only when the user explicitly requests image-to-video generation."
       : attachment.direct
@@ -45,7 +47,11 @@ export function parseWorkspaceAttachment(value: string): WorkspaceAttachment | u
       typeof parsed.size !== "number" || !Number.isSafeInteger(parsed.size) || parsed.size < 0 ||
       typeof parsed.direct !== "boolean" ||
       (parsed.filePartID !== undefined && typeof parsed.filePartID !== "string") ||
-      (parsed.publicUrl !== undefined && (typeof parsed.publicUrl !== "string" || !parsed.publicUrl.startsWith("https://")))
+      (parsed.publicUrl !== undefined && (typeof parsed.publicUrl !== "string" || !parsed.publicUrl.startsWith("https://"))) ||
+      (parsed.drawingSessionId !== undefined && (
+        typeof parsed.drawingSessionId !== "string" ||
+        !/^drawing_[0-9a-f]{32}$/.test(parsed.drawingSessionId)
+      ))
     ) return undefined
     return {
       name: parsed.name,
@@ -55,6 +61,7 @@ export function parseWorkspaceAttachment(value: string): WorkspaceAttachment | u
       direct: parsed.direct,
       filePartID: parsed.filePartID,
       publicUrl: parsed.publicUrl,
+      drawingSessionId: parsed.drawingSessionId,
     }
   } catch {
     return undefined

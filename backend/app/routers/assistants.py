@@ -6,11 +6,7 @@ from app.auth.dependencies import get_current_user
 from app.database import get_db
 from app.models import User
 from app.sandbox.manager import ensure_workspace, get_or_create_workspace
-from app.services.assistant_installer import (
-    ASSISTANTS,
-    get_assistant,
-    install_assistant,
-)
+from app.services.assistant_installer import available_assistants, get_assistant, install_assistant
 
 
 router = APIRouter(prefix="/assistants", tags=["assistants"])
@@ -51,7 +47,7 @@ def catalog_item(assistant) -> AssistantCatalogItem:
 async def list_assistants(
     _user: User = Depends(get_current_user),
 ):
-    return [catalog_item(assistant) for assistant in ASSISTANTS.values()]
+    return [catalog_item(assistant) for assistant in available_assistants()]
 
 
 @router.post("/{assistant_id}/install", response_model=AssistantInstallResponse)

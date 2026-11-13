@@ -1,6 +1,6 @@
 import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
 import { ChatMessageBubble } from "./message-bubble"
-import type { DisplayMessage } from "./message-normalize"
+import { shouldShowThinkingIndicator, type DisplayMessage } from "./message-normalize"
 
 export function ChatMessageList(props: {
   messages: DisplayMessage[]
@@ -15,8 +15,8 @@ export function ChatMessageList(props: {
   let atBottom = true
   let scrollFrame: number | undefined
   const [showLatest, setShowLatest] = createSignal(false)
-  const waitingForAssistant = createMemo(
-    () => !!props.generating && props.messages.at(-1)?.role === "user",
+  const showThinkingIndicator = createMemo(
+    () => shouldShowThinkingIndicator(props.messages, !!props.generating),
   )
 
   const handleScroll = () => {
@@ -89,13 +89,14 @@ export function ChatMessageList(props: {
             />
           )}
         </For>
-        <Show when={waitingForAssistant()}>
-          <div class="chat-message-row chat-message-row-assistant" aria-label="AI 正在回复" role="status">
+        <Show when={showThinkingIndicator()}>
+          <div class="chat-message-row chat-message-row-assistant" aria-label="AI 正在思考" role="status">
             <div class="chat-bubble chat-bubble-assistant">
-              <div class="chat-typing-indicator" aria-hidden="true">
-                <div class="chat-typing-dot" />
-                <div class="chat-typing-dot" />
-                <div class="chat-typing-dot" />
+              <div class="chat-typing-indicator">
+                <div class="chat-typing-dot" aria-hidden="true" />
+                <div class="chat-typing-dot" aria-hidden="true" />
+                <div class="chat-typing-dot" aria-hidden="true" />
+                <span class="chat-typing-label" aria-hidden="true">思考中</span>
               </div>
             </div>
           </div>

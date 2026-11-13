@@ -35,7 +35,7 @@ export type PlatformAssistant = {
   name: string
   description: string
   version: string
-  baseAgent: "build" | "plan"
+  baseAgent: string
   systemPrompt: string
   skills: string[]
   tools: string[]
@@ -49,6 +49,7 @@ export type WorkspaceUploadFile = {
   url: string
   direct: boolean
   publicUrl?: string | null
+  drawingSessionId?: string | null
 }
 
 export type EducationPreviewProgress = {
@@ -257,6 +258,15 @@ export const backend = {
       130_000,
     )
   },
+  uploadEducationFileImage: (path: string, file: File) => {
+    const form = new FormData()
+    form.append("file", file, file.name)
+    return apiFetch<EducationPreviewImage>(
+      `/education/files/images?path=${encodeURIComponent(path)}`,
+      { method: "POST", body: form },
+      130_000,
+    )
+  },
   wechatAuthorization: () => apiFetch<WechatAuthorization>("/wechat/authorization", { cache: "no-store" }, 15_000),
   createWechatAuthorization: () =>
     apiFetch<WechatAuthorization>("/wechat/authorization", { method: "POST" }, 30_000),
@@ -287,6 +297,30 @@ export const backend = {
   resolveEducationWechatPublish: (sessionID: string, jobID: string, published: boolean) =>
     apiFetch<EducationWechatRelease>(
       `/wechat/previews/${encodeURIComponent(jobID)}/resolve?session_id=${encodeURIComponent(sessionID)}`,
+      { method: "POST", body: JSON.stringify({ published }) },
+      30_000,
+    ),
+  educationFileWechatRelease: (path: string) =>
+    apiFetch<EducationWechatRelease | null>(
+      `/wechat/files/release?path=${encodeURIComponent(path)}`,
+      { cache: "no-store" },
+      30_000,
+    ),
+  syncEducationFileWechatDraft: (path: string, revision: string) =>
+    apiFetch<EducationWechatRelease>(
+      `/wechat/files/draft?path=${encodeURIComponent(path)}`,
+      { method: "POST", body: JSON.stringify({ revision }) },
+      180_000,
+    ),
+  publishEducationFileWechatDraft: (path: string) =>
+    apiFetch<EducationWechatRelease>(
+      `/wechat/files/publish?path=${encodeURIComponent(path)}`,
+      { method: "POST" },
+      180_000,
+    ),
+  resolveEducationFileWechatPublish: (path: string, published: boolean) =>
+    apiFetch<EducationWechatRelease>(
+      `/wechat/files/resolve?path=${encodeURIComponent(path)}`,
       { method: "POST", body: JSON.stringify({ published }) },
       30_000,
     ),

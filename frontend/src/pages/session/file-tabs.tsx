@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, Match, on, onCleanup, Switch } from "solid-js"
+import { createEffect, createMemo, createSignal, Match, on, onCleanup, Show, Switch } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Dynamic } from "solid-js/web"
 import { makeEventListener } from "@solid-primitives/event-listener"
@@ -9,6 +9,7 @@ import { createLineCommentController } from "@/session-ui/line-comment-annotatio
 import { sampledChecksum } from "@/lib/encode"
 import { DropdownMenu } from "@/ui/dropdown-menu"
 import { IconButton } from "@/ui/icon-button"
+import { Button } from "@/ui/button"
 import { Tabs } from "@/ui/tabs"
 import { ScrollView } from "@/ui/scroll-view"
 import { showToast } from "@/utils/toast"
@@ -19,6 +20,9 @@ import { usePrompt } from "@/context/prompt"
 import { getSessionHandoff } from "@/pages/session/handoff"
 import { useSessionLayout } from "@/pages/session/session-layout"
 import { createSessionTabs } from "@/pages/session/helpers"
+import { useDialog } from "@/ui/context/dialog"
+import { EducationHtmlEditor } from "@/pages/chat/education-html-editor"
+import { educationHtmlJobID } from "@/pages/chat/education-html"
 
 function FileCommentMenu(props: {
   moreLabel: string
@@ -173,6 +177,7 @@ function createScrollSync(input: { tab: () => string; view: ReturnType<typeof us
 
 export function FileTabContent(props: { tab: string }) {
   const file = useFile()
+  const dialog = useDialog()
   const comments = useComments()
   const language = useLanguage()
   const prompt = usePrompt()
@@ -193,6 +198,10 @@ export function FileTabContent(props: { tab: string }) {
   }
 
   const path = createMemo(() => file.pathFromTab(props.tab))
+  const educationJobID = createMemo(() => {
+    const value = path()
+    return value ? educationHtmlJobID(value) : undefined
+  })
   const state = createMemo(() => {
     const p = path()
     if (!p) return
@@ -209,6 +218,29 @@ export function FileTabContent(props: { tab: string }) {
   const scrollSync = createScrollSync({
     tab: () => props.tab,
     view,
+  })
+  let openedEducationPath: string | undefined
+
+  const openEducationEditor = (filePath: string, jobID: string) => {
+    let editorDirty = false
+    void dialog.push(() => (
+      <EducationHtmlEditor
+        path={filePath}
+        jobID={jobID}
+        onDirtyChange={(dirty) => { editorDirty = dirty }}
+        onSaved={() => void file.load(filePath, { force: true })}
+        onViewInWorkspace={() => dialog.close()}
+      />
+    ), () => !editorDirty || window.confirm("排版还有未保存的修改，确定关闭编辑器吗？"))
+  }
+
+  createEffect(() => {
+    const filePath = path()
+    const jobID = educationJobID()
+    if (!filePath || !jobID || !state()?.loaded || activeFileTab() !== props.tab) return
+    if (openedEducationPath === filePath) return
+    openedEducationPath = filePath
+    openEducationEditor(filePath, jobID)
   })
 
   const selectionPreview = (source: string, selection: FileSelection) => {
@@ -396,6 +428,22 @@ export function FileTabContent(props: { tab: string }) {
 
   const renderFile = (source: string) => (
     <div class="relative overflow-hidden pb-40">
+      <Show when={educationJobID()}>
+        {(jobID) => (
+          <div class="sticky top-0 z-10 flex justify-end border-b border-border-weak-base bg-background-base px-4 py-2">
+            <Button
+              variant="primary"
+              size="small"
+              onClick={() => {
+                const filePath = path()
+                if (filePath) openEducationEditor(filePath, jobID())
+              }}
+            >
+              打开富文本编辑
+            </Button>
+          </div>
+        )}
+      </Show>
       <Dynamic
         component={fileComponent}
         mode="text"

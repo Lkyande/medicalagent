@@ -16,6 +16,14 @@ from app.sandbox.manager import run_sandbox_command_capture, sandbox_auth
 CATALOG_ROOT = Path(__file__).resolve().parent.parent / "assistant_catalog"
 
 
+def _mcp_server_url(name: str, url: str) -> str:
+    """Keep the door/window Streamable HTTP endpoint on its required /mcp path."""
+    normalized = url.rstrip("/")
+    if name == "door-window-thumbnail":
+        return normalized
+    return normalized + "/"
+
+
 @dataclass(frozen=True)
 class AssistantDefinition:
     id: str
@@ -91,14 +99,14 @@ EDUCATION_ASSISTANT = AssistantDefinition(
     id="education-assistant",
     name="宣教助手",
     description="面向公众生成医学科普宣传文案、配图、短视频和微信公众号排版预览。",
-    version="1.7.1",
+    version="1.8.0",
     base_agent="build",
     system_prompt=(
         "本会话启用了宣教助手能力。你仍然是 Build 基础 Agent，但必须按照医学科普宣教模式工作。\n\n"
         "1. 先判断用户是否给出具体医学主题。若只有医院科普宣传、健康宣教等宽泛意图以及受众、渠道或图片风格，必须先询问是否需要结合当前热点素材选题，不得立即搜索热点或创建预览。\n"
         "2. 生成微信公众号科普预览时必须加载 health-education-content 技能，并按其要求调用 education-content 工具。\n"
-        "3. 用户明确要求结合热点，或对上一条询问回答需要时，先调用 smart-market-hot-topics 搜索；用户回答不需要时，不得搜索热点，应询问具体主题或提供常规宣教主题供选择。\n"
-        "4. 用户已给出具体疾病、症状、专科或健康主题且未要求热点时，直接按主题生成，不得强制搜索或重复询问热点。热点结果只用于传播背景，不得把热榜观点当作医学证据。\n"
+        "3. 用户明确要求结合热点，或对上一条询问回答需要时，先调用 smart-market-hot-topics 搜索；热点结果包含 URL 时，优先使用可用的网页读取工具获取原文或落地页信息；链接缺失、不可访问或摘要不足时，可使用可用的网络搜索工具补充核验。\n"
+        "4. 用户回答不需要热点时，不得搜索热点、读取网页或调用网络搜索，应询问具体主题或提供常规宣教主题供选择。用户已给出具体疾病、症状、专科或健康主题且未要求热点时，直接按主题生成，不得强制搜索或重复询问热点。热点和网页结果只用于传播背景、选题判断和事实核验，不得把热榜观点、搜索摘要或网页内容当作医学证据。\n"
         "5. 必须先调用 education_create_preview，并在拿到 job_id 后调用 education_wait_for_preview；后续只能使用同一 job_id，禁止重复创建任务。\n"
         "6. pending、running、timed_out 及 MCP -32001/Request timed out 都不代表任务失败；必须从工具输入恢复同一 job_id 继续查询，禁止显示任务执行失败或重新创建。只有 completed 或明确 failed 才能结束，completed 时必须提供 editable_html_url。\n"
         "7. 不得编造患病率、疗效、诊断标准、指南结论、机构背书或来源。资料不足时使用审慎的通用表述并标记待审核。\n"
@@ -118,11 +126,42 @@ EDUCATION_ASSISTANT = AssistantDefinition(
     ),
 )
 
+DOOR_WINDOW_ASSISTANT = AssistantDefinition(
+    id="door-window-assistant",
+    name="门窗拆图助手",
+    description="从建筑 PDF 图纸和客户报价说明中拆分门窗框图、核对玻璃性能、统计数量，并生成带缩图的 CSV/Excel。",
+    version="1.3.0",
+    base_agent="door-window-thumbnail",
+    system_prompt=(
+        "本会话启用了门窗拆图助手。必须加载 door-window-thumbnail 技能，"
+        "先读取可选的 TXT/DOCX 客户报价说明并提取 U-value、SHGC 和玻璃要求；"
+        "再通过页面文本筛选并由视觉模型确认 WINDOWS & DOORS SCHEDULE，再拆分门窗框图；"
+        "拆图完成后继续由视觉模型识别 GROUND FLOOR PLAN 等楼层平面图中的门窗标签和数量，"
+        "没有门窗编号的玻璃要求默认应用于所有有玻璃或未明确为非玻璃的门窗，最后调用导出工具生成包含要求核对、缩图链接的 CSV 和嵌入缩图的 Excel。"
+        "户型图、立面图和 2D 平面图不得作为明细表拆图页，"
+        "确认低置信度或批量区域后再执行裁剪。"
+    ),
+    skills=("door-window-thumbnail",),
+    tools=("door-window-thumbnail",),
+    files=(
+        "agent/door-window-thumbnail.md",
+        "skills/door-window-thumbnail/SKILL.md",
+    ),
+    mcp_servers=(("door-window-thumbnail", "door_window_mcp_url", "door_window_mcp_timeout_ms"),),
+)
+
 ASSISTANTS = {
     CLINICAL_ASSISTANT.id: CLINICAL_ASSISTANT,
     DISEASE_MANAGEMENT_ASSISTANT.id: DISEASE_MANAGEMENT_ASSISTANT,
     EDUCATION_ASSISTANT.id: EDUCATION_ASSISTANT,
 }
+
+
+def available_assistants() -> tuple[AssistantDefinition, ...]:
+    assistants = list(ASSISTANTS.values())
+    if settings.door_window_mcp_url:
+        assistants.append(DOOR_WINDOW_ASSISTANT)
+    return tuple(assistants)
 _install_locks: dict[str, asyncio.Lock] = {}
 _reload_pending: set[str] = set()
 _mcp_connect_attempts = 10
@@ -198,7 +237,7 @@ process.exitCode = changed ? 20 : 0;
 
 
 def get_assistant(assistant_id: str) -> AssistantDefinition:
-    assistant = ASSISTANTS.get(assistant_id)
+    assistant = next((item for item in available_assistants() if item.id == assistant_id), None)
     if not assistant:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assistant not found")
     return assistant
@@ -241,11 +280,16 @@ def _package_payload(assistant: AssistantDefinition, workspace: UserWorkspace | 
             "mcpServers": [
                 {
                     "name": name,
-                    "url": getattr(settings, url_setting).rstrip("/") + "/",
+                    "url": _mcp_server_url(name, getattr(settings, url_setting)),
                     "timeoutMs": getattr(settings, timeout_setting),
                     **(
                         {"headers": {"X-Media-MCP-Token": issue_media_mcp_token(workspace)}}
                         if name == "media-generation"
+                        else {}
+                    ),
+                    **(
+                        {"headers": {"Authorization": f"Bearer {settings.door_window_mcp_token}"}}
+                        if name == "door-window-thumbnail" and settings.door_window_mcp_token
                         else {}
                     ),
                 }
@@ -261,7 +305,7 @@ def _package_payload(assistant: AssistantDefinition, workspace: UserWorkspace | 
 def _workspace_package_payload(workspace: UserWorkspace) -> str:
     files: dict[str, dict] = {}
     mcp_servers: dict[str, dict] = {}
-    for assistant in ASSISTANTS.values():
+    for assistant in available_assistants():
         payload = json.loads(base64.b64decode(_package_payload(assistant, workspace)))
         for item in payload["files"]:
             existing = files.get(item["path"])
@@ -282,7 +326,7 @@ def _workspace_package_payload(workspace: UserWorkspace) -> str:
     payload = json.dumps(
         {
             "id": "workspace-capabilities",
-            "assistantIds": list(ASSISTANTS),
+            "assistantIds": [*ASSISTANTS, DOOR_WINDOW_ASSISTANT.id],
             "files": list(files.values()),
             "mcpServers": list(mcp_servers.values()),
         },
@@ -328,7 +372,7 @@ async def install_assistant(sandbox: dict, workspace: UserWorkspace, assistant: 
 
 
 async def install_workspace_capabilities(sandbox: dict, workspace: UserWorkspace) -> bool:
-    assistants = tuple(ASSISTANTS.values())
+    assistants = available_assistants()
     _validate_mcp_configuration(assistants)
     return await _install_capability_payload(
         sandbox,

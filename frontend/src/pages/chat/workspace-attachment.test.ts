@@ -11,6 +11,20 @@ describe("workspace attachment marker", () => {
       direct: true,
       filePartID: "prt_1",
       publicUrl: "https://example.com/image.png",
+      drawingSessionId: undefined,
+    }
+
+    expect(parseWorkspaceAttachment(serializeWorkspaceAttachment(attachment))).toEqual(attachment)
+  })
+
+  test("round trips a drawing session id", () => {
+    const attachment = {
+      name: "drawing.pdf",
+      path: "attachments/ses_1/drawing.pdf",
+      mime: "application/pdf",
+      size: 42,
+      direct: true,
+      drawingSessionId: "drawing_0123456789abcdef0123456789abcdef",
     }
 
     expect(parseWorkspaceAttachment(serializeWorkspaceAttachment(attachment))).toEqual(attachment)

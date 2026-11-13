@@ -51,6 +51,7 @@ export function ChatLayout() {
   const clinical = createMemo(() => location.pathname === "/clinical" || location.pathname.startsWith("/clinical/"))
   const diseaseManagement = createMemo(() => location.pathname === "/disease-management" || location.pathname.startsWith("/disease-management/"))
   const education = createMemo(() => location.pathname === "/education" || location.pathname.startsWith("/education/"))
+  const doorWindow = createMemo(() => location.pathname === "/door-window" || location.pathname.startsWith("/door-window/"))
   const [loggedIn, setLoggedIn] = createSignal<boolean | undefined>(undefined)
   const [authError, setAuthError] = createSignal("")
   const [startupPhase, setStartupPhase] = createSignal<ChatStartupPhase>("identity")
@@ -103,6 +104,7 @@ export function ChatLayout() {
             clinical={clinical()}
             diseaseManagement={diseaseManagement()}
             education={education()}
+            doorWindow={doorWindow()}
             assistants={assistantCatalog()}
           />
         </Show>
@@ -115,6 +117,7 @@ function ChatWorkspace(props: {
   clinical?: boolean
   diseaseManagement?: boolean
   education?: boolean
+  doorWindow?: boolean
   assistants: PlatformAssistant[]
 }) {
   const params = useParams()
@@ -485,7 +488,7 @@ function ChatWorkspace(props: {
         setSessions((prev) => prev.filter((s) => s.id !== sid))
         if (sid === sessionId()) {
           setLocalGeneratingMessageID(undefined)
-          navigate(clinical() ? "/clinical" : diseaseManagement() ? "/disease-management" : education() ? "/education" : "/chat")
+          navigate(clinical() ? "/clinical" : diseaseManagement() ? "/disease-management" : education() ? "/education" : props.doorWindow ? "/door-window" : "/chat")
         }
       },
       onFileEdited: () => setWorkspaceRefresh((value) => value + 1),
@@ -615,7 +618,7 @@ function ChatWorkspace(props: {
     try {
       await getChatClient().session.delete({ sessionID: sid } as any)
       setSessions((prev) => prev.filter((s) => s.id !== sid))
-      if (sid === sessionId()) navigate(clinical() ? "/clinical" : diseaseManagement() ? "/disease-management" : education() ? "/education" : "/chat")
+      if (sid === sessionId()) navigate(clinical() ? "/clinical" : diseaseManagement() ? "/disease-management" : education() ? "/education" : props.doorWindow ? "/door-window" : "/chat")
     } catch (e: any) {
       alert("删除失败: " + (e?.message ?? String(e)))
     }
@@ -656,7 +659,7 @@ function ChatWorkspace(props: {
       />
       <div class="chat-main">
         <ChatHeader
-          title={sessionInfo()?.title || (clinical() ? "诊疗助手" : diseaseManagement() ? "疾病管理助手" : education() ? "宣教助手" : "新对话")}
+          title={sessionInfo()?.title || (clinical() ? "诊疗助手" : diseaseManagement() ? "疾病管理助手" : education() ? "宣教助手" : props.doorWindow ? "门窗拆图助手" : "新对话")}
           generating={isGenerating()}
           sidebarExpanded={!sidebarCollapsed()}
           onToggleSidebar={() => {
@@ -665,7 +668,7 @@ function ChatWorkspace(props: {
           }}
           onOpenWorkspace={() => openWorkspace()}
         />
-        <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} diseaseManagement={diseaseManagement()} education={education()} />}>
+        <Show when={sessionId()} fallback={<ChatEmptyState clinical={clinical()} diseaseManagement={diseaseManagement()} education={education()} doorWindow={props.doorWindow} />}>
           <Show
             when={!messagesLoading() || messages.length > 0}
             fallback={<div class="chat-loading">加载消息中...</div>}
@@ -713,6 +716,7 @@ function ChatWorkspace(props: {
           clinical={clinical()}
           diseaseManagement={diseaseManagement()}
           education={education()}
+          doorWindow={props.doorWindow}
           conversationTypeReady={conversationTypeReady()}
         />
       </div>

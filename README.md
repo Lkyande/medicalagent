@@ -316,6 +316,10 @@ VITE_BACKEND_API_URL=/api
 | `SANDBOX_<ID>_USERNAME` | `opencode` | 沙盒 Basic Auth 用户名 |
 | `SANDBOX_WORKSPACE_ROOT` | 自动探测 | 所有沙盒的用户工作目录根路径；生产建议显式设置 |
 | `MURTAGH_MCP_URL` | - | 平台内部莫塔医学 MCP 地址，用于按需路由和读取审核后的 skill |
+| `DOOR_WINDOW_MCP_URL` | - | 局域网门窗拆图 MCP 服务基地址；配置后 PDF 上传会自动注册图纸 |
+| `DOOR_WINDOW_MCP_TOKEN` | - | 门窗拆图 MCP 的 Bearer Token |
+| `DOOR_WINDOW_MCP_TIMEOUT_MS` | `120000` | 门窗 MCP 工具调用超时，单位毫秒 |
+| `DOOR_WINDOW_MCP_TIMEOUT_SECONDS` | `120` | 平台上传 PDF 注册到门窗 MCP 的超时，单位秒 |
 | `SANDBOX_<ID>_WORKSPACE_ROOT` | 全局值 | 指定沙盒的工作目录根路径 |
 | `IMAGE_UPLOAD_URL` | - | 平台后端代理上传公众号排版图片的服务地址 |
 | `IMAGE_UPLOAD_FIELD_NAME` | `file` | 上游 multipart 图片字段名 |

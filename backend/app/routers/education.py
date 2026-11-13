@@ -22,8 +22,10 @@ from app.routers.workspace import (
     decode_file_content,
     invalidate_workspace_directory_cache,
     remote_json,
+    safe_html_path,
     spool_upload_file,
     validate_remote_file,
+    workspace_context,
 )
 
 
@@ -232,6 +234,28 @@ def _artifact_path(job_id: str) -> str:
     return f"education-previews/{job_id}.html"
 
 
+def education_preview_job_id(path: str) -> str:
+    relative_path = safe_html_path(path)
+    prefix = "education-previews/"
+    if not relative_path.startswith(prefix) or not relative_path.endswith(".html"):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="An education preview HTML path is required")
+    job_id = relative_path[len(prefix):-len(".html")]
+    if not JOB_ID_RE.fullmatch(job_id) or relative_path != _artifact_path(job_id):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="An education preview HTML path is required")
+    return job_id
+
+
+async def _owned_preview_file_context(
+    path: str,
+    user: User,
+    db: AsyncSession,
+) -> tuple[str, dict, UserWorkspace]:
+    job_id = education_preview_job_id(path)
+    sandbox, workspace = await workspace_context(user, db)
+    await validate_remote_file(sandbox, workspace, _artifact_path(job_id))
+    return job_id, sandbox, workspace
+
+
 def _artifact_metadata(job_id: str, content: bytes) -> PreviewArtifactMetadata:
     path = _artifact_path(job_id)
     return PreviewArtifactMetadata(
@@ -392,7 +416,22 @@ async def upload_preview_image(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    session, workspace = await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+    await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+    return await _upload_preview_image(file)
+
+
+@router.post("/files/images", response_model=PreviewImageUploadResponse)
+async def upload_preview_file_image(
+    file: Annotated[UploadFile, File(...)],
+    path: str = Query(...),
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    await _owned_preview_file_context(path, user, db)
+    return await _upload_preview_image(file)
+
+
+async def _upload_preview_image(file: UploadFile) -> PreviewImageUploadResponse:
     prepared = None
     try:
         prepared = await spool_upload_file(file, 0)

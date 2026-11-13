@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     media_mcp_url: str = ""
     media_mcp_timeout_ms: int = 120000
     media_mcp_signing_key: str = ""
+    door_window_mcp_url: str = ""
+    door_window_mcp_token: str = ""
+    door_window_mcp_timeout_ms: int = 120000
+    door_window_mcp_timeout_seconds: float = 120.0
     agnes_api_base_url: str = "https://api.agnes-ai.cn"
     agnes_image_generation_api_key: str = ""
     agnes_image_generation_fallback_api_key: str = ""

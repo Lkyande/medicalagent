@@ -16,6 +16,7 @@ from app.database import get_db
 from app.models import EducationWechatPublication, User
 from app.routers.education import (
     _owned_preview_context,
+    _owned_preview_file_context,
     _artifact_locks,
     _preview_sandbox,
     _read_artifact_bytes,
@@ -153,6 +154,20 @@ async def release_status(
     db: AsyncSession = Depends(get_db),
 ):
     await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+    return await _release_status(job_id, user, db)
+
+
+@router.get("/files/release", response_model=ReleaseResponse | None)
+async def file_release_status(
+    path: str = Query(...),
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    job_id, _, _ = await _owned_preview_file_context(path, user, db)
+    return await _release_status(job_id, user, db)
+
+
+async def _release_status(job_id: str, user: User, db: AsyncSession) -> ReleaseResponse | None:
     result = await db.execute(
         select(EducationWechatPublication).where(
             EducationWechatPublication.user_id == user.id,
@@ -181,6 +196,26 @@ async def resolve_publish_result(
     db: AsyncSession = Depends(get_db),
 ):
     await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+    return await _resolve_publish_result(job_id, payload, user, db)
+
+
+@router.post("/files/resolve", response_model=ReleaseResponse)
+async def resolve_file_publish_result(
+    payload: ResolvePublishRequest,
+    path: str = Query(...),
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    job_id, _, _ = await _owned_preview_file_context(path, user, db)
+    return await _resolve_publish_result(job_id, payload, user, db)
+
+
+async def _resolve_publish_result(
+    job_id: str,
+    payload: ResolvePublishRequest,
+    user: User,
+    db: AsyncSession,
+) -> ReleaseResponse:
     result = await db.execute(
         select(EducationWechatPublication)
         .where(
@@ -220,17 +255,37 @@ async def sync_draft(
         return await _sync_draft_locked(job_id, payload, session_id, user, db)
 
 
+@router.post("/files/draft", response_model=ReleaseResponse)
+async def sync_file_draft(
+    payload: DraftRequest,
+    path: str = Query(...),
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    job_id, sandbox, workspace = await _owned_preview_file_context(path, user, db)
+    lock = _release_locks.setdefault(f"{user.id}\0{job_id}", asyncio.Lock())
+    if lock.locked():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="WeChat release operation is already running")
+    async with lock:
+        return await _sync_draft_locked(job_id, payload, "", user, db, sandbox=sandbox, workspace=workspace)
+
+
 async def _sync_draft_locked(
     job_id: str,
     payload: DraftRequest,
     session_id: str,
     user: User,
     db: AsyncSession,
+    *,
+    sandbox: dict | None = None,
+    workspace=None,
 ) -> ReleaseResponse:
-    session, workspace = await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+    if sandbox is None or workspace is None:
+        session, workspace = await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+        sandbox = _preview_sandbox(session)
     artifact_lock = _artifact_locks.setdefault(f"{workspace.id}\0{job_id}", asyncio.Lock())
     async with artifact_lock:
-        content = await _read_artifact_bytes(_preview_sandbox(session), workspace, job_id)
+        content = await _read_artifact_bytes(sandbox, workspace, job_id)
         if content is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Preview HTML has not been saved")
         if hashlib.sha256(content).hexdigest() != payload.revision:
@@ -272,7 +327,8 @@ async def _sync_draft_locked(
                 raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="This article cannot be resynced after publish submission")
             if release.status == "syncing" and updated_at and updated_at > now - timedelta(minutes=5):
                 raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="WeChat draft sync is already running")
-            release.session_id = session_id
+            if session_id:
+                release.session_id = session_id
             release.authorizer_appid = binding.authorizer_appid
             release.content_revision = payload.revision
             release.media_id = None
@@ -359,13 +415,32 @@ async def publish_draft(
         return await _publish_draft_locked(job_id, session_id, user, db)
 
 
+@router.post("/files/publish", response_model=ReleaseResponse)
+async def publish_file_draft(
+    path: str = Query(...),
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    job_id, sandbox, workspace = await _owned_preview_file_context(path, user, db)
+    lock = _release_locks.setdefault(f"{user.id}\0{job_id}", asyncio.Lock())
+    if lock.locked():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="WeChat release operation is already running")
+    async with lock:
+        return await _publish_draft_locked(job_id, "", user, db, sandbox=sandbox, workspace=workspace)
+
+
 async def _publish_draft_locked(
     job_id: str,
     session_id: str,
     user: User,
     db: AsyncSession,
+    *,
+    sandbox: dict | None = None,
+    workspace=None,
 ) -> ReleaseResponse:
-    session, workspace = await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+    if sandbox is None or workspace is None:
+        session, workspace = await _owned_preview_context(job_id, session_id, user, db, require_create=True)
+        sandbox = _preview_sandbox(session)
     artifact_lock = _artifact_locks.setdefault(f"{workspace.id}\0{job_id}", asyncio.Lock())
     async with artifact_lock:
         platform = WechatBrokerClient()
@@ -384,7 +459,7 @@ async def _publish_draft_locked(
         release = result.scalar_one_or_none()
         if release is None or not release.media_id:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Sync the article to WeChat draft first")
-        content = await _read_artifact_bytes(_preview_sandbox(session), workspace, job_id)
+        content = await _read_artifact_bytes(sandbox, workspace, job_id)
         if content is None or hashlib.sha256(content).hexdigest() != release.content_revision:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Preview changed after the WeChat draft was synced")
         if binding.authorizer_appid != release.authorizer_appid:

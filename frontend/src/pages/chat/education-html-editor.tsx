@@ -23,7 +23,6 @@ type WindowBounds = { left: number; top: number; width: number; height: number }
 type ResizeDirection = (typeof RESIZE_DIRECTIONS)[number]
 
 export function EducationHtmlEditor(props: {
-  sessionID: string
   path: string
   jobID?: string
   externalUrl?: string | null
@@ -231,11 +230,9 @@ export function EducationHtmlEditor(props: {
     setLoading(true)
     setError("")
     try {
-      const htmlRequest = props.jobID
-        ? backend.educationPreviewHtml(props.sessionID, props.jobID)
-        : backend.workspaceHtml(props.path)
+      const htmlRequest = backend.workspaceHtml(props.path)
       const releaseRequest = props.jobID
-        ? backend.educationWechatRelease(props.sessionID, props.jobID)
+        ? backend.educationFileWechatRelease(props.path)
         : Promise.resolve(null)
       const [next, release] = await Promise.all([
         htmlRequest,
@@ -261,7 +258,6 @@ export function EducationHtmlEditor(props: {
   }
 
   createEffect(() => {
-    props.sessionID
     props.path
     props.jobID
     void load()
@@ -351,9 +347,7 @@ export function EducationHtmlEditor(props: {
     try {
       const html = serialize()
       const savedVersion = editVersion
-      const saved = props.jobID
-        ? await backend.saveEducationPreviewHtml(props.sessionID, props.jobID, html, current.revision)
-        : await backend.saveWorkspaceHtml(props.path, html, current.revision)
+      const saved = await backend.saveWorkspaceHtml(props.path, html, current.revision)
       const next = { ...current, ...saved, html }
       setArtifact(next)
       if (editVersion === savedVersion) setDirty(false)
@@ -414,14 +408,14 @@ export function EducationHtmlEditor(props: {
       if (!authorization.authorized) authorization = await authorizeWechat()
       let release: EducationWechatRelease
       try {
-        release = await backend.syncEducationWechatDraft(props.sessionID, jobID, current.revision)
+        release = await backend.syncEducationFileWechatDraft(props.path, current.revision)
       } catch (cause) {
         const authorizationExpired = cause instanceof ApiError
           && cause.status === 409
           && cause.message.toLowerCase().includes("authorization")
         if (!authorizationExpired) throw cause
         authorization = await authorizeWechat()
-        release = await backend.syncEducationWechatDraft(props.sessionID, jobID, current.revision)
+        release = await backend.syncEducationFileWechatDraft(props.path, current.revision)
       }
       setWechatRelease(release)
       showToast({
@@ -451,7 +445,7 @@ export function EducationHtmlEditor(props: {
     setPublishingWechat(true)
     setError("")
     try {
-      const published = await backend.publishEducationWechatDraft(props.sessionID, jobID)
+      const published = await backend.publishEducationFileWechatDraft(props.path)
       setWechatRelease(published)
       showToast({
         class: "chat-preview-toast",
@@ -477,7 +471,7 @@ export function EducationHtmlEditor(props: {
     setPublishingWechat(true)
     setError("")
     try {
-      const resolved = await backend.resolveEducationWechatPublish(props.sessionID, jobID, published)
+      const resolved = await backend.resolveEducationFileWechatPublish(props.path, published)
       setWechatRelease(resolved)
       showToast({
         class: "chat-preview-toast",
@@ -512,7 +506,7 @@ export function EducationHtmlEditor(props: {
     setError("")
     try {
       const url = props.jobID
-        ? (await backend.uploadEducationPreviewImage(props.sessionID, props.jobID, file)).url
+        ? (await backend.uploadEducationFileImage(props.path, file)).url
         : await new Promise<string>((resolve, reject) => {
             const reader = new FileReader()
             reader.addEventListener("load", () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("图片读取失败")))

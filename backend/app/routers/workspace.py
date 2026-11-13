@@ -23,10 +23,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.background import BackgroundTask
 
 from app.auth.dependencies import get_current_user
+from app.config import settings
 from app.database import get_db
 from app.models import User, UserWorkspace
 from app.proxy.opencode_proxy import basic_auth_header
 from app.services.image_upload_client import ImageUploadClient
+from app.services.door_window_mcp_client import register_uploaded_pdf
 from app.sandbox.manager import (
     delete_sandbox_files,
     ensure_workspace,
@@ -518,6 +520,9 @@ async def upload_workspace_files(
                 sha256=item["sha256"],
             )
             uploaded_paths.append(item["path"])
+            drawing_session = None
+            if item["mime"] == "application/pdf" and settings.door_window_mcp_url:
+                drawing_session = await register_uploaded_pdf(item["spool"], item["name"])
             public_url = None
             if (
                 publish_images
@@ -534,17 +539,18 @@ async def upload_workspace_files(
                         status_code=status.HTTP_502_BAD_GATEWAY,
                         detail="Unable to prepare image for video generation",
                     ) from exc
-            response_files.append(
-                {
-                    "name": item["name"],
-                    "path": item["path"],
-                    "mime": item["mime"],
-                    "size": item["size"],
-                    "url": url,
-                    "direct": item["direct"],
-                    **({"publicUrl": public_url} if public_url else {}),
-                }
-            )
+            response_file = {
+                "name": item["name"],
+                "path": item["path"],
+                "mime": item["mime"],
+                "size": item["size"],
+                "url": url,
+                "direct": item["direct"],
+                **({"publicUrl": public_url} if public_url else {}),
+            }
+            if drawing_session:
+                response_file["drawingSessionId"] = drawing_session["session_id"]
+            response_files.append(response_file)
         invalidate_workspace_directory_cache(sandbox, workspace)
         return {"files": response_files}
     except BaseException:

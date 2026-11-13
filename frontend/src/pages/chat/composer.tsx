@@ -9,6 +9,7 @@ import {
   CLINICAL_ASSISTANT_ID,
   DEFAULT_ASSISTANT_ID,
   DISEASE_MANAGEMENT_ASSISTANT_ID,
+  DOOR_WINDOW_ASSISTANT_ID,
   EDUCATION_ASSISTANT_ID,
   type AssistantOption,
 } from "./assistant-selector"
@@ -54,6 +55,7 @@ export function ChatComposer(props: {
   clinical?: boolean
   diseaseManagement?: boolean
   education?: boolean
+  doorWindow?: boolean
   conversationTypeReady?: boolean
 }) {
   const navigate = useNavigate()
@@ -67,6 +69,8 @@ export function ChatComposer(props: {
       ? { id: DISEASE_MANAGEMENT_ASSISTANT_ID, name: "疾病管理助手", description: "生成可追溯的跨访视管理计划与随访草案。" }
       : props.education
       ? { id: EDUCATION_ASSISTANT_ID, name: "宣教助手", description: "生成医学科普文案、配图和微信公众号排版预览。" }
+      : props.doorWindow
+      ? { id: DOOR_WINDOW_ASSISTANT_ID, name: "门窗拆图助手", description: "识别 PDF 图纸中的门窗框图并生成裁剪结果。" }
       : { id: DEFAULT_ASSISTANT_ID, name: "Build", description: "基础执行 Agent，负责开发、修改和工具调用。" }
   const [selectedAssistant, setSelectedAssistant] = createSignal<AssistantOption>({
     ...initialAssistant(),
@@ -100,8 +104,10 @@ export function ChatComposer(props: {
       ? CLINICAL_ASSISTANT_ID
       : props.diseaseManagement
         ? DISEASE_MANAGEMENT_ASSISTANT_ID
-        : props.education
+      : props.education
         ? EDUCATION_ASSISTANT_ID
+        : props.doorWindow
+        ? DOOR_WINDOW_ASSISTANT_ID
         : undefined
     if (!assistantID) {
       setSelectedAssistant({
@@ -202,8 +208,8 @@ export function ChatComposer(props: {
       setError("正在识别会话类型，请稍候")
       return
     }
-    if ((props.clinical || props.diseaseManagement || props.education) && assistantStatus() !== "enabled") {
-      const assistantName = props.education ? "宣教助手" : props.diseaseManagement ? "疾病管理助手" : "诊疗助手"
+    if ((props.clinical || props.diseaseManagement || props.education || props.doorWindow) && assistantStatus() !== "enabled") {
+      const assistantName = props.doorWindow ? "门窗拆图助手" : props.education ? "宣教助手" : props.diseaseManagement ? "疾病管理助手" : "诊疗助手"
       setError(
         assistantStatus() === "error"
           ? `${assistantName}启用失败，请刷新页面后重试`
@@ -253,7 +259,7 @@ export function ChatComposer(props: {
         const titleSource = currentText || currentAttachments[0]?.file.name || "文件分析"
         const title = titleSource.length > 40 ? titleSource.slice(0, 40) + "..." : titleSource
         client.session.update({ sessionID, title } as any).catch(() => {})
-        navigate(`${props.clinical ? "/clinical" : props.diseaseManagement ? "/disease-management" : props.education ? "/education" : "/chat"}/${sessionID}`)
+          navigate(`${props.clinical ? "/clinical" : props.diseaseManagement ? "/disease-management" : props.education ? "/education" : props.doorWindow ? "/door-window" : "/chat"}/${sessionID}`)
       }
 
       const pendingIndexes = currentAttachments
@@ -303,9 +309,10 @@ export function ChatComposer(props: {
           mime: uploaded.mime,
           size: uploaded.size,
           direct: uploaded.direct,
-          filePartID,
-          publicUrl: uploaded.publicUrl ?? undefined,
-        })
+           filePartID,
+           publicUrl: uploaded.publicUrl ?? undefined,
+           drawingSessionId: uploaded.drawingSessionId ?? undefined,
+         })
         promptParts.push({ id: markerPartID, type: "text", text: marker })
         optimisticParts.push({
           id: markerPartID,
@@ -429,14 +436,14 @@ export function ChatComposer(props: {
           </div>
         </Show>
 
-        <div class="chat-composer-box" classList={{ "chat-composer-box-clinical": props.clinical || props.diseaseManagement || props.education }}>
+        <div class="chat-composer-box" classList={{ "chat-composer-box-clinical": props.clinical || props.diseaseManagement || props.education || props.doorWindow }}>
           <Show when={props.conversationTypeReady === false}>
             <div class="chat-conversation-type-loading" role="status">正在识别会话类型...</div>
           </Show>
-          <Show when={props.conversationTypeReady !== false && (props.clinical || props.diseaseManagement || props.education)}>
+          <Show when={props.conversationTypeReady !== false && (props.clinical || props.diseaseManagement || props.education || props.doorWindow)}>
             <div class="chat-clinical-status" classList={{ error: assistantStatus() === "error" }} role="status">
               <span class="chat-clinical-status-icon" aria-hidden="true">
-                <Show when={props.education} fallback={
+                  <Show when={props.education} fallback={
                   <Show when={props.diseaseManagement} fallback={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.4 7-11V5l-7-2-7 2v5c0 6.6 7 11 7 11z"/><path d="M9 11h6M12 8v6"/></svg>}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
                   </Show>
@@ -444,10 +451,10 @@ export function ChatComposer(props: {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/><path d="M9 18v3M15 18v3"/></svg>
                 </Show>
               </span>
-              <strong>{props.education ? "宣教助手" : props.diseaseManagement ? "疾病管理助手" : "诊疗助手"}</strong>
+              <strong>{props.doorWindow ? "门窗拆图助手" : props.education ? "宣教助手" : props.diseaseManagement ? "疾病管理助手" : "诊疗助手"}</strong>
               <span class="chat-clinical-status-dot" />
               <span>{assistantStatus() === "error" ? "不可用" : "已就绪"}</span>
-              <span class="chat-clinical-status-detail">{assistantStatus() === "enabled" && props.isGenerating ? "任务运行中" : props.education ? "科普排版预览" : props.diseaseManagement ? "跨访视计划草案" : "临床辅助决策"}</span>
+              <span class="chat-clinical-status-detail">{assistantStatus() === "enabled" && props.isGenerating ? "任务运行中" : props.doorWindow ? "PDF 门窗框图拆分" : props.education ? "科普排版预览" : props.diseaseManagement ? "跨访视计划草案" : "临床辅助决策"}</span>
             </div>
           </Show>
           <textarea
@@ -459,8 +466,10 @@ export function ChatComposer(props: {
                   ? "描述症状、病史或检查结果..."
                   : props.diseaseManagement
                     ? "输入病程变化、治疗反应、监测结果或随访目标..."
-                    : props.education
+                  : props.education
                     ? "输入科普主题、目标受众和宣传重点..."
+                  : props.doorWindow
+                    ? "上传门窗 PDF 图纸并描述需要拆分的门窗框图..."
                   : "输入消息... (Enter 发送, Shift+Enter 换行)"
             }
             aria-label="消息"
@@ -490,7 +499,7 @@ export function ChatComposer(props: {
                 />
               </label>
               <Show when={!props.clinical && !props.diseaseManagement && !props.education}>
-                <ChatAssistantSelector selected={selectedAssistant().id} onSelect={selectAssistant} />
+                <ChatAssistantSelector selected={selectedAssistant().id} onSelect={selectAssistant} includePlatform={props.doorWindow} />
               </Show>
               <ChatModelSelector selected={selectedModel()} onSelect={setSelectedModel} />
             </div>

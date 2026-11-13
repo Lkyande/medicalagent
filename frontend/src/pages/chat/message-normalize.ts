@@ -58,6 +58,18 @@ export interface DisplayMessage {
   }
 }
 
+export function shouldShowThinkingIndicator(messages: readonly DisplayMessage[], generating: boolean): boolean {
+  if (!generating) return false
+  const latest = messages.at(-1)
+  if (!latest) return false
+  if (latest.role === "user") return true
+  if (latest.error) return false
+
+  const block = latest.blocks.at(-1)
+  if (block?.type !== "tool" || block.tool.educationWaitTimedOut) return false
+  return block.tool.status === "completed" || block.tool.status === "error"
+}
+
 export function latestEducationJobID(messages: DisplayMessage[]): string | undefined {
   for (let messageIndex = messages.length - 1; messageIndex >= 0; messageIndex--) {
     const blocks = messages[messageIndex]?.blocks ?? []

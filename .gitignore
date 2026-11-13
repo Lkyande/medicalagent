@@ -15,3 +15,12 @@ __pycache__/
 !/backend/tests/
 !/backend/tests/test_connection_lifecycle.py
 /backend/tests/test_workspace_uploads.py
+
+# Local and deployment-only files
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.rar
+NUL

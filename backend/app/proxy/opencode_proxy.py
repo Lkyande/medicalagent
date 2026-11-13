@@ -268,8 +268,14 @@ async def proxy_to_sandbox(
 
     body = _secure_request_body(path, request.method, raw_body)
     timeout = httpx.Timeout(300.0, connect=30.0)
-    async with httpx.AsyncClient(timeout=timeout) as client:
-        resp = await client.request(request.method, target_url, headers=headers, content=body)
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.request(request.method, target_url, headers=headers, content=body)
+    except httpx.RequestError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="OpenCode sandbox is unavailable",
+        ) from exc
 
     payload = None
     if "application/json" in resp.headers.get("content-type", ""):

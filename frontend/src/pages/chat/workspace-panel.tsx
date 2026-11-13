@@ -4,6 +4,7 @@ import { DialogBody, DialogHeader, DialogTitle, DialogV2 } from "@/ui/v2/dialog-
 import { FileIcon } from "@/ui/file-icon"
 import { useDialog } from "@/ui/context/dialog"
 import { EducationHtmlEditor } from "./education-html-editor"
+import { educationHtmlJobID } from "./education-html"
 
 export interface WorkspaceNode {
   name: string
@@ -35,7 +36,6 @@ const codeExtensions = new Set([
 ])
 const WORKSPACE_POLL_INTERVAL_MS = 30_000
 const WORKSPACE_EVENT_DEBOUNCE_MS = 400
-const EDUCATION_PREVIEW_PATH = /^education-previews\/([A-Za-z0-9_-]{1,80})\.html$/
 const HTML_FILE_PATH = /\.html?$/i
 
 function categoryOf(node: WorkspaceNode): Exclude<FileCategory, "all"> {
@@ -205,14 +205,11 @@ export function WorkspacePanel(props: {
 
   const openFile = async (path: string) => {
     setHighlightedPath("")
-    const preview = EDUCATION_PREVIEW_PATH.exec(path)
     if (HTML_FILE_PATH.test(path)) {
-      const previewJobID = preview?.[1]
-      const jobID = props.sessionID && previewJobID && props.educationJobIDs?.includes(previewJobID) ? previewJobID : undefined
+      const jobID = educationHtmlJobID(path)
       let editorDirty = false
       void dialog.push(() => (
         <EducationHtmlEditor
-          sessionID={props.sessionID ?? ""}
           path={path}
           jobID={jobID}
           onDirtyChange={(dirty) => { editorDirty = dirty }}

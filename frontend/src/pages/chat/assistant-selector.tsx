@@ -5,12 +5,13 @@ export const DEFAULT_ASSISTANT_ID = "build"
 export const CLINICAL_ASSISTANT_ID = "clinical-assistant"
 export const DISEASE_MANAGEMENT_ASSISTANT_ID = "disease-management-assistant"
 export const EDUCATION_ASSISTANT_ID = "education-assistant"
+export const DOOR_WINDOW_ASSISTANT_ID = "door-window-assistant"
 
 export type AssistantOption = {
   id: string
   name: string
   description: string
-  baseAgent: "build" | "plan"
+  baseAgent: string
   systemPrompt?: string
   platform?: PlatformAssistant
 }
@@ -53,20 +54,21 @@ export function resolveAssistant(catalog: PlatformAssistant[], selected: string,
 export function ChatAssistantSelector(props: {
   selected: string
   onSelect: (assistant: AssistantOption) => void
+  includePlatform?: boolean
 }) {
   const [open, setOpen] = createSignal(false)
   const [catalog, setCatalog] = createSignal<PlatformAssistant[]>([])
   const [error, setError] = createSignal("")
   let ref: HTMLDivElement | undefined
 
-  const options = createMemo(() => assistantOptions(catalog()))
-  const current = createMemo(() => resolveAssistant(catalog(), props.selected))
+  const options = createMemo(() => assistantOptions(catalog(), props.includePlatform ?? false))
+  const current = createMemo(() => resolveAssistant(catalog(), props.selected, props.includePlatform ?? false))
 
   onMount(async () => {
     try {
       const platformAssistants = await backend.assistants()
       setCatalog(platformAssistants)
-      const selected = resolveAssistant(platformAssistants, props.selected)
+      const selected = resolveAssistant(platformAssistants, props.selected, props.includePlatform ?? false)
       if (selected.id !== props.selected) props.onSelect(selected)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "无法加载助手能力")
